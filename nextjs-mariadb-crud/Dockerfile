@@ -1,15 +1,19 @@
-# Use Node.js base image
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install --frozen-lockfile
+
+COPY . .
+RUN npm run build
+
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install
+COPY --from=builder /app /app
 
-# Copy all source files (including API routes)
-COPY . . 
-
-RUN npm run build
+RUN npm install --production
 
 CMD ["npm", "run", "start"]

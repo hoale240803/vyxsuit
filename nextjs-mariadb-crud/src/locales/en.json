@@ -1,0 +1,13 @@
+{
+  "layout": {
+    "header": {
+      "home": "Home",
+      "vision_mission": "Vision & Mission",
+      "about_us": "About us",
+      "shop_buy": "Shop/Buy",
+      "blog": "Blog",
+      "contract": "Contract",
+      "search": "Search"
+    }
+  }
+}
