@@ -104,7 +104,7 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main className={clsx("main-content", "container-fluid")}>{children}</main>
+      <main className={clsx("main-content", "container-fluid p-0")}>{children}</main>
 
       <footer className={clsx("main-footer","py-4")}>
         <div className="container d-flex justify-content-between align-items-center">
