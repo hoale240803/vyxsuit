@@ -2,14 +2,14 @@ import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 export interface ApiServiceConfig {
   baseUrl: string;
-  apiKey?: string;
+  apiKey: string;
   timeout?: number;
   headers?: Record<string, string>;
 }
 
 export class ThirdPartyApiService {
   protected baseUrl: string;
-  protected apiKey?: string;
+  protected apiKey: string;
   protected defaultHeaders: Record<string, string>;
   protected timeout: number;
 
