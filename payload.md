@@ -345,7 +345,7 @@ GET /api/measurements/{orderId}
 - `measurementType` must be either "Shirt", "Trouser", or both based on order
 - `unit` must be either "Cm" or "Inch"
 - Required measurements depend on the order type (shirt/trouser/suit)
-- 
+- `measurementImages` must contain exactly 4 images with names: "front", "back", "left", "right"
 
 ## Step 9 - Payment and Shipping Info
 
