@@ -30,7 +30,6 @@ POST /api/order/suit-type
 ```json
 {
   "suitType": "2piece|3piece",
-  "tailoredFit": "SlimFit|ComfortFit",
   "orderId": "number|null"  // null for new orders
 }
 ```
@@ -41,8 +40,7 @@ POST /api/order/suit-type
   "success": true,
   "orderId": 123,
   "suitDetails": {
-    "suitType": "2piece",
-    "tailoredFit": "SlimFit"
+    "suitType": "2piece"
   },
   "nextStep": "/order/select-trouser"
 }
@@ -50,7 +48,6 @@ POST /api/order/suit-type
 
 ### Validation
 - `suitType` must be either "2piece" or "3piece"
-- `tailoredFit` must be either "SlimFit" or "ComfortFit"
 
 ## Step 3 - Select Trouser
 
@@ -64,8 +61,7 @@ POST /api/order/trouser
 ```json
 {
   "orderId": 123,
-  "trouserId": 456,
-  "quantity": 1
+  "trouserId": 456
 }
 ```
 
@@ -86,22 +82,20 @@ POST /api/order/trouser
 
 ### Validation
 - `trouserId` must exist in the database
-- `quantity` must be at least 1
 
-## Step 4 - Select Jacket
+## Step 4 - Select TailoredFit
 
 ### API Endpoints
 ```
-GET /api/products?productType=Jacket
-POST /api/order/jacket
+GET /api/products?productType=TailoredFit
+POST /api/order/tailored-fit
 ```
 
 ### Frontend to Backend (Request)
 ```json
 {
   "orderId": 123,
-  "jacketId": 789,
-  "quantity": 1
+  "tailoredFit": "SlimFit|ComfortFit"
 }
 ```
 
@@ -110,19 +104,13 @@ POST /api/order/jacket
 {
   "success": true,
   "orderId": 123,
-  "jacket": {
-    "id": 789,
-    "name": "Premium Jacket",
-    "price": 159.99,
-    "imageUrl": "https://..."
-  },
-  "nextStep": "/order/select-fabric"
+  "tailoredFit": "SlimFit",
+  "nextStep": "/order/select-jacket"
 }
 ```
 
 ### Validation
-- `jacketId` must exist in the database
-- `quantity` must be at least 1
+- `tailoredFit` must be either "SlimFit" or "ComfortFit"
 
 ## Step 5 - Select Fabric
 
@@ -170,7 +158,7 @@ POST /api/order/lining
 ### Frontend to Backend (Request)
 ```json
 {
-  "orderId": 123,
+  "ord  erId": 123,
   "liningId": 345
 }
 ```
@@ -233,8 +221,66 @@ POST /api/order/button
 
 ### API Endpoints
 ```
-POST /api/measurements
-PUT /api/order/measurements
+GET /api/measurements/{orderId}  // Get existing measurement details
+POST /api/measurements           // Create new measurements
+PUT /api/order/measurements      // Update existing measurements
+```
+
+### GET Request (Retrieve Measurements)
+```
+GET /api/measurements/{orderId}
+```
+
+### GET Response
+```
+{
+  "success": true,
+  "measurementId": 789,
+  "measurementType": "Shirt|Trouser",
+  "unit": "Cm",
+  "shirtMeasurements": {
+    "chest": 102.5,
+    "shoulder": 45.0,
+    "armLength": 65.0,
+    "armShoulderJoint": 42.0,
+    "armBicepWidth": 35.0,
+    "jacketWidth": 55.0,
+    "abdomen": 95.0,
+    "bellyTummy": 98.0,
+    "hips": 100.0,
+    "neck": 40.0
+  },
+  "trouserMeasurements": {
+    "waist": 85.0,
+    "upperHips": 95.0,
+    "hipsCrotch": 25.0,
+    "outswarm": 100.0,
+    "thigh": 58.0,
+    "calf": 40.0
+  },
+  "measurementImages": [
+    {
+      "id": 101,
+      "name": "front",
+      "s3Url": "https://example.com/images/measurement-front-123.jpg"
+    },
+    {
+      "id": 102,
+      "name": "back",
+      "s3Url": "https://example.com/images/measurement-back-123.jpg"
+    },
+    {
+      "id": 103,
+      "name": "left",
+      "s3Url": "https://example.com/images/measurement-left-123.jpg"
+    },
+    {
+      "id": 104,
+      "name": "right",
+      "s3Url": "https://example.com/images/measurement-right-123.jpg"
+    }
+  ]
+}
 ```
 
 ### Frontend to Backend (Request)
@@ -265,7 +311,19 @@ PUT /api/order/measurements
   },
   "measurementImages": [
     {
-      "name": "Front view",
+      "name": "front",
+      "imageFile": "[Base64 encoded image]"
+    },
+    {
+      "name": "back",
+      "imageFile": "[Base64 encoded image]"
+    },
+    {
+      "name": "left",
+      "imageFile": "[Base64 encoded image]"
+    },
+    {
+      "name": "right",
       "imageFile": "[Base64 encoded image]"
     }
   ]
@@ -287,6 +345,7 @@ PUT /api/order/measurements
 - `measurementType` must be either "Shirt", "Trouser", or both based on order
 - `unit` must be either "Cm" or "Inch"
 - Required measurements depend on the order type (shirt/trouser/suit)
+- 
 
 ## Step 9 - Payment and Shipping Info
 
@@ -443,7 +502,7 @@ POST /api/payment/confirm
 
 ### Validation
 - Secure handling of Stripe client secret
-- Error handling for payment failures
+- Error han-  ing for payment failures
 - Order status updates after payment completion
 
 ## General Implementation Notes
