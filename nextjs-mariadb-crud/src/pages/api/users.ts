@@ -10,6 +10,7 @@ const pool = mariadb.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
+  
   connectionLimit: 5,
 });
 
@@ -17,7 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let conn;
   try {
     conn = await pool.getConnection();
-
+    
+    debugger;
     if (req.method === "GET") {
       const users = await conn.query("SELECT * FROM users");
       return res.status(200).json(users);
