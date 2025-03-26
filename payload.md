@@ -2,16 +2,16 @@
 
 fort theses features, define clearly what fields includes in payload, what function validation need to be handle. Let me see it adaptable
 
-Xây dựng Step2 - select loại suit
-Xây dựng Step3 - Chọn quần
-Xây dựng Step4 - Chọn áo
-Xây dựng Step5 - chọn vải
-Xây dựng Step6 - Chọn họa tiết
-Xây dựng Step7  select button
-Xây dựng Step8 - Thông số đo
-Xây dựng step9 - payment - shipping info
-Xây dựng step 10 - overview
-Step 11 - tích hợp api stripe
+Develop Step 2 - Select suit type
+Develop Step 3 - Choose trousers
+Develop Step 4 - Choose fit style
+Develop Step 5 - Choose Fabric
+Develop Step 6 - Select lining
+Develop Step 7 - Select buttons
+Develop Step 8 - Enter measurement details
+Develop Step 9 - Payment & shipping info
+Develop Step 10 - Overview
+Step 11 - Integrate Stripe API
 
 
 GitHub Copilot: # VyxSuit Order Process Payloads
