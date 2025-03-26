@@ -3,14 +3,23 @@
 fort theses features, define clearly what fields includes in payload, what function validation need to be handle. Let me see it adaptable
 
 Develop Step 2 - Select suit type
+
 Develop Step 3 - Choose trousers
+
 Develop Step 4 - Choose fit style
+
 Develop Step 5 - Choose Fabric
+
 Develop Step 6 - Select lining
+
 Develop Step 7 - Select buttons
+
 Develop Step 8 - Enter measurement details
+
 Develop Step 9 - Payment & shipping info
+
 Develop Step 10 - Overview
+
 Step 11 - Integrate Stripe API
 
 
