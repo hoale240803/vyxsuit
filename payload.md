@@ -1,7 +1,5 @@
 # Suit Builder payload
 
-
-dotnet-sdc2-saigontechnology: please define payload for fe and be consistency
 fort theses features, define clearly what fields includes in payload, what function validation need to be handle. Let me see it adaptable
 
 Xây dựng Step2 - select loại suit
