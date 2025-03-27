@@ -10,6 +10,8 @@ services:
         condition: service_healthy
     env_file:
       - .env
+    networks:
+      - app_network      
 
   mariadb:
     image: mariadb:10.8.3
@@ -17,19 +19,26 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: vyxsuit_db
-      MYSQL_USER: root
+      MYSQL_USER: vyxsuit_user      # Use a different username
       MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
-      - ./docker/mariadb-init.sql:/docker-entrypoint-initdb.d/mariadb-init.sql
+      - ./docker/00-user-permissions.sql:/docker-entrypoint-initdb.d/00-user-permissions.sql
+      - ./docker/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./docker/seed-data.sql:/docker-entrypoint-initdb.d/02-seed-data.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
+    networks:
+      - app_network      
 
 volumes:
   mariadb_data:
+networks:
+  app_network:
+    driver: bridge  
