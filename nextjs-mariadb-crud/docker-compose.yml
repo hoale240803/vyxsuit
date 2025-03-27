@@ -15,15 +15,17 @@ services:
     image: mariadb:10.8.3
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASS}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: vyxsuit_db
+      MYSQL_USER: vyxsuit_user      # Use a different username
+      MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
-      - ./docker/mariadb-init.sql:/docker-entrypoint-initdb.d/mariadb-init.sql
+      - ./docker/00-user-permissions.sql:/docker-entrypoint-initdb.d/00-user-permissions.sql
+      - ./docker/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./docker/seed-data.sql:/docker-entrypoint-initdb.d/02-seed-data.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
