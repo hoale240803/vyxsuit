@@ -10,19 +10,28 @@
   --ping-color: #{variables.$ping-color};
   --interactive-color: #{variables.$interactive-color};
   --error-color: #{variables.$error-color};
+
+  .primary-color {
+    color: var(--primary-color);
+  }
+  .secondary-color {
+    color: variables.$secondary-color;
+    margin-right: 1rem;
+  }
+  .accent-color {
+    color: var(--accent-color);
+  }
+  
+  .bg-primary-color {
+    background-color: var(--primary-color);
+  }
+  
 }
 
 body {
   background-color: variables.$primary-light-color;
   color: variables.$secondary-color;
 }
-
-.secondary-color {
-  color: variables.$secondary-color;
-  margin-right: 1rem;
-}
-
-
 /* main layout */
 
 

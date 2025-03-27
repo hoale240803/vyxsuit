@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,116 +7,148 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Customer {
-  id          Int     @id @default(autoincrement())
-  firstName   String  @db.VarChar(255)
-  lastName    String  @db.VarChar(255)
-  email       String  @unique @db.VarChar(255)
-  companyName String? @db.VarChar(255)
-  orders      Order[]
+model customer {
+  Id          Int     @id @default(autoincrement())
+  FirstName   String  @db.VarChar(255)
+  LastName    String  @db.VarChar(255)
+  Email       String  @unique(map: "Email") @db.VarChar(255)
+  CompanyName String? @db.VarChar(255)
 }
 
-model Measurement {
-  id              Int       @id @default(autoincrement())
-  measurementType String    @db.Enum(["Shirt", "Trouser"])
-  unit            String    @db.Enum(["Cm", "Inch"])
-  orders          Order[]
-  shirtMeasurement ShirtMeasurement?
-  trouserMeasurement TrouserMeasurement?
-  images          MeasurementImage[]
+model measurement {
+  Id              Int                         @id @default(autoincrement())
+  MeasurementType measurement_MeasurementType
+  Unit            measurement_Unit
 }
 
-model MeasurementImage {
-  id            Int      @id @default(autoincrement())
-  name         String?  @db.VarChar(255)
-  s3Url        String?  @db.VarChar(500)
-  measurement  Measurement @relation(fields: [measurementId], references: [id])
-  measurementId Int
+model measurementimage {
+  Id            Int     @id @default(autoincrement())
+  Name          String? @db.VarChar(255)
+  S3Url         String? @db.VarChar(500)
+  MeasurementId Int
 }
 
-model Order {
-  id              Int      @id @default(autoincrement())
-  customer        Customer @relation(fields: [customerId], references: [id])
-  customerId      Int
-  measurement     Measurement @relation(fields: [measurementId], references: [id])
-  measurementId   Int
-  salesOrderNumber String  @unique @db.VarChar(50)
-  createdAt      DateTime @default(now())
-  note           String?  @db.Text
-  totalAmount    Decimal  @db.Decimal(10,6)
-  country        String?  @db.VarChar(100)
-  city           String?  @db.VarChar(100)
-  state          String?  @db.VarChar(100)
-  zipCode        String?  @db.VarChar(20)
-  phone          String?  @db.VarChar(15)
-  shippingMethod String  @db.Enum(["Standard", "Express"])
-  differentAddress Boolean @default(false)
-  paymentStatus  String  @db.Enum(["failed", "success", "none"])
-  stripeId       String?  @db.VarChar(1000)
-  lang           String?  @db.VarChar(10)
-  currencyCode   String?  @db.VarChar(10)
-  currencyRate   Decimal @default(1.000000) @db.Decimal(10,6)
-  orderDetails   OrderDetail[]
+model orderdetail {
+  Id          Int                      @id @default(autoincrement())
+  OrderId     Int
+  ProductId   Int
+  Price       Decimal                  @default(0.00) @db.Decimal(10, 2)
+  Quantity    Int                      @default(1) @db.TinyInt
+  SuitType    orderdetail_SuitType?
+  TrouserId   Int?
+  TailoredFit orderdetail_TailoredFit?
+  FabricId    Int?
+  LiningId    Int?
+  ButtonId    Int?
 }
 
-model OrderDetail {
-  id            Int      @id @default(autoincrement())
-  order         Order    @relation(fields: [orderId], references: [id])
-  orderId       Int
-  product       Product  @relation(fields: [productId], references: [id])
-  productId     Int
-  price         Decimal  @db.Decimal(10,2)
-  quantity      Int      @default(1)
-  suitType      String?  @db.Enum(["2piece", "3piece"])
-  tailoredFit   String?  @db.Enum(["SlimFit", "ComfortFit"])
-  fabricId      Int?
-  liningId      Int?
-  buttonId      Int?
+model orders {
+  OrderId          Int                   @id @default(autoincrement())
+  CustomerId       Int
+  MeasurementId    Int
+  SalesOrderNumber String                @unique(map: "SalesOrderNumber") @db.VarChar(50)
+  Sequence         Int?                  @db.TinyInt
+  CreatedAt        DateTime?             @default(now()) @db.DateTime(0)
+  Note             String?               @db.Text
+  TotalAmount      Decimal               @default(0.000000) @db.Decimal(10, 6)
+  Country          String?               @db.VarChar(100)
+  City             String?               @db.VarChar(100)
+  State            String?               @db.VarChar(100)
+  ZipCode          String?               @db.VarChar(20)
+  Phone            String?               @db.VarChar(15)
+  ShippingMethod   orders_ShippingMethod
+  DifferentAddress Boolean?              @default(false)
+  PaymentStatus    orders_PaymentStatus
+  StripeId         String?               @db.VarChar(1000)
+  Lang             String?               @db.VarChar(10)
+  CurrencyCode     String?               @db.VarChar(10)
+  CurrencyRate     Decimal?              @default(1.000000) @db.Decimal(10, 6)
 }
 
-model Product {
-  id           Int      @id @default(autoincrement())
-  name         String   @db.VarChar(255)
-  description  String?  @db.Text
-  s3Url        String?  @db.VarChar(500)
-  productType  String  @db.Enum(["DesignOfSuit", "Jacket", "Trouser", "Shirt", "TailoredFit", "FabricOptions", "Button", "Lining", "SuitType", "TrouserType"])
-  code         String?  @unique @db.VarChar(100)
-  price        Decimal @db.Decimal(10,6)
-  orderDetails OrderDetail[]
+model product {
+  Id          Int                 @id @default(autoincrement())
+  Name        String              @db.VarChar(255)
+  Description String?             @db.Text
+  S3Url       String?             @db.VarChar(500)
+  ProductType product_ProductType
+  Code        String?             @unique(map: "Code") @db.VarChar(100)
+  Price       Decimal             @default(0.000000) @db.Decimal(10, 6)
 }
 
-model ProductTranslation {
-  id           Int     @id @default(autoincrement())
-  product      Product @relation(fields: [productId], references: [id])
-  productId    Int
-  language     String  @db.VarChar(10)
-  translatedName String @db.VarChar(255)
+model producttranslation {
+  Id             Int    @id @default(autoincrement())
+  ProductId      Int
+  Language       String @db.VarChar(10)
+  TranslatedName String @db.VarChar(255)
 }
 
-model ShirtMeasurement {
-  id                 Int     @id @default(autoincrement())
-  measurement        Measurement @relation(fields: [measurementId], references: [id])
-  measurementId      Int
-  chest             Decimal? @db.Decimal(5,2)
-  shoulder          Decimal? @db.Decimal(5,2)
-  armLength         Decimal? @db.Decimal(5,2)
-  armShoulderJoint  Decimal? @db.Decimal(5,2)
-  armBicepWidth     Decimal? @db.Decimal(5,2)
-  jacketWidth       Decimal? @db.Decimal(5,2)
-  abdomen           Decimal? @db.Decimal(5,2)
-  bellyTummy        Decimal? @db.Decimal(5,2)
-  hips              Decimal? @db.Decimal(5,2)
-  neck              Decimal? @db.Decimal(5,2)
+model shirtmeasurement {
+  Id               Int      @id @default(autoincrement())
+  MeasurementId    Int
+  Chest            Decimal? @db.Decimal(5, 2)
+  Shoulder         Decimal? @db.Decimal(5, 2)
+  ArmLength        Decimal? @db.Decimal(5, 2)
+  ArmShoulderJoint Decimal? @db.Decimal(5, 2)
+  ArmBicepWidth    Decimal? @db.Decimal(5, 2)
+  JacketWidth      Decimal? @db.Decimal(5, 2)
+  Abdomen          Decimal? @db.Decimal(5, 2)
+  BellyTummy       Decimal? @db.Decimal(5, 2)
+  Hips             Decimal? @db.Decimal(5, 2)
+  Neck             Decimal? @db.Decimal(5, 2)
 }
 
-model TrouserMeasurement {
-  id              Int     @id @default(autoincrement())
-  measurement     Measurement @relation(fields: [measurementId], references: [id])
-  measurementId  Int
-  waist          Decimal? @db.Decimal(5,2)
-  upperHips      Decimal? @db.Decimal(5,2)
-  hipsCrotch     Decimal? @db.Decimal(5,2)
-  outswarm       Decimal? @db.Decimal(5,2)
-  thigh          Decimal? @db.Decimal(5,2)
-  calf           Decimal? @db.Decimal(5,2)
+model trousermeasurement {
+  Id            Int      @id @default(autoincrement())
+  MeasurementId Int
+  Waist         Decimal? @db.Decimal(5, 2)
+  UpperHips     Decimal? @db.Decimal(5, 2)
+  HipsCrotch    Decimal? @db.Decimal(5, 2)
+  Outswarm      Decimal? @db.Decimal(5, 2)
+  Thigh         Decimal? @db.Decimal(5, 2)
+  Calf          Decimal? @db.Decimal(5, 2)
+}
+
+enum measurement_MeasurementType {
+  Shirt
+  Trouser
+  Image
+}
+
+enum measurement_Unit {
+  Cm
+  Inch
+}
+
+enum product_ProductType {
+  DesignOfSuit
+  Jacket
+  Trouser
+  Shirt
+  TailoredFit
+  FabricOptions
+  Button
+  Lining
+  SuitType
+  TrouserType
+}
+
+enum orderdetail_SuitType {
+  TWO_PIECE   @map("2piece")
+  THREE_PIECE @map("3piece")
+}
+
+enum orderdetail_TailoredFit {
+  SlimFit
+  ComfortFit
+}
+
+enum orders_ShippingMethod {
+  Standard
+  Express
+}
+
+enum orders_PaymentStatus {
+  failed
+  success
+  none
 }

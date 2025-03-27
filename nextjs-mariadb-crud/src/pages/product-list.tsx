@@ -1,9 +1,17 @@
 import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function ProductList() {
-  console.log(styles);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/product-api")
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
+  }, []);
+  console.log(products);
   return (
     <>
       <div className={clsx(styles.banner, "container-fluid p-0")}>
@@ -42,25 +50,36 @@ export default function ProductList() {
         </div>
       </div>
 
-      <div className={clsx(styles["products-container"], " container-fluid p-5 pt-3")}>
-        <div className="row">
-          <div className="col-3">
-            <img
-              src="https://vyxlyfstyles.shop/wp-content/uploads/2024/12/IMG_4357-768x1152.jpg"
-              alt=""
-              className="w-100"
-            />
-            <p className="fs-4 mb-0">The Luminary</p>
-            <p className="fs-6">
-              Radiating confidence and distinction for trailblazers.
-            </p>
-
-            <Link href="product/10/builder">
-              <button className="p-3 w-100 border-0"><span>View options</span></button>
-            </Link>
-          </div>
-          
-        </div>
+      <div
+        className={clsx(
+          styles["products-container"],
+          " container-fluid p-5 pt-3"
+        )}
+      >
+        {products?.length > 0 ? (
+          products.map((prod, index) => (
+            <div className="row" key={index}>
+              {products.slice(index * 4, index * 4 + 4).map((item) => (
+                <div className="col-md-3 mb-4" key={item.Main.Id}>
+                  <img
+                    src={item.Main.S3Url}
+                    alt={item.Name || "Product Image"}
+                    className="w-100"
+                  />
+                  <p className="fs-4 mb-0">{item.Name}</p>
+                  <p className="fs-6">{item.Description}</p>
+                  <Link href={`/product/${item.Main.Id}/builder/step-2`} passHref>
+                    <button className="p-3 w-100 border-0">
+                      <span>View options</span>
+                    </button>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          ))
+        ) : (
+          <p>No products available</p>
+        )}
       </div>
     </>
   );
