@@ -7,43 +7,176 @@ TRUNCATE TABLE ProductTranslation;
 TRUNCATE TABLE Measurement;
 TRUNCATE TABLE Orders;
 SET FOREIGN_KEY_CHECKS = 1;
+select * from users u 
 
--- Insert users data
-INSERT INTO users (name, email) VALUES 
-  ('John Doe', 'john@example.com'),
-  ('Jane Smith', 'jane@example.com'),
-  ('Bob Johnson', 'bob@example.com');
+select * from Product p
+where p.ProductType = 'FabricOptions' and p.PriceType = '2PieceSuitWoolAndVlvet'
 
--- Insert customer data
-INSERT INTO Customer (FirstName, LastName, Email, CompanyName) VALUES
-  ('Hoa', 'Le', 'hoa@vyxsuit.com', 'VyxSuit'),
-  ('Minh', 'Nguyen', 'minh@example.com', 'Fashion Inc'),
-  ('Tuan', 'Tran', 'tuan@example.com', NULL);
 
--- Insert product data
-INSERT INTO Product (Name, Description, ProductType, Code, Price) VALUES
-  ('Classic Two-Piece', 'Traditional two-piece suit', 'SuitType', 'ST001', 299.99),
-  ('Premium Three-Piece', 'Elegant three-piece suit with waistcoat', 'SuitType', 'ST002', 399.99),
-  ('Regular Fit Trouser', 'Comfortable regular fit trouser', 'TrouserType', 'TT001', 89.99),
-  ('Slim Fit Trouser', 'Modern slim fit trouser', 'TrouserType', 'TT002', 99.99),
-  ('Slim Fit', 'Modern slim silhouette', 'TailoredFit', 'TF001', 0.00),
-  ('Comfort Fit', 'Relaxed comfortable fit', 'TailoredFit', 'TF002', 0.00),
-  ('Italian Wool', 'Premium Italian wool fabric', 'FabricOptions', 'FA001', 49.99),
-  ('Pearl Buttons', 'Elegant mother of pearl buttons', 'Button', 'BT001', 9.99),
-  ('Silk Lining', 'Luxurious silk lining', 'Lining', 'LN001', 19.99);
+truncate table Product
+CREATE TABLE IF NOT EXISTS Product (
+  Id INT AUTO_INCREMENT PRIMARY KEY,
+  Name VARCHAR(255) NOT NULL,
+  Description TEXT,
+  S3Url VARCHAR(500),
+  ProductType ENUM('DesignOfSuit', 'Jacket', 'Trouser', 'Shirt', 'TailoredFit', 'FabricOptions', 'Button', 'Lining', 'SuitType', 'TrouserType') NOT NULL,
+  Code VARCHAR(100) UNIQUE,
+  Price DECIMAL(10,6) NOT NULL DEFAULT 0.00,
+  PriceType ENUM('2PieceSuit', '3PieceSuit','JacketOnlySuitSuper150',
+'JacketOnlySuitVelvette',	
+'JacketOnlySuitCashmereBlend',	
+'JacketOnlySuitLinen200GSM',	
+'JacketOnlySuitMerino',
 
--- Insert product translations
-INSERT INTO ProductTranslation (ProductId, Language, TranslatedName) VALUES
-  (1, 'vi', 'Bộ Vest Hai Mảnh Cổ Điển'),
-  (2, 'vi', 'Bộ Vest Ba Mảnh Cao Cấp'),
-  (3, 'vi', 'Quần Ống Đứng');
+'2PieceSuitWoolAndVlvet',
+'2PieceSuitCashmereBlend',	
+'2PieceSuitSuper150sWool',	
+'2PieceSuitLinen200GSM',	
+'2PieceSuitMerinoWoolBlend') DEFAULT NULL
+);
 
--- Insert measurement data
-INSERT INTO Measurement (Unit, Chest, Shoulder, Waist, Hips) VALUES
-  ('Cm', 100.0, 45.5, 85.0, 95.0),
-  ('Inch', 40.5, 18.2, 34.0, 38.0);
+-- seed data design of suit
 
--- Insert order data
-INSERT INTO Orders (CustomerId, MeasurementId, SalesOrderNumber, TotalAmount, Country, City) VALUES
-  (1, 1, 'VYX-2025-0001', 349.97, 'Vietnam', 'Ho Chi Minh City'),
-  (2, 2, 'VYX-2025-0002', 529.96, 'Vietnam', 'Hanoi');
+INSERT INTO Product (Id, Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES
+  (1, 'TheAristocrat', 'Effortlessly blending heritage and modernity','DesignOfSuit', '2PieceSuit', null, 500.00,'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheAristocrat/DesignOfSuit_TheAristocrat_001.JPG'),
+  (2, 'TheAristocrat', 'Effortlessly blending heritage and modernity', 'DesignOfSuit','3PieceSuit', null, 550.00,'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheAristocrat/DesignOfSuit_TheAristocrat_001.JPG'),
+  (3, 'TheClassicVirtuoso', 'Timeless elegance with a contemporary twist', 'DesignOfSuit','2PieceSuit', null, 500.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheClassicVirtuoso/DesignOfSuit_TheClassicVirtuoso_001.JPG'),
+  (4, 'TheClassicVirtuoso', 'Timeless elegance with a contemporary twist', 'DesignOfSuit','3PieceSuit', null, 19.00,'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheClassicVirtuoso/DesignOfSuit_TheClassicVirtuoso_001.JPG'),
+  (5,'TheCosmopolitan', 'Refined simplicity for global professionals', 'DesignOfSuit', '2PieceSuit', null, 550.00,'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheCosmopolitan/DesignOfSuit_TheCosmopolitan_001.JPG'),
+  (6, 'TheCosmopolitan', 'Refined simplicity for global professionals', 'DesignOfSuit', '3PieceSuit', null, 45.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheCosmopolitan/DesignOfSuit_TheCosmopolitan_001.JPG'),
+	(7, 'TheLuminary', 'Radiating confidence and distinction for trailblazers', 'DesignOfSuit', '2PieceSuit', null, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheLuminary/DesignOfSuit_TheLuminary_001.JPG'),
+	(8, 'TheLuminary', 'Radiating confidence and distinction for trailblazers', 'DesignOfSuit', '3PieceSuit', null, 500.00,  'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheLuminary/DesignOfSuit_TheLuminary_001.JPG'),
+	(9, 'TheMaverick', 'Unique cuts and textures for the daring individual', 'DesignOfSuit','2PieceSuit', null, 500.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheMaverick/DesignOfSuit_TheMaverick_001.JPG'),
+	(10, 'TheMaverick', 'Unique cuts and textures for the daring individual','DesignOfSuit', '3PieceSuit', null, 33.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheMaverick/DesignOfSuit_TheMaverick_001.JPG'),
+	(11, 'TheNobleSovereign', 'Sophistication tailored for formal excellence', 'DesignOfSuit', '2PieceSuit', null, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheNobleSovereign/DesignOfSuit_TheNobleSovereign_001.JPG'),
+	(12, 'TheNobleSovereign', 'Sophistication tailored for formal excellence', 'DesignOfSuit', '3PieceSuit', null, 34.00,'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheNobleSovereign/DesignOfSuit_TheNobleSovereign_001.JPG'),
+	(13, 'TheVanguard', 'Bold, modern, and sharp for industry leaders', 'DesignOfSuit', '2PieceSuit', null, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheVanguard/DesignOfSuit_TheVanguard_001.JPG'),
+	(14, 'TheVanguard', 'Bold, modern, and sharp for industry leaders', 'DesignOfSuit', '3PieceSuit', null, 35.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheVanguard/DesignOfSuit_TheVanguard_001.JPG');
+
+
+
+-- seed data fabric of suit
+truncate table Product
+
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'D725', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_001.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'K725', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_002.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'C725', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_003.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'B509', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_004.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'C509', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_005.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'A509', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_006.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'B476', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_007.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'C476', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_008.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'D502', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_009.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'A502', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_010.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'B502', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_011.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'A476', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_012.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FBW8', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_013.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB1', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_014.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB3', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_015.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB5', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_016.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB6', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_017.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB7', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_018.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB9', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_019.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB10', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_020.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB11', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_021.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB12', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_022.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB13', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_023.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB312', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_024.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB320', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_025.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB321', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_026.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'FWB322', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_027.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'K728', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_028.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'A728', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_029.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'D728', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_030.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'C728', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_031.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', '2PieceSuitCashmereBlend', 'B728', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_032.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'BEDA_M102_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_001.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'BEDA_M106_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_002.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'BEDO_M100_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_003.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'BEHONGNHAT_M103_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_004.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'DO_M105_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_005.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'GACH_M136_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_006.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'INDIGO_M146_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_007.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'INDIGO_M77_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_008.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'KEM_M101_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_009.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'KEM_M104_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_010.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'KEM_M151_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_011.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'KEM_M154_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_012.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'MAUBO_M156_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_013.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'METALGREY_M137_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_014.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'NAUGO_M144_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_015.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'NAUHATOCCHO_M134_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_016.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'REUNHAT_M153_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_017.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'REU_M155_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_018.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'TIMANHXANH_M122_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_019.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XAMCHIANHNAU_M117_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_020.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XAMCHI_M159_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_021.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XAMXANH_M118_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_022.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XANHBIENNHAT_M116_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_023.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XAMCHAM_M147_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_024.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XANHCOVITDAM_M119_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_025.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XANHDA_M124_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_026.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XANHDA_M161_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_027.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XANHDAUNHAT_M150_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_028.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XANHNGODAM_M162_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_029.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XANHREU_M145_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_030.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XANHREU_M152_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_031.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', '2PieceSuitLinen200GSM', 'XANH_M120_200GSM', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_032.jpg');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-2', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_001.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-16', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_002.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-10', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_003.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-7', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_004.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-1', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_005.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-6', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_006.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-5', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_007.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-9', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_008.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-15', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_009.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-14', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_010.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-13', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_011.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-17', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_012.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-3', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_013.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', '2PieceSuitMerinoWoolBlend', 'DT789-8', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_014.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-160#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_001.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-161#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_002.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-162#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_003.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-166#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_004.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-165#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_005.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-163#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_006.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-270-10#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_007.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-270-9#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_008.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-270-8#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_009.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-270-13#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_010.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-270-12#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_011.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-270-11#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_012.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-270-15#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_013.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', '2PieceSuitSuper150sWool', 'SUNSHINE-270-14#', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_014.png');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-01', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_001.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-10', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_002.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-11', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_003.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-12', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_004.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-13', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_005.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-14', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_006.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-15', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_007.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-16', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_008.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-17', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_009.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-18', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_010.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-19', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_011.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-02', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_012.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-20', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_013.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-21', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_014.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-22', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_015.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-23', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_016.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-24', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_017.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-25', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_018.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-26', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_019.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-27', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_020.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-28', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_021.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-03', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_022.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-04', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_023.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-05', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_024.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-06', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_025.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-07', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_026.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-08', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_027.JPG');
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', '2PieceSuitWoolAndVlvet', 'VP-09', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_028.JPG');
+
+
