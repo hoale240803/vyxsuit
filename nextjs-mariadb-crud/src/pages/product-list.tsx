@@ -1,17 +1,18 @@
+import { GroupedProduct } from "@/models/product.model";
 import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function ProductList() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<GroupedProduct[]>([]);
 
   useEffect(() => {
     fetch("/api/product-api")
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
-  console.log(products);
+
   return (
     <>
       <div className={clsx(styles.banner, "container-fluid p-0")}>
