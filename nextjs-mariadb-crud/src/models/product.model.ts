@@ -15,3 +15,7 @@ export type GroupedProduct = {
     Main: Product;
     Images: { S3Url: string; Code: string }[];
 };
+
+export type SuitType = '' | '2Piece' | '3Piece';
+export type TrouserType = '' | 'SideLoopStyleWith2Plates' | 'DoubleButtonDoublePlated' | 'DoubleButtonPlateLessDisconnectedSideLoop' | 'PlateLessStandardSingleButton';
+export type SuitStyle = '' | 'ConfortFit' | 'SlimFit';

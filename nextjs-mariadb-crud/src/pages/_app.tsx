@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import "../i18n";
 
 import "@/styles/global.scss";
+import { SuitBuilderContextProvider } from "@/context/suit-builder/suit-builder.provider";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -20,8 +21,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, []);
   
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <SuitBuilderContextProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </SuitBuilderContextProvider>
   );
 }

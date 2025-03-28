@@ -13,10 +13,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       where: {
         AND: [
           { ProductType: "DesignOfSuit" }, // Điều kiện cố định
-          {...condition}
+          { ...condition }
         ],
       },
-    }) as Product[];
+    }) as unknown as Product[];
 
     const groupedProducts = products.reduce((acc: GroupedProduct[], product: Product) => {
       const existingGroup = acc.find(

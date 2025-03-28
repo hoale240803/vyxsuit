@@ -2,6 +2,7 @@
 
 :root {
   --primary-color: #{variables.$primary-color};
+  --primary-bright-color: #{variables.$primary-bright-color};
   --primary-light-color: #{variables.$primary-light-color};
   --secondary-color: #{variables.$secondary-color};
   --secondary-bright-color: #{variables.$secondary-bright-color};
@@ -24,6 +25,10 @@
   
   .bg-primary-color {
     background-color: var(--primary-color);
+  }
+
+  .h-75vh {
+    height: 75vh;
   }
   
 }

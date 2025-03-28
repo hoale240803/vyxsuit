@@ -2,14 +2,19 @@ import { useRouter } from "next/router";
 import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
+import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
+import { SuitType } from "@/models/product.model";
 
 const Step2 = () => {
   const router = useRouter();
+  const { suitType, selectSuitType } = useSuitBuilder();
   const { id } = router.query;
 
   const nextStep = () => {
     router.push(`/product/${id}/builder/step-3`);
   }
+
+  const handleChose = (type: SuitType) => selectSuitType(type)
 
   return (
     <>
@@ -39,10 +44,10 @@ const Step2 = () => {
 
       <div className="container">
         <div className="row">
-          <div className={clsx(styles["suit-type"], "col-5 offset-1")}>
+          <div className={clsx(styles["suit-type"], "col-5 offset-1")} onClick={() => handleChose('2Piece')}>
             <img src="/images/2-piece.JPG" className={clsx("w-100")} />
-            <div className={clsx(styles["overlay"], styles["active"])}></div>
-            <span className={clsx(styles["checkmark"], styles["active"])}>
+            <div className={clsx(styles["overlay"], (suitType === '2Piece' ? styles['active'] : ''))}></div>
+            <span className={clsx(styles["checkmark"], (suitType === '2Piece' ? styles['active'] : ''))}>
               <svg
                 width="7rem"
                 height="7rem"
@@ -60,10 +65,10 @@ const Step2 = () => {
               </svg>
             </span>
           </div>
-          <div className={clsx(styles["suit-type"], "col-5")}>
+          <div className={clsx(styles["suit-type"], "col-5")} onClick={() => handleChose('3Piece')}>
             <img src="/images/3-piece.JPG" className={clsx("w-100")} />
-            <div className={styles["overlay"]}></div>
-            <span className={styles["checkmark"]}>
+            <div className={clsx(styles["overlay"], (suitType === '3Piece' ? styles['active'] : ''))}></div>
+            <span className={clsx(styles["checkmark"], (suitType === '3Piece' ? styles['active'] : ''))}>
               <svg
                 width="7rem"
                 height="7rem"

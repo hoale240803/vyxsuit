@@ -48,6 +48,11 @@ export default function Layout({ children }: LayoutProps) {
                   Vision & Mission
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" href="/about-us">
+                  About us
+                </Link>
+              </li>
               <li className="nav-item dropdown">
                 <Link
                   className="nav-link dropdown-toggle"
@@ -60,7 +65,7 @@ export default function Layout({ children }: LayoutProps) {
 
                 <ul className="dropdown-menu">
                   <li>
-                    <Link className="dropdown-item" href="#">
+                    <Link className="dropdown-item" href="/product-list">
                       Suit
                     </Link>
                   </li>
@@ -85,19 +90,19 @@ export default function Layout({ children }: LayoutProps) {
             <ul className="navbar-nav">
               <li className="nav-item">
                 <Link className="nav-link" href="#">
-                  🔍 Search
-                </Link>
-              </li>
-              {/* <li className="nav-item">
-                <Link className="nav-link" href="#">
-                  🛒 Cart
+                  <img src="/images/icons/Search.png" alt="search icon" /> Search
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" href="#">
-                  👤 Profile
+                <img src="/images/icons/ShoppingCart.png" alt="shopping cart icon" /> Cart
                 </Link>
-              </li> */}
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" href="#">
+                <img src="/images/icons/Person.png" alt="person icon" /> Profile
+                </Link>
+              </li>
             </ul>
           </div>
         </nav>
