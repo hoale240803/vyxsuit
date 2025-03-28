@@ -1,0 +1,18 @@
+.banner-right-logo {
+    position: relative;
+    img {
+        position: absolute;
+        transform: translate(-10%,-25%);
+    }
+}
+
+.banner-left-logo {
+    padding: 6rem 0rem 6rem 6rem;
+    
+    h1 {
+        font-size: 3rem;
+    }
+    p {
+        font-size: 20px;
+    }
+}
