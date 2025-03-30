@@ -22,15 +22,56 @@
   .accent-color {
     color: var(--accent-color);
   }
-  
+
   .bg-primary-color {
     background-color: var(--primary-color);
+  }
+  .bg-primary-bright-color {
+    background-color: var(--primary-bright-color);
+  }
+  .bg-secondary-bright-color {
+    background-color: var(--secondary-bright-color);
+  }
+  .bg-secondary-light-color {
+    background-color: var(--secondary-light-color);
+  }
+  .bg-secondary-color {
+    background-color: var(--secondary-color);
+  }
+
+  .primary-btn {
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 100%;
+    border: none;
+    width: fit-content;
+  }
+
+  .h-25vh {
+    height: 25vh;
   }
 
   .h-75vh {
     height: 75vh;
   }
-  
+  .vh-30 {
+    height: 30vh;
+  }
+  .vh-40 {
+    height: 40vh;
+  }
+  .vh-50 {
+    height: 50vh;
+  }
+  .vh-70 {
+    height: 70vh;
+  }
+  .vh-75 {
+    height: 75vh;
+  }
 }
 
 body {
@@ -38,7 +79,6 @@ body {
   color: variables.$secondary-color;
 }
 /* main layout */
-
 
 .main-layout {
   background-color: variables.$primary-light-color;
