@@ -1,69 +1,30 @@
 -- Clear existing data (optional)
 SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE users;
 TRUNCATE TABLE Customer;
 TRUNCATE TABLE Product;
 TRUNCATE TABLE ProductTranslation;
 TRUNCATE TABLE Measurement;
 TRUNCATE TABLE Orders;
 SET FOREIGN_KEY_CHECKS = 1;
-select * from users u 
 
-select * from Product p
-where p.ProductType = 'FabricOptions' and p.PriceType = '2PieceSuitWoolAndVlvet'
+SELECT 'Seeding Product data' AS log_message;
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES
+  ('TheAristocrat', 'Effortlessly blending heritage and modernity', 'DesignOfSuit', 'FullSuit', NULL, 500.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheAristocrat/DesignOfSuit_TheAristocrat_001.JPG'),
+  ('TheClassicVirtuoso', 'Timeless elegance with a contemporary twist', 'DesignOfSuit', 'FullSuit', NULL, 500.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheClassicVirtuoso/DesignOfSuit_TheClassicVirtuoso_001.JPG'),
+  ('TheCosmopolitan', 'Refined simplicity for global professionals', 'DesignOfSuit', 'FullSuit', NULL, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheCosmopolitan/DesignOfSuit_TheCosmopolitan_001.JPG'),
+  ('TheLuminary', 'Radiating confidence and distinction for trailblazers', 'DesignOfSuit', 'FullSuit', NULL, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheLuminary/DesignOfSuit_TheLuminary_001.JPG'),
+  ('TheMaverick', 'Unique cuts and textures for the daring individual', 'DesignOfSuit', 'FullSuit', NULL, 500.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheMaverick/DesignOfSuit_TheMaverick_001.JPG'),
+  ('TheNobleSovereign', 'Sophistication tailored for formal excellence', 'DesignOfSuit', 'FullSuit', NULL, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheNobleSovereign/DesignOfSuit_TheNobleSovereign_001.JPG'),
+  ('TheVanguard', 'Bold, modern, and sharp for industry leaders', 'DesignOfSuit', 'FullSuit', NULL, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheVanguard/DesignOfSuit_TheVanguard_001.JPG');
 
-
-truncate table Product
-CREATE TABLE IF NOT EXISTS Product (
-  Id INT AUTO_INCREMENT PRIMARY KEY,
-  Name VARCHAR(255) NOT NULL,
-  Description TEXT,
-  S3Url VARCHAR(500),
-  ProductType ENUM('DesignOfSuit', 'JacketOnly', 'TrouserOnly','VestCoatOnly', 'FabricOptions', 'Shirt', 'TailoredFit', 'Button', 'Lining', 'SuitType') NOT NULL,
-  Code VARCHAR(100) UNIQUE,
-  Price DECIMAL(10,6) NOT NULL DEFAULT 0.00,
-  PriceType ENUM(
-    '2PieceSuit', 
-    '3PieceSuit',
-  
-'JacketOnlySuitSuper150',
-'JacketOnlySuitVelvette',	
-'JacketOnlySuitCashmereBlend',	
-'JacketOnlySuitLinen200GSM',	
-'JacketOnlySuitMerino',
-
-'VestCoatSuitWoolAndVlvet',
-'VestCoatSuitCashmereBlend',	
-'VestCoatSuitSuper150sWool',	
-'VestCoatSuitLinen200GSM',	
-'VestCoatSuitMerinoWoolBlend',
-
-'TrouserSuitWoolAndVlvet',
-'TrouserSuitCashmereBlend',	
-'TrouserSuitSuper150sWool',	
-'TrouserSuitLinen200GSM',	
-'TrouserSuitMerinoWoolBlend') DEFAULT NULL
-);
-
--- seed data design of suit -base
-
-INSERT INTO Product (Id, Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES
-  (1, 'TheAristocrat', 'Effortlessly blending heritage and modernity','DesignOfSuit', 'FullSuit', null, 500.00,'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheAristocrat/DesignOfSuit_TheAristocrat_001.JPG'),
-  (2, 'TheClassicVirtuoso', 'Timeless elegance with a contemporary twist', 'DesignOfSuit','FullSuit', null, 500.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheClassicVirtuoso/DesignOfSuit_TheClassicVirtuoso_001.JPG'),
-  (3,'TheCosmopolitan', 'Refined simplicity for global professionals', 'DesignOfSuit', 'FullSuit', null, 550.00,'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheCosmopolitan/DesignOfSuit_TheCosmopolitan_001.JPG'),
-	(4, 'TheLuminary', 'Radiating confidence and distinction for trailblazers', 'DesignOfSuit', 'FullSuit', null, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheLuminary/DesignOfSuit_TheLuminary_001.JPG'),
-	(5, 'TheMaverick', 'Unique cuts and textures for the daring individual', 'DesignOfSuit','FullSuit', null, 500.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheMaverick/DesignOfSuit_TheMaverick_001.JPG'),
-	(6, 'TheNobleSovereign', 'Sophistication tailored for formal excellence', 'DesignOfSuit', 'FullSuit', null, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheNobleSovereign/DesignOfSuit_TheNobleSovereign_001.JPG'),
-	(7, 'TheVanguard', 'Bold, modern, and sharp for industry leaders', 'DesignOfSuit', 'FullSuit', null, 550.00, 'https://d1wuhi05elo03b.cloudfront.net/DesignOfSuit/TheVanguard/DesignOfSuit_TheVanguard_001.JPG'),
-
-
--- seed data for 2-3 piece suit
-	(9, 'TwoPieceSuit', null, 'SuitType', '2PieceSuit', null, 0, null),
-	(8, 'ThreePieceSuit', null, 'SuitType', '3PieceSuit', null, 100, null),
-
+-- Additional seed data for other categories (e.g., SuitType, FabricOptions, etc.)
+INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES
+  ('TwoPieceSuit', NULL, 'SuitType', '2PieceSuit', NULL, 0, NULL),
+  ('ThreePieceSuit', NULL, 'SuitType', '3PieceSuit', NULL, 100, NULL);
 
 -- seed data fabric of suit
 -- seed data for JacketOnlySuperWool150
+SELECT 'Seeding JacketOnlySuperWool150 data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'JacketOnlySuperWool150', 'SUNSHINE-160#', 400, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_001.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'JacketOnlySuperWool150', 'SUNSHINE-161#', 400, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_002.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'JacketOnlySuperWool150', 'SUNSHINE-162#', 400, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_003.png');
@@ -79,7 +40,8 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'JacketOnlySuperWool150', 'SUNSHINE-270-15#', 400, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_013.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'JacketOnlySuperWool150', 'SUNSHINE-270-14#', 400, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_014.png');
 
---seed data for JacketOnlyVelvette
+-- seed data for JacketOnlyVelvette
+SELECT 'Seeding JacketOnlyVelvette data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'JacketOnlyVelvette', 'VP-01', 450, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_001.JPG');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'JacketOnlyVelvette', 'VP-10', 450, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_002.JPG');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'JacketOnlyVelvette', 'VP-11', 450, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_003.JPG');
@@ -111,6 +73,7 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 
 
 -- seed data for JacketOnlyCashmereBlend -500
+SELECT 'Seeding JacketOnlyCashmereBlend data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'JacketOnlyCashmereWool', 'D725', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_001.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'JacketOnlyCashmereWool', 'K725', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_002.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'JacketOnlyCashmereWool', 'C725', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_003.png');
@@ -145,6 +108,7 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'JacketOnlyCashmereWool', 'B728', 500, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_032.png');
 
 -- seed data JacketOnly200GSM
+SELECT 'Seeding JacketOnly200GSM data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', 'JacketOnlyLinen200GSM', 'BEDA_M102_200GSM', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_001.jpg');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', 'JacketOnlyLinen200GSM', 'BEDA_M106_200GSM', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_002.jpg');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', 'JacketOnlyLinen200GSM', 'BEDO_M100_200GSM', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_003.jpg');
@@ -180,6 +144,7 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 
 
 -- seed data OnlyMerinoWool - 600
+SELECT 'Seeding OnlyMerinoWool data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'JacketOnlyMerinoWool', 'DT789-2', 600, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_001.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'JacketOnlyMerinoWool', 'DT789-16', 600, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_002.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'JacketOnlyMerinoWool', 'DT789-10', 600, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_003.png');
@@ -198,6 +163,7 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 
 -- TrouserOnly
 -- seed data for TrouserOnlySuperWool150
+SELECT 'Seeding TrouserOnlySuperWool150 data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'TrouserOnlySuperWool150', 'SUNSHINE-160#', 140, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_001.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'TrouserOnlySuperWool150', 'SUNSHINE-161#', 140, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_002.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'TrouserOnlySuperWool150', 'SUNSHINE-162#', 140, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_003.png');
@@ -214,7 +180,9 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'TrouserOnlySuperWool150', 'SUNSHINE-270-14#', 140, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_014.png');
 
 
---seed data for TrouserOnlyVelvette
+-- seed data for TrouserOnlyVelvette
+SELECT 'Seeding TrouserOnlyVelvette data' AS log_message;
+
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'TrouserOnlyVelvette', 'VP-01', 160, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_001.JPG');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'TrouserOnlyVelvette', 'VP-10', 160, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_002.JPG');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'TrouserOnlyVelvette', 'VP-11', 160, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_003.JPG');
@@ -245,6 +213,7 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'TrouserOnlyVelvette', 'VP-09', 160, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_028.JPG');
 
 -- seed data for TrouserOnlyCashmereBlend -180
+SELECT 'Seeding TrouserOnlyCashmereBlend data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'TrouserOnlyCashmereBlend', 'D725', 180, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_001.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'TrouserOnlyCashmereBlend', 'K725', 180, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_002.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'TrouserOnlyCashmereBlend', 'C725', 180, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_003.png');
@@ -279,6 +248,8 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'TrouserOnlyCashmereBlend', 'B728', 180, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_032.png');
 
 -- seed data TrouserOnlyLinen200GSM
+SELECT 'Seeding TrouserOnlyLinen200GSM data' AS log_message;
+
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', 'TrouserOnlyLinen200GSM', 'BEDA_M102_200GSM', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_001.jpg');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', 'TrouserOnlyLinen200GSM', 'BEDA_M106_200GSM', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_002.jpg');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', 'TrouserOnlyLinen200GSM', 'BEDO_M100_200GSM', 550, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_003.jpg');
@@ -314,6 +285,8 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 
 
 -- seed data TrouserOnlyMerinoWool - 600
+SELECT 'Seeding TrouserOnlyMerinoWool data' AS log_message;
+
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'TrouserOnlyMerinoWool', 'DT789-2', 600, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_001.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'TrouserOnlyMerinoWool', 'DT789-16', 600, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_002.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'TrouserOnlyMerinoWool', 'DT789-10', 600, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_003.png');
@@ -331,6 +304,8 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 
 -- VestCoat
 -- seed data for VestCoatSuperWool150
+SELECT 'Seeding VestCoatSuperWool150 data' AS log_message;
+
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'VestCoatOnlySuperWool150', 'SUNSHINE-160#', 150, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_001.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'VestCoatOnlySuperWool150', 'SUNSHINE-161#', 150, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_002.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'VestCoatOnlySuperWool150', 'SUNSHINE-162#', 150, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_003.png');
@@ -347,7 +322,8 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Super150sWool', NULL, 'FabricOptions', 'VestCoatOnlySuperWool150', 'SUNSHINE-270-14#', 150, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Super150sWool/FabricOptions_Super150sWool_014.png');
 
 
---seed data for VestCoatOnlyVelvette
+-- seed data for VestCoatOnlyVelvette
+SELECT 'Seeding VestCoatOnlyVelvette data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'VestCoatOnlyVelvette', 'VP-01', 175, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_001.JPG');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'VestCoatOnlyVelvette', 'VP-10', 175, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_002.JPG');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('WoolAndVlvet', NULL, 'FabricOptions', 'VestCoatOnlyVelvette', 'VP-11', 175, 'https://vyxsources.s3.amazonaws.com/FabricOptions/WoolAndVlvet/FabricOptions_WoolAndVlvet_003.JPG');
@@ -379,6 +355,7 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 
 
 -- seed data for VestCoatOnlyCashmereCahmereWool -180
+SELECT 'Seeding VestCoatOnlyCashmereCahmereWool data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'VestCoatOnlyCashmereCahmereWool', 'D725', 200, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_001.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'VestCoatOnlyCashmereCahmereWool', 'K725', 200, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_002.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('CashmereBlend', NULL, 'FabricOptions', 'VestCoatOnlyCashmereCahmereWool', 'C725', 200, 'https://vyxsources.s3.amazonaws.com/FabricOptions/CashmereBlend/FabricOptions_CashmereBlend_003.png');
@@ -414,6 +391,7 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 
 
 -- seed data VestCoatOnlyLinen200GSM
+SELECT 'Seeding VestCoatOnlyLinen200GSM data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', 'VestCoatOnlyLinen200GSM', 'BEDA_M102_200GSM', 225, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_001.jpg');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', 'VestCoatOnlyLinen200GSM', 'BEDA_M106_200GSM', 225, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_002.jpg');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('Linen200GSM', NULL, 'FabricOptions', 'VestCoatOnlyLinen200GSM', 'BEDO_M100_200GSM', 225, 'https://vyxsources.s3.amazonaws.com/FabricOptions/Line/FabricOptions_Line_003.jpg');
@@ -450,6 +428,7 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 
 
 -- seed data VestCoatOnlyMerinoWool - 600
+SELECT 'Seeding VestCoatOnlyMerinoWool data' AS log_message;
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'VestCoatOnlyMerinoWool', 'DT789-2', 250, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_001.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'VestCoatOnlyMerinoWool', 'DT789-16', 250, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_002.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'VestCoatOnlyMerinoWool', 'DT789-10', 250, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_003.png');
@@ -464,4 +443,3 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3U
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'VestCoatOnlyMerinoWool', 'DT789-17', 250, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_012.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'VestCoatOnlyMerinoWool', 'DT789-3', 250, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_013.png');
 INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, S3Url) VALUES ('MerinoWoolBlend', NULL, 'FabricOptions', 'VestCoatOnlyMerinoWool', 'DT789-8', 250, 'https://vyxsources.s3.amazonaws.com/FabricOptions/MerinoWoolBlend/FabricOptions_MerinoWoolBlend_014.png');
-  

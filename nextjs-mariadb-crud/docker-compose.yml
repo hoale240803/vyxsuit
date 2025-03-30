@@ -1,20 +1,28 @@
-version: "3.8"
-
 services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    depends_on:
-      mariadb:
-        condition: service_healthy
-    env_file:
-      - .env
-    networks:
-      - app_network      
+  # app:
+  #   container_name: nextjs-app
+  #   build: .
+  #   ports:
+  #     - "3000:3000"
+  #   command: >
+  #     sh -c "
+  #     npx prisma generate &&
+  #     npx prisma migrate deploy &&
+  #     npm run dev
+  #     "
+  #   depends_on:
+  #     mariadb:
+  #       condition: service_healthy
+  #   environment:
+  #     DATABASE_URL: mysql://vyxsuit_user:password@mariadb:3306/vyxsuit_db
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - app_network      
 
   mariadb:
     image: mariadb:10.8.3
+    container_name: mariadb
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -29,7 +37,7 @@ services:
       - ./docker/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
       - ./docker/seed-data.sql:/docker-entrypoint-initdb.d/02-seed-data.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "vyxsuit_user", "-ppassword"]
       interval: 10s
       timeout: 5s
       retries: 5
