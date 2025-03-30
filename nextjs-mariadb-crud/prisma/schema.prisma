@@ -7,42 +7,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model customer {
-  Id          Int     @id @default(autoincrement())
-  FirstName   String  @db.VarChar(255)
-  LastName    String  @db.VarChar(255)
-  Email       String  @unique(map: "Email") @db.VarChar(255)
-  CompanyName String? @db.VarChar(255)
+model Customer {
+  Id          Int      @id @default(autoincrement())
+  FirstName   String   @db.VarChar(255)
+  LastName    String   @db.VarChar(255)
+  Email       String   @unique(map: "Email") @db.VarChar(255)
+  CompanyName String?  @db.VarChar(255)
+  Orders      Orders[]
 }
 
-model measurement {
-  Id              Int                         @id @default(autoincrement())
-  MeasurementType measurement_MeasurementType
-  Unit            measurement_Unit
+model Measurement {
+  Id                 Int                         @id @default(autoincrement())
+  MeasurementType    Measurement_MeasurementType
+  Unit               Measurement_Unit
+  MeasurementImage   MeasurementImage[]
+  Orders             Orders[]
+  ShirtMeasurement   ShirtMeasurement[]
+  TrouserMeasurement TrouserMeasurement[]
 }
 
-model measurementimage {
-  Id            Int     @id @default(autoincrement())
-  Name          String? @db.VarChar(255)
-  S3Url         String? @db.VarChar(500)
+model MeasurementImage {
+  Id            Int         @id @default(autoincrement())
+  Name          String?     @db.VarChar(255)
+  S3Url         String?     @db.VarChar(500)
   MeasurementId Int
+  Measurement   Measurement @relation(fields: [MeasurementId], references: [Id], onDelete: Cascade, onUpdate: Restrict, map: "MeasurementImage_ibfk_1")
+
+  @@index([MeasurementId], map: "MeasurementId")
 }
 
-model orderdetail {
+model OrderDetail {
   Id          Int                      @id @default(autoincrement())
   OrderId     Int
   ProductId   Int
   Price       Decimal                  @default(0.00) @db.Decimal(10, 2)
   Quantity    Int                      @default(1) @db.TinyInt
-  SuitType    orderdetail_SuitType?
+  SuitType    OrderDetail_SuitType?
   TrouserId   Int?
-  TailoredFit orderdetail_TailoredFit?
+  TailoredFit OrderDetail_TailoredFit?
   FabricId    Int?
   LiningId    Int?
   ButtonId    Int?
+  Orders      Orders                   @relation(fields: [OrderId], references: [OrderId], onDelete: Cascade, onUpdate: Restrict, map: "OrderDetail_ibfk_1")
+  Product     Product                  @relation(fields: [ProductId], references: [Id], onDelete: Cascade, onUpdate: Restrict, map: "OrderDetail_ibfk_2")
+
+  @@index([OrderId], map: "OrderId")
+  @@index([ProductId], map: "ProductId")
 }
 
-model orders {
+model Orders {
   OrderId          Int                   @id @default(autoincrement())
   CustomerId       Int
   MeasurementId    Int
@@ -56,98 +69,136 @@ model orders {
   State            String?               @db.VarChar(100)
   ZipCode          String?               @db.VarChar(20)
   Phone            String?               @db.VarChar(15)
-  ShippingMethod   orders_ShippingMethod
+  ShippingMethod   Orders_ShippingMethod
   DifferentAddress Boolean?              @default(false)
-  PaymentStatus    orders_PaymentStatus
+  PaymentStatus    Orders_PaymentStatus
   StripeId         String?               @db.VarChar(1000)
   Lang             String?               @db.VarChar(10)
   CurrencyCode     String?               @db.VarChar(10)
   CurrencyRate     Decimal?              @default(1.000000) @db.Decimal(10, 6)
+  OrderDetail      OrderDetail[]
+  Customer         Customer              @relation(fields: [CustomerId], references: [Id], onDelete: Cascade, onUpdate: Restrict, map: "Orders_ibfk_1")
+  Measurement      Measurement           @relation(fields: [MeasurementId], references: [Id], onDelete: Cascade, onUpdate: Restrict, map: "Orders_ibfk_2")
+
+  @@index([CustomerId], map: "CustomerId")
+  @@index([MeasurementId], map: "MeasurementId")
 }
 
-model product {
-  Id          Int                 @id @default(autoincrement())
-  Name        String              @db.VarChar(255)
-  Description String?             @db.Text
-  S3Url       String?             @db.VarChar(500)
-  ProductType product_ProductType
-  Code        String?             @unique(map: "Code") @db.VarChar(100)
-  Price       Decimal             @default(0.000000) @db.Decimal(10, 6)
+model Product {
+  Id                 Int                  @id @default(autoincrement())
+  Name               String               @db.VarChar(255)
+  Description        String?              @db.Text
+  S3Url              String?              @db.VarChar(500)
+  ProductType        Product_ProductType
+  PriceType          Product_PriceType
+  Code               String?              @db.VarChar(100)
+  Price              Decimal              @default(0.000000) @db.Decimal(10, 6)
+  OrderDetail        OrderDetail[]
+  ProductTranslation ProductTranslation[]
 }
 
-model producttranslation {
-  Id             Int    @id @default(autoincrement())
+model ProductTranslation {
+  Id             Int     @id @default(autoincrement())
   ProductId      Int
-  Language       String @db.VarChar(10)
-  TranslatedName String @db.VarChar(255)
+  Language       String  @db.VarChar(10)
+  TranslatedName String  @db.VarChar(255)
+  Product        Product @relation(fields: [ProductId], references: [Id], onDelete: Cascade, onUpdate: Restrict, map: "ProductTranslation_ibfk_1")
+
+  @@index([ProductId], map: "ProductId")
 }
 
-model shirtmeasurement {
-  Id               Int      @id @default(autoincrement())
+model ShirtMeasurement {
+  Id               Int         @id @default(autoincrement())
   MeasurementId    Int
-  Chest            Decimal? @db.Decimal(5, 2)
-  Shoulder         Decimal? @db.Decimal(5, 2)
-  ArmLength        Decimal? @db.Decimal(5, 2)
-  ArmShoulderJoint Decimal? @db.Decimal(5, 2)
-  ArmBicepWidth    Decimal? @db.Decimal(5, 2)
-  JacketWidth      Decimal? @db.Decimal(5, 2)
-  Abdomen          Decimal? @db.Decimal(5, 2)
-  BellyTummy       Decimal? @db.Decimal(5, 2)
-  Hips             Decimal? @db.Decimal(5, 2)
-  Neck             Decimal? @db.Decimal(5, 2)
+  Chest            Decimal?    @db.Decimal(5, 2)
+  Shoulder         Decimal?    @db.Decimal(5, 2)
+  ArmLength        Decimal?    @db.Decimal(5, 2)
+  ArmShoulderJoint Decimal?    @db.Decimal(5, 2)
+  ArmBicepWidth    Decimal?    @db.Decimal(5, 2)
+  JacketWidth      Decimal?    @db.Decimal(5, 2)
+  Abdomen          Decimal?    @db.Decimal(5, 2)
+  BellyTummy       Decimal?    @db.Decimal(5, 2)
+  Hips             Decimal?    @db.Decimal(5, 2)
+  Neck             Decimal?    @db.Decimal(5, 2)
+  Measurement      Measurement @relation(fields: [MeasurementId], references: [Id], onDelete: Cascade, onUpdate: Restrict, map: "ShirtMeasurement_ibfk_1")
+
+  @@index([MeasurementId], map: "MeasurementId")
 }
 
-model trousermeasurement {
-  Id            Int      @id @default(autoincrement())
+model TrouserMeasurement {
+  Id            Int         @id @default(autoincrement())
   MeasurementId Int
-  Waist         Decimal? @db.Decimal(5, 2)
-  UpperHips     Decimal? @db.Decimal(5, 2)
-  HipsCrotch    Decimal? @db.Decimal(5, 2)
-  Outswarm      Decimal? @db.Decimal(5, 2)
-  Thigh         Decimal? @db.Decimal(5, 2)
-  Calf          Decimal? @db.Decimal(5, 2)
+  Waist         Decimal?    @db.Decimal(5, 2)
+  UpperHips     Decimal?    @db.Decimal(5, 2)
+  HipsCrotch    Decimal?    @db.Decimal(5, 2)
+  Outswarm      Decimal?    @db.Decimal(5, 2)
+  Thigh         Decimal?    @db.Decimal(5, 2)
+  Calf          Decimal?    @db.Decimal(5, 2)
+  Measurement   Measurement @relation(fields: [MeasurementId], references: [Id], onDelete: Cascade, onUpdate: Restrict, map: "TrouserMeasurement_ibfk_1")
+
+  @@index([MeasurementId], map: "MeasurementId")
 }
 
-enum measurement_MeasurementType {
+enum Measurement_MeasurementType {
   Shirt
   Trouser
-  Image
 }
 
-enum measurement_Unit {
+enum Measurement_Unit {
   Cm
   Inch
 }
 
-enum product_ProductType {
+enum Product_ProductType {
   DesignOfSuit
-  Jacket
-  Trouser
+  JacketOnly
+  TrouserOnly
+  VestCoatOnly
+  FabricOptions
   Shirt
   TailoredFit
-  FabricOptions
   Button
   Lining
   SuitType
-  TrouserType
 }
 
-enum orderdetail_SuitType {
-  TWO_PIECE   @map("2piece")
-  THREE_PIECE @map("3piece")
+enum Product_PriceType {
+  FullSuit
+  TwoPieceSuit                       @map("2PieceSuit")
+  ThreePieceSuit                       @map("3PieceSuit")
+  JacketOnlySuperWool150
+  JacketOnlyVelvette
+  JacketOnlyCashmereWool
+  JacketOnlyLinen200GSM
+  JacketOnlyMerinoWool
+  TrouserOnlySuperWool150
+  TrouserOnlyVelvette
+  TrouserOnlyCashmereBlend
+  TrouserOnlyLinen200GSM
+  TrouserOnlyMerinoWool
+  VestCoatOnlySuperWool150
+  VestCoatOnlyVelvette
+  VestCoatOnlyCashmereCahmereWool
+  VestCoatOnlyLinen200GSM
+  VestCoatOnlyMerinoWool
 }
 
-enum orderdetail_TailoredFit {
+enum OrderDetail_SuitType {
+  TwoPiece @map("2piece")
+  ThreePiece @map("3piece")
+}
+
+enum OrderDetail_TailoredFit {
   SlimFit
   ComfortFit
 }
 
-enum orders_ShippingMethod {
+enum Orders_ShippingMethod {
   Standard
   Express
 }
 
-enum orders_PaymentStatus {
+enum Orders_PaymentStatus {
   failed
   success
   none

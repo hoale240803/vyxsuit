@@ -2,6 +2,7 @@
 
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
+import Image from 'next/image'
 
 const ProductSlider = ({ images }: { images: string[] }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -29,11 +30,14 @@ const ProductSlider = ({ images }: { images: string[] }) => {
         transition={{ ease: "easeInOut", duration: 3, repeat: Infinity }}
       >
         {images.map((src, index) => (
-          <img
-            key={index}
+          <Image
             src={src}
+            key={index}
             alt={`Product ${index}`}
             className="w-60 h-60 object-cover"
+            width={240}
+            height={240}
+            unoptimized={true}
           />
         ))}
       </motion.div>

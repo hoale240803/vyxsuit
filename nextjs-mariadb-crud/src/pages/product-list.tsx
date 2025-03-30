@@ -4,6 +4,7 @@ import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from 'next/image';
 
 export default function ProductList() {
   const { clear } = useSuitBuilder();
@@ -23,7 +24,13 @@ export default function ProductList() {
   return (
     <>
       <div className={clsx(styles.banner, "container-fluid p-0")}>
-        <img src="/images/big-banner.jpg" className="w-100" />
+        <Image
+          src="/images/big-banner.jpg"
+          className="w-100"
+          alt="banner"
+          width={100}
+          height={100}
+          unoptimized={true} />
 
         <div className={styles["banner-text"]}>
           <h1>Craft Your Legacy, Your Brand, One Stitch at a Time.</h1>
@@ -69,11 +76,13 @@ export default function ProductList() {
             <div className="row" key={index}>
               {products.slice(index * 4, index * 4 + 4).map((item) => (
                 <div className="col-md-3 mb-4" key={item.Main.Id}>
-                  <img
+                  <Image
                     src={item.Main.S3Url}
                     alt={item.Name || "Product Image"}
                     className="w-100"
-                  />
+                    width={100}
+                    height={100}
+                    unoptimized={true} />
                   <p className="fs-4 mb-0">{item.Name}</p>
                   <p className="fs-6">{item.Description}</p>
                   <Link href={`/product/${item.Main.Id}/builder/step-2`} passHref onClick={handleClearOldSuit}>

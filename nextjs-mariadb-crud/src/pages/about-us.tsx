@@ -1,10 +1,8 @@
-import { useRouter } from "next/router";
-
 import styles from "@/styles/about-us.module.scss";
 import clsx from "clsx";
+import Image from 'next/image'
 
 export default function AboutUs() {
-  const router = useRouter();
 
   return (
     <>
@@ -18,12 +16,17 @@ export default function AboutUs() {
             </p>
           </div>
           <div className={clsx(styles["banner-right-logo"], "col-6 h-100")}>
-            <img src="/images/logo-lg.png" className="w-100" />
+            <Image
+              src="/images/logo-lg.png"
+              className="w-100"
+              alt="Logo"
+              width={50}
+              height={50}
+              unoptimized={true} />
           </div>
 
           <div className="w-100">
             <div className="img-cantainer">
-              <img />
             </div>
           </div>
         </div>

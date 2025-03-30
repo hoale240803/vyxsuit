@@ -7,7 +7,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
     const { keyword } = req.query;
 
-    const condition = keyword ? { Name: { contains: keyword } } : {};
+    const condition = typeof keyword === "string" ? { Name: { contains: keyword } } : {};
     
     const products = await prisma.product.findMany({
       where: {

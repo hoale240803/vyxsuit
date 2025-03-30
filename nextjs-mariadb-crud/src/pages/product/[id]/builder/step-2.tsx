@@ -4,6 +4,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
 import { SuitType } from "@/models/product.model";
+import Image from 'next/image';
 
 const Step2 = () => {
   const router = useRouter();
@@ -22,10 +23,10 @@ const Step2 = () => {
         <div className="row">
           <div className="col-3">
             <div className="w-100 d-inline-flex align-items-center justify-content-end gap-3">
-                <svg width={'2rem'} version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" enable-background="new 0 0 32 32" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <line fill="none" stroke="#D4AF37" stroke-width="2" stroke-miterlimit="10" x1="6" y1="16" x2="28" y2="16"></line> <polyline fill="none" stroke="#D4AF37" stroke-width="2" stroke-miterlimit="10" points="14,24.5 5.5,16 14,7.5 "></polyline> </g></svg>
-                <Link href={"/product-list"} className="primary-color text-decoration-none" passHref>
-                    <p className="mb-0 primary-color">Back to prevous</p>
-                </Link>
+              <svg width={'2rem'} version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" enable-background="new 0 0 32 32" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <line fill="none" stroke="#D4AF37" stroke-width="2" stroke-miterlimit="10" x1="6" y1="16" x2="28" y2="16"></line> <polyline fill="none" stroke="#D4AF37" stroke-width="2" stroke-miterlimit="10" points="14,24.5 5.5,16 14,7.5 "></polyline> </g></svg>
+              <Link href={"/product-list"} className="primary-color text-decoration-none" passHref>
+                <p className="mb-0 primary-color">Back to prevous</p>
+              </Link>
             </div>
           </div>
           <div className="col-6">
@@ -45,7 +46,13 @@ const Step2 = () => {
       <div className="container">
         <div className="row">
           <div className={clsx(styles["suit-type"], "col-5 offset-1")} onClick={() => handleChose('2Piece')}>
-            <img src="/images/2-piece.JPG" className={clsx("w-100")} />
+            <Image
+              src="/images/2-piece.JPG"
+              className={clsx("w-100")}
+              alt="2-piece suit"
+              width={100}
+              height={100}
+              unoptimized={true} />
             <div className={clsx(styles["overlay"], (suitType === '2Piece' ? styles['active'] : ''))}></div>
             <span className={clsx(styles["checkmark"], (suitType === '2Piece' ? styles['active'] : ''))}>
               <svg
@@ -66,7 +73,13 @@ const Step2 = () => {
             </span>
           </div>
           <div className={clsx(styles["suit-type"], "col-5")} onClick={() => handleChose('3Piece')}>
-            <img src="/images/3-piece.JPG" className={clsx("w-100")} />
+            <Image
+              src="/images/3-piece.JPG"
+              className={clsx("w-100")}
+              alt="3-piece suit"
+              width={100}
+              height={100}
+              unoptimized={true} />
             <div className={clsx(styles["overlay"], (suitType === '3Piece' ? styles['active'] : ''))}></div>
             <span className={clsx(styles["checkmark"], (suitType === '3Piece' ? styles['active'] : ''))}>
               <svg
@@ -89,7 +102,7 @@ const Step2 = () => {
         </div>
         <div className="row">
           <div className="col-4 m-auto mt-5 ">
-          <button className="p-3 w-100 bg-primary-color border-0 accent-color fs-5" onClick={nextStep}>Continue</button>
+            <button className="p-3 w-100 bg-primary-color border-0 accent-color fs-5" onClick={nextStep}>Continue</button>
           </div>
         </div>
       </div>

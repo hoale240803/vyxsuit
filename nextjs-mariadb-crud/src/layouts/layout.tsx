@@ -25,7 +25,8 @@ export default function Layout({ children }: LayoutProps) {
               alt="WX logo"
               width={50}
               height={50}
-              priority 
+              priority
+              unoptimized={true}
             />
           </Link>
           <button
@@ -90,17 +91,38 @@ export default function Layout({ children }: LayoutProps) {
             <ul className="navbar-nav">
               <li className="nav-item">
                 <Link className="nav-link" href="#">
-                  <img src="/images/icons/Search.png" alt="search icon" /> Search
+                  <Image
+                    src='/images/icons/Search.png'
+                    alt='search icon'
+                    width={20}
+                    height={20}
+                    unoptimized={true}
+                  />
+                  Search
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" href="#">
-                <img src="/images/icons/ShoppingCart.png" alt="shopping cart icon" /> Cart
+                  <Image
+                    src="/images/icons/ShoppingCart.png"
+                    alt="shopping cart icon"
+                    width={20}
+                    height={20}
+                    unoptimized={true}
+                  />
+                  Cart
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" href="#">
-                <img src="/images/icons/Person.png" alt="person icon" /> Profile
+                  <Image
+                    src="/images/icons/Person.png"
+                    alt="person icon"
+                    width={20}
+                    height={20}
+                    unoptimized={true}
+                  />
+                  Profile
                 </Link>
               </li>
             </ul>
@@ -111,7 +133,7 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content */}
       <main className={clsx("main-content", "container-fluid p-0")}>{children}</main>
 
-      <footer className={clsx("main-footer","py-4")}>
+      <footer className={clsx("main-footer", "py-4")}>
         <div className="container d-flex justify-content-between align-items-center">
           {/* Logo */}
           <div>
@@ -120,6 +142,7 @@ export default function Layout({ children }: LayoutProps) {
               alt="Logo"
               width={200}
               height={200}
+              unoptimized={true}
             />
           </div>
 

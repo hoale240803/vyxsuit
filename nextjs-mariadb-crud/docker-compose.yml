@@ -1,24 +1,25 @@
 services:
-  # app:
-  #   container_name: nextjs-app
-  #   build: .
-  #   ports:
-  #     - "3000:3000"
-  #   command: >
-  #     sh -c "
-  #     npx prisma generate &&
-  #     npx prisma migrate deploy &&
-  #     npm run dev
-  #     "
-  #   depends_on:
-  #     mariadb:
-  #       condition: service_healthy
-  #   environment:
-  #     DATABASE_URL: mysql://vyxsuit_user:password@mariadb:3306/vyxsuit_db
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - app_network      
+  app:
+    container_name: nextjs-app
+    build: .
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "
+      npm install &&
+      npx prisma migrate deploy &&
+      npx prisma generate &&
+      tail -f /dev/null
+      "
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: mysql://vyxsuit_user:password@mariadb:3306/vyxsuit_db
+    env_file:
+      - .env
+    networks:
+      - app_network      
 
   mariadb:
     image: mariadb:10.8.3

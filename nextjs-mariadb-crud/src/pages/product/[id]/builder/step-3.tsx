@@ -4,11 +4,12 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
 import { TrouserType } from "@/models/product.model";
+import Image from 'next/image';
 
 const Step3 = () => {
   const router = useRouter();
   const { trouser, selectTrouser } = useSuitBuilder();
-  
+
   const { id } = router.query;
 
   const nextStep = () => {
@@ -79,7 +80,13 @@ const Step3 = () => {
       <div className="container-fluid">
         <div className="row">
           <div className={clsx(styles["suit-type"], "offset-2 col-4")} id="SideLoopStyleWith2Plates" onClick={() => handleChose('SideLoopStyleWith2Plates')}>
-            <img src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/SideLoopStyleWith2Plates/TrouserType_SideLoopStyleWith2Plates_005.JPG" className={clsx("w-100")} />
+            <Image
+              src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/SideLoopStyleWith2Plates/TrouserType_SideLoopStyleWith2Plates_005.JPG"
+              className={clsx("w-100")}
+              alt="2-piece suit"
+              width={100}
+              height={100}
+              unoptimized={true} />
             <div className={clsx(styles["overlay"], (trouser === 'SideLoopStyleWith2Plates' ? styles['active'] : ''))}></div>
             <span className={clsx(styles["checkmark"], (trouser === 'SideLoopStyleWith2Plates' ? styles['active'] : ''))}>
               <svg
@@ -101,7 +108,12 @@ const Step3 = () => {
           </div>
 
           <div className={clsx(styles["suit-type"], "col-4")} id="DoubleButtonDoublePlated" onClick={() => handleChose('DoubleButtonDoublePlated')}>
-            <img src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/DoubleButtonDoublePlated/TrouserType_DoubleButtonDoublePlated_002.JPG" className={clsx("w-100")} />
+            <Image src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/DoubleButtonDoublePlated/TrouserType_DoubleButtonDoublePlated_002.JPG"
+              className={clsx("w-100")}
+              alt="piece suit"
+              width={100}
+              height={100}
+              unoptimized={true} />
             <div className={clsx(styles["overlay"], (trouser === 'DoubleButtonDoublePlated' ? styles['active'] : ''))}></div>
             <span className={clsx(styles["checkmark"], (trouser === 'DoubleButtonDoublePlated' ? styles['active'] : ''))}>
               <svg
@@ -125,7 +137,12 @@ const Step3 = () => {
 
         <div className="row mt-3">
           <div className={clsx(styles["suit-type"], "offset-2 col-4")} id="DoubleButtonPlateLessDisconnectedSideLoop" onClick={() => handleChose('DoubleButtonPlateLessDisconnectedSideLoop')}>
-            <img src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/DoubleButtonPlateLessDisconnectedSideLoop/TrouserType_DoubleButtonPlateLessDisconnectedSideLoop_004.JPG" className={clsx("w-100")} />
+            <Image src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/DoubleButtonPlateLessDisconnectedSideLoop/TrouserType_DoubleButtonPlateLessDisconnectedSideLoop_004.JPG"
+              className={clsx("w-100")}
+              alt="piece suit"
+              width={100}
+              height={100}
+              unoptimized={true} />
             <div className={clsx(styles["overlay"], (trouser === 'DoubleButtonPlateLessDisconnectedSideLoop' ? styles['active'] : ''))}></div>
             <span className={clsx(styles["checkmark"], (trouser === 'DoubleButtonPlateLessDisconnectedSideLoop' ? styles['active'] : ''))}>
               <svg
@@ -147,7 +164,12 @@ const Step3 = () => {
           </div>
 
           <div className={clsx(styles["suit-type"], "col-4")} id="PlateLessStandardSingleButton" onClick={() => handleChose('PlateLessStandardSingleButton')}>
-            <img src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/PlateLessStandardSingleButton/TrouserType_PlateLessStandardSingleButton_006.JPG" className={clsx("w-100")} />
+            <Image src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/PlateLessStandardSingleButton/TrouserType_PlateLessStandardSingleButton_006.JPG"
+              className={clsx("w-100")}
+              alt="piece suit"
+              width={100}
+              height={100}
+              unoptimized={true} />
             <div className={clsx(styles["overlay"], (trouser === 'PlateLessStandardSingleButton' ? styles['active'] : ''))}></div>
             <span className={clsx(styles["checkmark"], (trouser === 'PlateLessStandardSingleButton' ? styles['active'] : ''))}>
               <svg
