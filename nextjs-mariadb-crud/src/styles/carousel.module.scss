@@ -1,0 +1,48 @@
+.embla {
+    position: relative;
+    max-width: 1000px; /* Adjust width */
+    width: 900px;
+    margin: auto;
+    overflow: hidden;
+  }
+  
+  .embla__viewport {
+    overflow: hidden;
+  }
+  
+  .embla__container {
+    display: flex;
+  }
+  
+  .embla__slide {
+    flex: 0 0 300px; /* Set width per slide */
+    min-width: 300px;
+    padding: 10px;
+  }
+  
+  .embla__slide img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .embla__prev,
+  .embla__next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  .embla__prev {
+    left: 10px;
+  }
+  
+  .embla__next {
+    right: 10px;
+  }
+  

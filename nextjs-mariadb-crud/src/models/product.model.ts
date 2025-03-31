@@ -19,3 +19,4 @@ export type GroupedProduct = {
 export type SuitType = '' | '2Piece' | '3Piece';
 export type TrouserType = '' | 'SideLoopStyleWith2Plates' | 'DoubleButtonDoublePlated' | 'DoubleButtonPlateLessDisconnectedSideLoop' | 'PlateLessStandardSingleButton';
 export type SuitStyle = '' | 'ConfortFit' | 'SlimFit';
+export type Fabric = '' | string;

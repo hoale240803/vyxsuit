@@ -1,4 +1,4 @@
-import { SuitStyle, SuitType, TrouserType } from '@/models/product.model';
+import { Fabric, SuitStyle, SuitType, TrouserType } from '@/models/product.model';
 import { createContext } from 'react';
 
 // Define the type for the context value
@@ -7,22 +7,25 @@ export interface SuitBuilderContextType {
   selectSuitType: (option: SuitType) => void;
   trouser: TrouserType;
   selectTrouser: (option: TrouserType) => void;
-
   suitStyle: SuitStyle;
   selectSuitStyle: (option: SuitStyle) => void;
+  fabric: Fabric;
+  selectFabric: (option: Fabric) => void;
   
   clear: () => void;
 }
 
-export const suitBuilderContextValue: SuitBuilderContextType = {
+export const suitBuilderContextDefaultValue: SuitBuilderContextType = {
   suitType: '',
   selectSuitType: () => {},
   trouser: '',
   selectTrouser: () => {},
   suitStyle: '',
   selectSuitStyle: () => {},
+  fabric: '',
+  selectFabric: () => {},
   clear: () => {},
 };
 
 // Create a context with a default value (null)
-export const SuitBuilderContext = createContext<SuitBuilderContextType>(suitBuilderContextValue);
+export const SuitBuilderContext = createContext<SuitBuilderContextType>(suitBuilderContextDefaultValue);
