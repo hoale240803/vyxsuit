@@ -21,7 +21,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   //   },
   // })) as unknown as Product[];
 
-  const products = await mariadbHelper.executeQuery(`select * from Product where ProductType = 'FabricOptions'`) as Product[];
+  const products = await mariadbHelper.executeQuery(`select * from Product where ProductType = 'Button'`) as Product[];
 
 
   const groupedProducts = buildGroup(products);
