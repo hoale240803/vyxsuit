@@ -1,15 +1,15 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import HeroSection from "./bespoke-hero-section";
 
 export default function Home() {
-  const router = useRouter();
-  useEffect(() => {
-    router.push(`/product-list`);
-  }, [router])
-  return <></>;
+  // const router = useRouter();
+  // useEffect(() => {
+  //   router.push(`/product-list`);
+  // }, [router])
   return (
-    <div className="container text-center mt-5">
-      <h1 className="text-primary"></h1>
-    </div>
+    <>
+      <HeroSection></HeroSection>
+    </>
   );
 }

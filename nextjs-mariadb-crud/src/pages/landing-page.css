@@ -1,0 +1,30 @@
+.home{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.home section{
+    width: 100%;
+    max-width: 1200px;
+    height: 944px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.home section div{
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}   
+
+.home section p{
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #666;
+}

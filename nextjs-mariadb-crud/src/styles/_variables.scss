@@ -13,3 +13,16 @@ $accent-color: #1e3a5f;
 $ping-color: #f4e1d2;
 $interactive-color: #4c7f59;
 $error-color: #800020;
+
+// Fonts
+$font-primary: "Roboto", sans-serif;
+$font-secondary: "Playfair Display", serif;
+
+// Units
+$spacing-unit: 16px;
+
+::export {
+  primary-color: $primary-color;
+  secondary-color: $secondary-color;
+  accent-color: $accent-color;
+}
