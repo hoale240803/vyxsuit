@@ -23,11 +23,21 @@ CREATE TABLE Product (
     Name VARCHAR(255) NOT NULL,
     Description TEXT,
     S3Url VARCHAR(500),
-    ProductType ENUM('DesignOfSuit', 'JacketOnly', 'TrouserOnly', 'VestCoatOnly', 'FabricOptions', 'Shirt', 'TailoredFit', 'Button', 'Lining', 'SuitType') NOT NULL,
+    ProductType ENUM(
+        'DesignOfSuit', 
+        'JacketOnly', 
+        'TrouserOnly', 
+        'VestCoatOnly', 
+        'FabricOptions', 
+        'Shirt', 
+        'TailoredFit', 
+        'Button', 
+        'Lining', 
+        'SuitType') NOT NULL,
     PriceType ENUM(
         'FullSuit',
-        '2PieceSuit', 
-        '3PieceSuit',
+        'TwoPieceSuit', 
+        'ThreePieceSuit',
 
         'JacketOnlySuperWool150',
         'JacketOnlyVelvette',	
@@ -43,14 +53,24 @@ CREATE TABLE Product (
 
         'VestCoatOnlySuperWool150',	
         'VestCoatOnlyVelvette',
-        'VestCoatOnlyCashmereCahmereWool',
+        'VestCoatOnlyCashmereWool',
         'VestCoatOnlyLinen200GSM',
-        'VestCoatOnlyMerinoWool'
+        'VestCoatOnlyMerinoWool',
+        
+        'FullSuitSuperWool150',
+        'FullSuitVelvette',
+        'FullSuitCashmereWool',
+        'FullSuitLinen200GSM',
+        'FullSuitMerinoWool',
+        
+        'Lining',
+        'Button'
     ) NOT NULL,
 
 
     Code VARCHAR(100),
-    Price DECIMAL(10,6) NOT NULL DEFAULT 0.00
+    Price DECIMAL(10,6) NOT NULL DEFAULT 0.00,
+    IsPrimary BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE ProductTranslation (
@@ -60,7 +80,6 @@ CREATE TABLE ProductTranslation (
     TranslatedName VARCHAR(255) NOT NULL,
     FOREIGN KEY (ProductId) REFERENCES Product(Id) ON DELETE CASCADE
 );
-
 
 CREATE TABLE Measurement (
     Id INT AUTO_INCREMENT PRIMARY KEY,
@@ -143,7 +162,7 @@ CREATE TABLE OrderDetail (
     ProductId INT NOT NULL,
     Price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     Quantity TINYINT NOT NULL DEFAULT 1,
-    SuitType ENUM('2piece', '3piece'),
+    SuitType ENUM('TwoPieceSuit', 'ThreePieceSuit'),
     TrouserId INT,
     TailoredFit ENUM('SlimFit', 'ComfortFit'),
     FabricId INT,
