@@ -17,8 +17,8 @@ const Step5 = () => {
   const [products, setProducts] = useState<GroupedProduct[]>([]);
   const [productSelected, setProductSelected] = useState<GroupedProduct>();
   const [productIndexSelected, setProductIndexSelected] = useState<number>(0);
-  const [mainCode, setMainCode] = useState<string>('');
-  const [fabricCode, setFabricCode] = useState<string>('');
+  const [mainCode, setMainCode] = useState<string>("");
+  const [fabricCode, setFabricCode] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
@@ -34,33 +34,37 @@ const Step5 = () => {
       setMainCode(data.group);
       setProductIndexSelected(data.fabric.index);
     }
-  }, [fabric])
+  }, [fabric]);
 
-  const buildFabric = (source: string) : { group: string, fabric: { code : string, index: number } } => {
-    if(!source) return {
-      group: '', fabric: { code: '', index: 0 }
-    }
-    const arr = source.split(':');
+  const buildFabric = (
+    source: string
+  ): { group: string; fabric: { code: string; index: number } } => {
+    if (!source)
+      return {
+        group: "",
+        fabric: { code: "", index: 0 },
+      };
+    const arr = source.split(":");
     return {
       group: arr[2],
       fabric: {
         code: arr[0],
-        index: Number(arr[1])
-      }
-    }
-  }
+        index: Number(arr[1]),
+      },
+    };
+  };
 
   const nextStep = () => {
     router.push(`/product/${id}/builder/step-6`);
   };
   const handleChose = (type: Fabric, index: number) => {
     selectFabric(`${type}:${index}:${productSelected?.Main.Code}`);
-    setProductIndexSelected(index)
-  }
+    setProductIndexSelected(index);
+  };
 
   const handleOpenTypePopup = (group: GroupedProduct) => {
-    if(mainCode !== group.Main.Code) {
-      setProductIndexSelected(0)
+    if (mainCode !== group.Main.Code) {
+      setProductIndexSelected(0);
     } else {
       const data = buildFabric(fabric);
       setFabricCode(data.fabric.code);
@@ -74,7 +78,7 @@ const Step5 = () => {
   const chooseFabric = () => {
     setShowModal(false);
     nextStep();
-  }
+  };
 
   return (
     <>
@@ -158,6 +162,8 @@ const Step5 = () => {
 
           {showModal && (
             <Popup isOpen={showModal} onClose={() => setShowModal(false)}>
+              <h3>Color Options</h3>
+
               <EmblaCarousel indexSelected={productIndexSelected}>
                 {productSelected?.Images.map((img, index) => (
                   <div className="embla__slide" key={img.Code}>
