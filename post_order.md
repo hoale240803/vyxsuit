@@ -112,7 +112,7 @@ POST /api/order/create
     "total": 364.95
   },
   "paymentIntent": {
-    "clientSecret": "pi_3NkCE7BYrDGnPCLx1gMNviGs_secret_f6tT7H0Ojx9IAsA8TQvPCgcZh",
+    "clientSecret": "xxx",
     "amount": 36495 // in cents
   }
 }
