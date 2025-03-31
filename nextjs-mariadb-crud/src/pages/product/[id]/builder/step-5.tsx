@@ -3,11 +3,12 @@ import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import { Fabric, GroupedProduct } from "@/models/product.model";
+import { GroupedProduct } from "@/models/product.model";
 import React, { useEffect, useState } from "react";
 
 import EmblaCarousel from "@/components/EmblaCarousel";
 import Popup from "@/components/Popup";
+import { buildFabric } from "@/utils/productGroup";
 
 const Step5 = () => {
   const router = useRouter();
@@ -36,30 +37,30 @@ const Step5 = () => {
     }
   }, [fabric]);
 
-  const buildFabric = (
-    source: string
-  ): { group: string; fabric: { code: string; index: number } } => {
-    if (!source)
-      return {
-        group: "",
-        fabric: { code: "", index: 0 },
-      };
-    const arr = source.split(":");
-    return {
-      group: arr[2],
-      fabric: {
-        code: arr[0],
-        index: Number(arr[1]),
-      },
-    };
-  };
+  // const buildFabric = (
+  //   source: string
+  // ): { group: string; fabric: { code: string; index: number } } => {
+  //   if (!source)
+  //     return {
+  //       group: "",
+  //       fabric: { code: "", index: 0 },
+  //     };
+  //   const arr = source.split(":;");
+  //   return {
+  //     group: arr[2],
+  //     fabric: {
+  //       code: arr[0],
+  //       index: Number(arr[1]),
+  //     },
+  //   };
+  // };
 
   const nextStep = () => {
     if(!fabric) return;
     router.push(`/product/${id}/builder/step-6`);
   };
-  const handleChose = (type: Fabric, index: number) => {
-    selectFabric(`${type}:${index}:${productSelected?.Main.Code}`);
+  const handleChose = (img: {Code: string, S3Url: string }, index: number) => {
+    selectFabric(`${img.Code}:;${index}:;${productSelected?.Main.Code}:;${img.S3Url}`);
     setProductIndexSelected(index);
   };
 
@@ -170,7 +171,7 @@ const Step5 = () => {
                   <div className="embla__slide" key={img.Code}>
                     <div
                       className={clsx(styles["suit-type"])}
-                      onClick={() => handleChose(img.Code, index)}
+                      onClick={() => handleChose(img, index)}
                     >
                       <img
                         src={img.S3Url}

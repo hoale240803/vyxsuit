@@ -16,12 +16,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   // const products = (await prisma.product.findMany({
   //   where: {
   //     AND: [
-  //       { ProductType: "FabricOptions" },
+  //       { ProductType: "Lining" },
   //     ],
   //   },
   // })) as unknown as Product[];
 
   const products = await mariadbHelper.executeQuery(`select * from Product where ProductType = 'FabricOptions'`) as Product[];
+
 
   const groupedProducts = buildGroup(products);
 

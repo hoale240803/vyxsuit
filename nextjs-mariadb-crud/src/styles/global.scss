@@ -17,7 +17,6 @@
   }
   .secondary-color {
     color: variables.$secondary-color;
-    margin-right: 1rem;
   }
   .accent-color {
     color: var(--accent-color);
@@ -72,6 +71,36 @@
   .vh-75 {
     height: 75vh;
   }
+
+  // Styling the number input field
+  input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid var(--secondary-bright-color);
+    border-radius: 5px;
+    background-color: var(--primary-light-color);
+    color: var(--secondary-color);
+    
+    // Customizing the up and down arrows
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    // Firefox - removing spinner arrows
+    &::-moz-appearance {
+      appearance: textfield;
+    }
+
+    // Focus state styling
+    &:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+  }
+
 }
 
 body {

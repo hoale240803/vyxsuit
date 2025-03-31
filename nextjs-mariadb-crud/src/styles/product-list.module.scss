@@ -113,20 +113,20 @@
   font-family: Georgia, "Times New Roman", Times, serif;
 
   .sub-text {
-    font-family: 'Open Sans', "Times New Roman", Times, serif;
+    font-family: "Open Sans", "Times New Roman", Times, serif;
     font-weight: 300;
   }
 }
 
 .products-container {
-    button {
-        background-color: var(--secondary-light-color);
+  button {
+    background-color: var(--secondary-light-color);
 
-        span {
-            font-size: 20px;
-            font-weight: 600;
-        }
+    span {
+      font-size: 20px;
+      font-weight: 600;
     }
+  }
 }
 
 .suit-type {
@@ -140,7 +140,7 @@
     position: relative;
 
     &:before {
-      content: ' ';
+      content: " ";
       position: absolute;
       top: 0;
       left: 0;
@@ -188,10 +188,11 @@
     transition: opacity 0.3s ease-in-out;
   }
 
-  &:hover .checkmark, img:before {
+  &:hover .checkmark,
+  img:before {
     opacity: 1; // Hiển thị khi hover
   }
-  .checkmark.active{
+  .checkmark.active {
     opacity: 1;
   }
 
@@ -202,71 +203,139 @@
     opacity: 0.5;
   }
 
-  .label--radio {
-    position: relative;
-  
-    margin: .5rem;
-    
-    font-family: Arial, sans-serif;
-    line-height: 135%;
-    
-    cursor: pointer;
+  // .label--radio {
+  //   position: relative;
+
+  //   margin: .5rem;
+
+  //   font-family: Arial, sans-serif;
+  //   line-height: 135%;
+
+  //   cursor: pointer;
+  // }
+
+  // .radio-container {
+  //   display: flex;
+  //   align-items: center;
+  //   gap: 8px;
+  //   font-size: 20px;
+  //   font-weight: 500;
+  //   color: var(--accent-color);
+  //   cursor: pointer;
+  //   justify-content: center;
+
+  //   input[type="radio"] {
+  //     display: none; // Hide the default radio button
+
+  //     &:checked + label::before {
+  //       border-color: var(--primary-color); // Outer circle border color
+  //     }
+
+  //     &:checked + label::after {
+  //       background: var(--primary-color); // Inner filled circle
+  //       opacity: 1;
+  //     }
+  //   }
+
+  //   label {
+  //     position: relative;
+  //     display: flex;
+  //     align-items: center;
+  //     cursor: pointer;
+  //     padding-left: 32px; // Space for the custom radio
+
+  //     &::before {
+  //       content: "";
+  //       position: absolute;
+  //       left: 0;
+  //       width: 26px;  // Adjusted size
+  //       height: 26px;
+  //       border-radius: 50%;
+  //       border: 2px solid var(--primary-bright-color); // Outer circle border color
+  //       background: #fff;
+  //       transition: 0.3s ease-in-out;
+  //     }
+
+  //     &::after {
+  //       content: "";
+  //       position: absolute;
+  //       left: 6px;
+  //       top: 8px;
+  //       width: 14px;  // Adjusted size for inner dot
+  //       height: 14px;
+  //       border-radius: 50%;
+  //       background: transparent;
+  //       opacity: 0;
+  //       transition: 0.3s;
+  //     }
+  //   }
+  // }
+}
+
+.label--radio {
+  position: relative;
+
+  margin: 0.5rem;
+
+  font-family: Arial, sans-serif;
+  line-height: 135%;
+
+  cursor: pointer;
+}
+
+.radio-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--accent-color);
+  cursor: pointer;
+  justify-content: center;
+
+  input[type="radio"] {
+    display: none; // Hide the default radio button
+
+    &:checked + label::before {
+      border-color: var(--primary-color); // Outer circle border color
+    }
+
+    &:checked + label::after {
+      background: var(--primary-color); // Inner filled circle
+      opacity: 1;
+    }
   }
-  
-  .radio-container {
+
+  label {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--accent-color);
     cursor: pointer;
-    justify-content: center;
-  
-    input[type="radio"] {
-      display: none; // Hide the default radio button
-  
-      &:checked + label::before {
-        border-color: var(--primary-color); // Outer circle border color
-      }
-  
-      &:checked + label::after {
-        background: var(--primary-color); // Inner filled circle
-        opacity: 1;
-      }
+    padding-left: 32px; // Space for the custom radio
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 26px; // Adjusted size
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--primary-bright-color); // Outer circle border color
+      background: #fff;
+      transition: 0.3s ease-in-out;
     }
-  
-    label {
-      position: relative;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      padding-left: 32px; // Space for the custom radio
-  
-      &::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        width: 26px;  // Adjusted size
-        height: 26px;
-        border-radius: 50%;
-        border: 2px solid var(--primary-bright-color); // Outer circle border color
-        background: #fff;
-        transition: 0.3s ease-in-out;
-      }
-  
-      &::after {
-        content: "";
-        position: absolute;
-        left: 6px;
-        top: 8px;
-        width: 14px;  // Adjusted size for inner dot
-        height: 14px;
-        border-radius: 50%;
-        background: transparent;
-        opacity: 0;
-        transition: 0.3s;
-      }
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      width: 14px; // Adjusted size for inner dot
+      height: 14px;
+      border-radius: 50%;
+      background: transparent;
+      opacity: 0;
+      transition: 0.3s;
     }
   }
 }
@@ -274,5 +343,63 @@
 .item {
   img {
     cursor: pointer;
+  }
+}
+
+.field {
+  margin-bottom: 1.5rem;
+  label {
+    font-size: 20px;
+    margin-top: 5px;
+  }
+}
+
+.icon {
+  position: relative;
+  padding: 0.5rem 1rem;
+  padding-left: 2rem; // Increased space to accommodate the icon
+  display: inline-flex;
+  align-items: center;
+
+  &::before {
+    content: " ";
+    background-image: url(/images/icons/upload.png);
+    background-size: contain; // Ensures the icon is scaled correctly
+    background-repeat: no-repeat; // Avoids tiling the background image
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    width: 20px; // Size of the icon
+    height: 20px; // Size of the icon
+    background-size: 15px 15px;
+  }
+}
+
+.icon.btn-icon {
+  background-color: var(--secondary-light-color);
+  cursor: pointer;
+  border-radius: 0.2rem;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  transition: background-color 0.3s ease, box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    background-color: var(--primary-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+  }
+
+  &:active {
+    background-color: var(--primary-color); /* Darker color on click */
+    box-shadow: none; /* Remove shadow on click */
+  }
+}
+
+.btn-icon {
+  input, button {
+    display: none;
   }
 }
