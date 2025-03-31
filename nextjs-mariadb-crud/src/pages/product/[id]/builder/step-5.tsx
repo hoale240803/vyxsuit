@@ -55,6 +55,7 @@ const Step5 = () => {
   };
 
   const nextStep = () => {
+    if(!fabric) return;
     router.push(`/product/${id}/builder/step-6`);
   };
   const handleChose = (type: Fabric, index: number) => {
@@ -225,7 +226,7 @@ const Step5 = () => {
             </Popup>
           )}
         </div>
-        {/* <div className="row">
+        <div className="row">
           <div className="col-4 m-auto mt-5 ">
             <button
               className="p-3 w-100 bg-primary-color border-0 accent-color fs-5"
@@ -234,7 +235,7 @@ const Step5 = () => {
               Continue
             </button>
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   );
