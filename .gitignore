@@ -5,3 +5,6 @@
 .idea/vcs.xml
 .idea/workspace.xml
 nextjs-mariadb-crud/src/pages/landing-page.html
+package-lock.json
+nextjs-mariadb-crud/package-lock.json
+package-lock.json

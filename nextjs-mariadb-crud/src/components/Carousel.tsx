@@ -13,7 +13,7 @@ const Carousel = ({ images, onPaginate }: CarouselProps) => {
   const [isHolding, setIsHolding] = useState(false);
   const [startX, setStartX] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const holdTimerRef = useRef<NodeJS.Timeout>();
+  const holdTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const slideVariants = {
     enter: (direction: number) => ({
