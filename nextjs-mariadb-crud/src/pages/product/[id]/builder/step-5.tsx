@@ -59,8 +59,8 @@ const Step5 = () => {
     if(!fabric) return;
     router.push(`/product/${id}/builder/step-6`);
   };
-  const handleChose = (img: {Code: string, S3Url: string }, index: number) => {
-    selectFabric(`${img.Code}:;${index}:;${productSelected?.Main.Code}:;${img.S3Url}`);
+  const handleChose = (img: {Id: number, Code: string, S3Url: string }, index: number) => {
+    selectFabric(`${img.Id}:;${index}:;${productSelected?.Main.Code}:;${img.S3Url}`);
     setProductIndexSelected(index);
   };
 

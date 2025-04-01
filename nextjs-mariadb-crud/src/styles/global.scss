@@ -81,7 +81,7 @@
     border-radius: 5px;
     background-color: var(--primary-light-color);
     color: var(--secondary-color);
-    
+
     // Customizing the up and down arrows
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
@@ -101,6 +101,60 @@
     }
   }
 
+  /* Checkbox Styling */
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    font-size: 16px;
+    // white-space: nowrap; /* Prevents text from breaking into multiple lines */
+
+    input[type="checkbox"] {
+      display: none; /* Hide the default checkbox */
+
+      &:checked + .checkmark {
+        background-color: var(--primary-color); /* Background when checked */
+        border-color: var(--primary-color);
+
+        &::after {
+          content: "";
+          display: block;
+          width: 6px;
+          height: 10px;
+          border: 1px solid white;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -60%) rotate(45deg);
+        }
+      }
+    }
+
+    .checkmark {
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--primary-bright-color);
+      border-radius: 4px;
+      position: relative;
+      transition: all 0.3s;
+      flex-shrink: 0; /* Prevents the checkbox from shrinking */
+      margin-right: 8px; /* Space between checkbox and label */
+
+      &:hover {
+        border-color: var(--primary-color);
+      }
+    }
+
+    .label {
+      color: var(--secondary-color);
+      font-size: 16px;
+      line-height: 1.5;
+      // word-wrap: break-word; /* Allow long text to wrap to the next line */
+    }
+  }
 }
 
 body {

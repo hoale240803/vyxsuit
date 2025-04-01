@@ -8,7 +8,7 @@ import { buildFabric, buildLining } from "@/utils/productGroup";
 import { GroupedProduct } from "@/models/product.model";
 import EmblaCarousel from "@/components/EmblaCarousel";
 
-const Step0 = () => {
+const Step6 = () => {
   const router = useRouter();
   const { fabric, lining, selectLining } = useSuitBuilder();
   const [products, setProducts] = useState<GroupedProduct[]>([]);
@@ -219,4 +219,4 @@ const Step0 = () => {
   );
 };
 
-export default Step0;
+export default Step6;
