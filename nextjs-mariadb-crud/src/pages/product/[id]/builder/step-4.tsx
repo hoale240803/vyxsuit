@@ -3,7 +3,7 @@ import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import { SuitStyle } from "@/models/enum";
+import { SuitStyle } from "@/models/product.model";
 
 const Step4 = () => {
   const router = useRouter();

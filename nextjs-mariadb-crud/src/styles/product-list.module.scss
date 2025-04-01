@@ -403,3 +403,21 @@
     display: none;
   }
 }
+
+.image-preview {
+  width: 5rem;
+  position: relative;
+
+  .delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background-color: var(--secondary-light-color);
+    text-align: center;
+    color: #ff0000;
+    cursor: pointer;
+    opacity: 0.7;
+  }
+}

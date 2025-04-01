@@ -1,4 +1,4 @@
-import { Buttontype, Fabric, ImageMeasurementType, LiningType, MeasurementType, ShirtMeasurementType, SuitStyle, SuitType, TrouserMeasurementType, TrouserType } from '@/models/product.model';
+import { Buttontype, Fabric, ImageMeasurementType, LiningType, MeasurementType, ShirtMeasurementType, SuitStyle, SuitType, TrouserMeasurementType, TrouserType, UnitMeasurementType } from '@/models/product.model';
 import { createContext } from 'react';
 
 // Define the type for the context value
@@ -16,9 +16,10 @@ export interface SuitBuilderContextType {
   button: Buttontype,
   selectButton: (option: Buttontype) => void;
   measurement: MeasurementType
-  selectShirtMeasurement: (option: ShirtMeasurementType) => void;
-  selectTrouserMeasurement: (option: TrouserMeasurementType) => void;
-  selectImageMeasurement: (option: ImageMeasurementType) => void;
+  selectUnitOfMeasurement: (option: UnitMeasurementType) => void;
+  updateShirtMeasurement: (option: ShirtMeasurementType) => void;
+  updateTrouserMeasurement: (option: TrouserMeasurementType) => void;
+  pushImageMeasurement: (option: ImageMeasurementType | ImageMeasurementType[]) => void;
   deleteImageMeasurement: (index: number) => void;
   clear: () => void;
 }
@@ -37,9 +38,10 @@ export const suitBuilderContextDefaultValue: SuitBuilderContextType = {
   button: '',
   selectButton: () => {},
   measurement: {} as MeasurementType,
-  selectShirtMeasurement: () => {},
-  selectTrouserMeasurement: () => {},
-  selectImageMeasurement: () => {},
+  selectUnitOfMeasurement: () => {},
+  updateShirtMeasurement: () => {},
+  updateTrouserMeasurement: () => {},
+  pushImageMeasurement: () => {},
   deleteImageMeasurement: () => {},
   clear: () => {},
 };

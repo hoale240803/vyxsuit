@@ -55,7 +55,7 @@ export default function Layout({ children }: LayoutProps) {
               </li>
               <li className="nav-item dropdown">
                 <Link
-                  className="nav-link dropdown-toggle"
+                  className="nav-link"
                   href="#"
                   role="button"
                   data-bs-toggle="dropdown"

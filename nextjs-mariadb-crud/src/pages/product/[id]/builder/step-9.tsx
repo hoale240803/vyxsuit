@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
 import { SuitStyle } from "@/models/product.model";
 
-const Step0 = () => {
+const Step9 = () => {
   const router = useRouter();
   const { suitStyle, selectSuitStyle } = useSuitBuilder();
   const { id } = router.query;
@@ -97,4 +97,4 @@ const Step0 = () => {
   );
 };
 
-export default Step0;
+export default Step9;

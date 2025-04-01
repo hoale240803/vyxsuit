@@ -13,7 +13,7 @@ const Carousel = ({ images, onPaginate }: CarouselProps) => {
   const [isHolding, setIsHolding] = useState(false);
   const [startX, setStartX] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const holdTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const holdTimerRef = useRef<NodeJS.Timeout>();
 
   const slideVariants = {
     enter: (direction: number) => ({
@@ -49,14 +49,14 @@ const Carousel = ({ images, onPaginate }: CarouselProps) => {
     }
   };
 
-  const handleWheel = (e: WheelEvent) => {
-    e.preventDefault(); // Prevent default scroll behavior
-    if (e.deltaY > 0) {
-      paginate(1);
-    } else {
-      paginate(-1);
-    }
-  };
+  // const handleWheel = (e: WheelEvent) => {
+  //   e.preventDefault(); // Prevent default scroll behavior
+  //   if (e.deltaY > 0) {
+  //     paginate(1);
+  //   } else {
+  //     paginate(-1);
+  //   }
+  // };
 
   const handleMouseDown = (e: MouseEvent) => {
     setStartX(e.pageX);
@@ -135,7 +135,7 @@ const Carousel = ({ images, onPaginate }: CarouselProps) => {
       container.addEventListener("touchend", handleTouchEnd);
 
       // Wheel event
-      container.addEventListener("wheel", handleWheel, { passive: false });
+      // container.addEventListener("wheel", handleWheel, { passive: false });
 
       return () => {
         container.removeEventListener("mousedown", handleMouseDown);
@@ -145,7 +145,7 @@ const Carousel = ({ images, onPaginate }: CarouselProps) => {
         container.removeEventListener("touchstart", handleTouchStart);
         container.removeEventListener("touchmove", handleTouchMove);
         container.removeEventListener("touchend", handleTouchEnd);
-        container.removeEventListener("wheel", handleWheel);
+        // container.removeEventListener("wheel", handleWheel);
       };
     }
   }, [isHolding, startX]);
@@ -171,7 +171,7 @@ const Carousel = ({ images, onPaginate }: CarouselProps) => {
             }}
             className={styles.slide}
           >
-            <img src={images[currentIndex]} alt={`Slide ${currentIndex}`} />
+            <img src={images[currentIndex]} alt={`Slide ${currentIndex}`} style={{cursor: 'pointer'}} draggable={false} />
           </motion.div>
         </AnimatePresence>
 
@@ -179,25 +179,27 @@ const Carousel = ({ images, onPaginate }: CarouselProps) => {
         <div
           className={styles.preview + " " + styles.previewLeft}
           onClick={() => handlePreviewClick(-1)}
-          style={{ cursor: "pointer" }}
+          style={{cursor: 'pointer'}} draggable={false}
         >
           <img
             src={
               images[currentIndex === 0 ? images.length - 1 : currentIndex - 1]
             }
             alt="Previous"
+            style={{cursor: 'pointer'}} draggable={false}
           />
         </div>
         <div
           className={styles.preview + " " + styles.previewRight}
           onClick={() => handlePreviewClick(1)}
-          style={{ cursor: "pointer" }}
+          style={{cursor: 'pointer'}} draggable={false}
         >
           <img
             src={
               images[currentIndex === images.length - 1 ? 0 : currentIndex + 1]
             }
             alt="Next"
+            style={{cursor: 'pointer'}} draggable={false}
           />
         </div>
 {/* 

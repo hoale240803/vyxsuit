@@ -129,7 +129,7 @@ export default function AboutUs() {
           </div>
           <div
             className={clsx(
-              "col-6 bg-secondary-color p-5 me-3",
+              "col-6 bg-secondary-color p-5",
               styles["img-right"]
             )}
           >
