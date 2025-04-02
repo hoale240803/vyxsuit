@@ -1,38 +1,26 @@
-import { SuitStyle, SuitType } from "../enum";
+import { SuitStyleEnum, SuitTypeEnum } from "../enum";
 
 export class OrderDetailsEntity {
-    OrderId: number;
-    ProductId: number;
-    Price: number;
-    Quantity: number;
-    SuitType: SuitType;
-    TailoredFit: SuitStyle;
-    TrouserId: number;
-    FabridId: number;
-    LiningId: string;
-    ButtonId: number;
+    orderId: number;
+    productId: number;
+    price: number;
+    quantity: number;
+    suitType: SuitTypeEnum;
+    tailoredFit: SuitStyleEnum;
 
     constructor(
         OrderId: number,
         ProductId: number,
         Price: number,
         Quantity: number,
-        SuitType: SuitType,
-        TailoredFit: SuitStyle,
-        TrouserId: number,
-        FabridId: number,
-        LiningId: string,
-        ButtonId: number
+        SuitType: SuitTypeEnum,
+        TailoredFit: SuitStyleEnum
     ) {
-        this.OrderId = OrderId;
-        this.ProductId = ProductId;
-        this.Price = Price;
-        this.Quantity = Quantity;
-        this.SuitType = SuitType;
-        this.TailoredFit = TailoredFit;
-        this.TrouserId = TrouserId;
-        this.FabridId = FabridId;
-        this.LiningId = LiningId;
-        this.ButtonId = ButtonId;
+        this.orderId = OrderId;
+        this.productId = ProductId;
+        this.price = Price;
+        this.quantity = Quantity;
+        this.suitType = SuitType;
+        this.tailoredFit = TailoredFit;
     }
 }

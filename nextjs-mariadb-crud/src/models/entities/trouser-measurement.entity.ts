@@ -1,11 +1,11 @@
 export class TrouserMeasurementEntity {
-    MeasureMentId: number;
-    Waist: number;
-    UpperHips: number;
-    HipCrotch: number;
-    Outswarm: number;
-    Thigh: number;
-    Calf: number;
+    measurementId: number;
+    waist: number;
+    upperHips: number;
+    hipCrotch: number;
+    outswarm: number;
+    thigh: number;
+    calf: number;
 
     constructor(
         measurementId: number,
@@ -16,12 +16,12 @@ export class TrouserMeasurementEntity {
         thigh: number,
         calf: number
     ) {
-        this.MeasureMentId = measurementId;
-        this.Waist = waist;
-        this.UpperHips = upperHips;
-        this.HipCrotch = hipCrotch;
-        this.Outswarm = outswarm;
-        this.Thigh = thigh;
-        this.Calf = calf;
+        this.measurementId = measurementId;
+        this.waist = waist;
+        this.upperHips = upperHips;
+        this.hipCrotch = hipCrotch;
+        this.outswarm = outswarm;
+        this.thigh = thigh;
+        this.calf = calf;
     }
 }

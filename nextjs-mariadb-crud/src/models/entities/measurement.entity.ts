@@ -1,11 +1,12 @@
 import { MeasurementType, MeasurementUnit } from "../enum";
 
 export class MeasurementEntity {
-    MeasurementType: MeasurementType;
-    Unit: MeasurementUnit;
+    id!: number;
+    measurementType: MeasurementType;
+    unit: MeasurementUnit;
 
     constructor(measurementType: MeasurementType, unit: MeasurementUnit) {
-        this.MeasurementType = measurementType;
-        this.Unit = unit;
+        this.measurementType = measurementType;
+        this.unit = unit;
     }
 }

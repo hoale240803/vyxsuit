@@ -1,10 +1,17 @@
-import { CustomerEntity } from "../entities/customer.entity";
+import {
+    MeasurementType,
+    MeasurementUnit,
+    PaymentStatus,
+    ShippingMethod,
+    SuitStyleEnum,
+} from "../enum";
 
 export type MeasurementRequest = {
-    measurementType: string;
-    unit: string;
-    shirtMeasurements: { [key: string]: number };
-    trouserMeasurements: { [key: string]: number };
+    id: number;
+    measurementType: MeasurementType;
+    unit: MeasurementUnit;
+    shirtMeasurements: ShirtMeasurementRequest;
+    trouserMeasurements: TrouserMeasurementRequest;
     measurementImages: MeasurementImageRequest;
 };
 
@@ -13,19 +20,19 @@ export interface MeasurementImageRequest {
     imageFile: string; // Base64 encoded image in the request
 }
 
-export type OrderDetailsRequest = {
+export interface OrderDetailsRequest {
     suitId: number;
     suitTypeId: number;
     trouserId: number;
-    tailoredFit: string;
+    tailoredFit: SuitStyleEnum;
     jacketId: number;
     fabricId: number;
     liningId: number;
     buttonId: number;
     orderedDate: string;
-};
+}
 
-export type ShippingInfoRequest = {
+export interface ShippingInfoRequest {
     country: string;
     city: string;
     state: string;
@@ -33,12 +40,12 @@ export type ShippingInfoRequest = {
     phone: string;
     shippingMethod: string;
     differentAddress: boolean;
-};
+}
 
-export type OrderRequest = {
+export interface OrderRequest {
     captchaToken: string;
     salesOrderNumber: string;
-    customer: CustomerEntity;
+    customer: CustomerRequest;
     orderDetails: OrderDetailsRequest;
     measurements: MeasurementRequest;
     shippingInfo: ShippingInfoRequest;
@@ -47,4 +54,79 @@ export type OrderRequest = {
         currencyRate: string;
     };
     lang: string;
-};
+}
+
+export interface CustomerRequest {
+    firstName: string;
+    lastName: string;
+    email: string;
+    companyName: string;
+}
+
+// export interface MeasurementRequest {
+//     id: number;
+//     measurementType: MeasurementType;
+//     unit: MeasurementUnit;
+// }
+
+export interface ShirtMeasurementRequest {
+    id: number;
+    measurementId: number;
+    chest: number;
+    shoulder: number;
+    armLength: number;
+    armShoulderJoint: number;
+    armBicepWidth: number;
+    jacketWidth: number;
+    abdomen: number;
+    bellyTummy: number;
+    hips: number;
+    neck: number;
+}
+
+export interface TrouserMeasurementRequest {
+    id: number;
+    measurementId: number;
+    waist: number;
+    upperHips: number;
+    hipsCrotch: number;
+    outswarm: number;
+    thigh: number;
+    calf: number;
+}
+
+export interface MeasurementImageRequest {
+    id: number;
+    name: string;
+    s3Url: string;
+    measurementId: number;
+}
+
+export interface OrderRequest {
+    orderId: number;
+    customerId: number;
+    measurementId: number;
+    salesOrderNumber: string;
+    sequence: number;
+    createdAt: Date;
+    note: string;
+    totalAmount: number;
+
+    // Shipping Information
+    country: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    phone: string;
+    shippingMethod: ShippingMethod;
+    differentAddress: boolean;
+
+    // Payment Information
+    paymentStatus: PaymentStatus;
+    stripeId: string;
+
+    // Localization
+    lang: string;
+    currencyCode: string;
+    currencyRate: number;
+}

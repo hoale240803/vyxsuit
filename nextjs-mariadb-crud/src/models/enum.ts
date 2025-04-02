@@ -18,7 +18,16 @@ export type TrouserType =
     | "PlateLessStandardSingleButton";
 
 export type SuitStyle = "" | "ConfortFit" | "SlimFit";
+export enum SuitStyleEnum {
+    ConfortFit,
+    SlimFit,
+}
+
 export type SuitType = "TwoPieceSuit" | "ThreePieceSuit";
+export enum SuitTypeEnum {
+    TwoPieceSuit,
+    ThreePieceSuit,
+}
 export type ShippingMethod = "Standard" | "Express";
 export type PaymentStatus = "failed" | "success" | "none";
 export type MeasurementType = "Shirt" | "Trouser";

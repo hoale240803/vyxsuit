@@ -159,15 +159,11 @@ CREATE TABLE Orders (
 CREATE TABLE OrderDetail (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     OrderId INT NOT NULL,
-    ProductId INT NOT NULL,
+    ProductId INT NOT NULL COMMENT('suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId'), 
     Price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     Quantity TINYINT NOT NULL DEFAULT 1,
     SuitType ENUM('TwoPieceSuit', 'ThreePieceSuit'),
-    TrouserId INT,
     TailoredFit ENUM('SlimFit', 'ComfortFit'),
-    FabricId INT,
-    LiningId INT,
-    ButtonId INT,
 
     FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE,
     FOREIGN KEY (ProductId) REFERENCES Product(Id) ON DELETE CASCADE

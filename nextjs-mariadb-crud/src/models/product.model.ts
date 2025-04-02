@@ -9,20 +9,25 @@ export type Product = {
 };
 
 export type GroupedProduct = {
-    Id: number,
+    Id: number;
     Name: string;
     Description: string;
     Price: number;
     Main: Product;
-    Images: { Id: number, S3Url: string; Code: string }[];
+    Images: { Id: number; S3Url: string; Code: string }[];
 };
 
-export type SuitType = '' | '2Piece' | '3Piece';
-export type TrouserType = '' | 'SideLoopStyleWith2Plates' | 'DoubleButtonDoublePlated' | 'DoubleButtonPlateLessDisconnectedSideLoop' | 'PlateLessStandardSingleButton';
-export type SuitStyle = '' | 'ConfortFit' | 'SlimFit';
-export type Fabric = '' | string;
-export type LiningType = '' | string;
-export type Buttontype = '' | string;
+export type SuitType = "" | "2Piece" | "3Piece";
+export type TrouserType =
+    | ""
+    | "SideLoopStyleWith2Plates"
+    | "DoubleButtonDoublePlated"
+    | "DoubleButtonPlateLessDisconnectedSideLoop"
+    | "PlateLessStandardSingleButton";
+export type SuitStyle = "" | "ConfortFit" | "SlimFit";
+export type Fabric = "" | string;
+export type LiningType = "" | string;
+export type Buttontype = "" | string;
 export type ShirtMeasurementType = {
     Chest: number;
     Shoulder: number;
@@ -34,7 +39,7 @@ export type ShirtMeasurementType = {
     Belly: number;
     Hips: number;
     Neck: number;
-}
+};
 export type TrouserMeasurementType = {
     Waist: number;
     UpperHips: number;
@@ -43,12 +48,17 @@ export type TrouserMeasurementType = {
     Outswam: number;
     Thigh: number;
     Calf: number;
-}
-export type ImageMeasurementType = '' | string;
-export type UnitMeasurementType = 'cm' | 'inch';
+};
+export type ImageMeasurementType = "" | string;
+export type UnitMeasurementType = "cm" | "inch";
 export type MeasurementType = {
     Shirt: ShirtMeasurementType;
-    Trouser: TrouserMeasurementType
-    Images: ImageMeasurementType[],
-    Unit: UnitMeasurementType
+    Trouser: TrouserMeasurementType;
+    Images: ImageMeasurementType[];
+    Unit: UnitMeasurementType;
+};
+export interface ProductInfo {
+    id: number;
+    name: string;
+    price: number;
 }
