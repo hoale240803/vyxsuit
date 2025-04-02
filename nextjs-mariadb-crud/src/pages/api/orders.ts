@@ -7,8 +7,6 @@ import {
     createProductRepository,
 } from "@/shared/di/container";
 import { OrderRequest } from "@/models/request/request.model";
-import { EmailTemplateHelper } from "@/utils/email-template-helper";
-import { GmailProvider } from "@/services/notifications/GmailProvider";
 import {
     CustomerMapper,
     MeasurementMapper,
@@ -18,7 +16,7 @@ import {
 } from "@/models/mapper/mapper";
 import { OrderDetailsEntity } from "@/models/entities/order-details.entity";
 import { SuitTypeEnum } from "@/models/enum";
-import mariadbHelper from "@/lib/mariadb.ado";
+import { ProductInfo } from "@/models/product.model";
 
 export default async function handler(
     req: NextApiRequest,
@@ -57,27 +55,23 @@ export default async function handler(
         // todo: 4. save order and return orderId
 
         // todo: 5. save order details for each product (suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId)
-        mariadbHelper.testConnection();
-        const productRepo = createProductRepository();
-        debugger;
-        const products = await productRepo.getProductInfoAsync({
-            suitId: payload.orderDetails.suitId,
-            suitTypeId: payload.orderDetails.suitTypeId,
-            trouserId: payload.orderDetails.trouserId,
-            jacketId: payload.orderDetails.jacketId,
-            fabricId: payload.orderDetails.fabricId,
-            liningId: payload.orderDetails.liningId,
-            buttonId: payload.orderDetails.buttonId,
-        });
 
+        const productRepo = createProductRepository();
+        var productIds = [
+            payload.orderDetails.suitId,
+            payload.orderDetails.suitTypeId,
+            payload.orderDetails.trouserId,
+            payload.orderDetails.jacketId,
+            payload.orderDetails.fabricId,
+            payload.orderDetails.liningId,
+            payload.orderDetails.buttonId,
+        ];
         // 2. Save Customer & get customerId.
         const customerRepo = createCustomerRepository();
         const customerMapper = new CustomerMapper();
-
         const customerId = await customerRepo.createCustomerAsync(
             customerMapper.toEntity(payload.customer)
         );
-
         // 3. Save Measurement & get measurementId.
         const measurementRepo = createMeasurementRepository();
         const measurementMapper = new MeasurementMapper();
@@ -128,44 +122,46 @@ export default async function handler(
         orderEntity.customerId = customerId;
         orderEntity.measurementId = measurementId;
         // (You can use the productInfo to calculate pricing, update order.totalAmount, etc.)
-        const totalAmount = products.reduce(
-            (sum, product) => sum + product.price,
-            0
-        );
+        const products = await productRepo.getProductInfoAsync(productIds);
+        const totalAmount = calculateTotal(products);
         const nextSequence = (await orderRepo.getSequenceAsync()) + 1;
-        orderEntity.totalAmout = totalAmount;
+        orderEntity.totalAmount = totalAmount;
         orderEntity.sequence = nextSequence;
+        debugger;
         const orderId = await orderRepo.createOrder(orderEntity);
 
         // 5. Save Order Details for each product.
         const orderDetailsRepo = createOrderDetailsRepository();
         const orderDetailsList: OrderDetailsEntity[] = products.map(
-            (product) => ({
-                productId: product.id,
-                price: product.price,
-                quantity: 1,
-                orderId: orderId, // Attach the orderId for each order detail.
-                suitType: mapSuitTypeFromProductName(product.name),
-                tailoredFit: payload.orderDetails.tailoredFit,
-            })
+            (product) =>
+                ({
+                    productId: product.id,
+                    price: product.price,
+                    quantity: 1,
+                    orderId: orderId, // Attach the orderId for each order detail.
+                    suitType: SuitTypeEnum.ThreePieceSuit,
+                    tailoredFit: payload.orderDetails.tailoredFit,
+                } as OrderDetailsEntity)
         );
 
+        debugger;
         // TODO: n+1 problem
         for (const orderDetails of orderDetailsList) {
             await orderDetailsRepo.createOrderDetailsAsync(orderDetails);
         }
 
-        // Generate email HTML using the template service.
-        const orderHtml: string =
-            EmailTemplateHelper.generateOrderConfirmationTemplate(payload);
+        debugger;
+        // // Generate email HTML using the template service.
+        // const orderHtml: string =
+        //     EmailTemplateHelper.generateOrderConfirmationTemplate(payload);
 
-        // Send a notification email to the tailor.
-        const gmail = new GmailProvider();
-        await gmail.sendEmail({
-            to: process.env.TAILOR_EMAIL || "tailor@yopmail.com",
-            subject: `New Order Received - Order #${payload.salesOrderNumber}`,
-            html: orderHtml,
-        });
+        // // Send a notification email to the tailor.
+        // const gmail = new GmailProvider();
+        // await gmail.sendEmail({
+        //     to: process.env.TAILOR_EMAIL || "tailor@yopmail.com",
+        //     subject: `New Order Received - Order #${payload.salesOrderNumber}`,
+        //     html: orderHtml,
+        // });
 
         return res.status(200).json({ success: true, orderId });
     } catch (error: any) {
@@ -183,5 +179,17 @@ export function mapSuitTypeFromProductName(productName?: string): SuitTypeEnum {
             return SuitTypeEnum.ThreePieceSuit;
         }
     }
+    debugger;
     return SuitTypeEnum.TwoPieceSuit;
+}
+
+function calculateTotal(products: ProductInfo[]): number {
+    if (!products || products.length === 0) {
+        return 0;
+    }
+    const total = products.reduce(
+        (total, product) => total + (product.price || 0),
+        0
+    );
+    return 123;
 }

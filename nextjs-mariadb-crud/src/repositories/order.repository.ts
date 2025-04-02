@@ -1,6 +1,6 @@
 import mariadbHelper from "@/lib/mariadb.ado";
-import { OrderEntity } from "@/models/entities/order.entity";
-import { OrderDetailsEntity } from "@/models/entities/order-details.entity";
+import { OrderEntity as OrderEntity } from "@/models/entities/order.entity";
+import { OrderDetailsEntity as OrderDetailEntity } from "@/models/entities/order-details.entity";
 
 export class OrderRepository implements IOrderRepository {
     /**
@@ -8,32 +8,7 @@ export class OrderRepository implements IOrderRepository {
      * Expects the OrderPayload extended with customerId and measurementId.
      */
     async createOrder(entity: OrderEntity): Promise<number> {
-        const params = [
-            entity.customerId,
-            entity.measurementId,
-            entity.salesOrderNumber,
-            entity.sequence,
-            entity.createdAt,
-            entity.note,
-            entity.totalAmout,
-
-            entity.country,
-            entity.city,
-            entity.state,
-            entity.zipCode,
-            entity.phone,
-            entity.shippingMethod,
-            entity.differentAddress,
-            entity.paymentStatus,
-            entity.stripeId,
-            entity.lang,
-            entity.currencyCode,
-            entity.currencyRate,
-        ];
-
-        const c: any = await mariadbHelper.insert("order", params);
-
-        return c.insertId;
+        return await mariadbHelper.insert("orders", entity);
     }
 
     async getSequenceAsync(): Promise<number> {
@@ -61,29 +36,14 @@ export class OrderRepository implements IOrderRepository {
             WHERE p.Id IN (?, ?, ?)
         `;
         const params = [productId, fabricId, suitTypeId];
-        const result: any = await mariadbHelper.executeQueryWithAny(
-            sql,
-            params
-        );
+        const result: any = await mariadbHelper.executeQuery(sql, params);
         return result[0]?.total || 0;
     }
 }
 
-export class OrderDetailsRepository implements IOrderDetailsRepository {
-    async createOrderDetailsAsync(entity: OrderDetailsEntity): Promise<void> {
-        // Define the parameters in the order matching your table schema.
-        const params = [
-            entity.orderId,
-            entity.productId,
-            entity.price,
-            entity.quantity,
-            entity.suitType,
-            entity.tailoredFit,
-        ];
-
-        // Use the existing insert helper.
-        const result: any = await mariadbHelper.insert("orderdetail", params);
-        return result.insertId;
+export class OrderDetailRepository implements IOrderDetailRepository {
+    async createOrderDetailsAsync(entity: OrderDetailEntity): Promise<void> {
+        await mariadbHelper.insert("orderdetail", entity);
     }
 }
 
@@ -100,10 +60,10 @@ export interface IOrderRepository {
     getSequenceAsync(): Promise<number>;
 }
 
-export interface IOrderDetailsRepository {
+export interface IOrderDetailRepository {
     /**
      * Creates an order detail record.
      */
 
-    createOrderDetailsAsync(detailData: OrderDetailsEntity): Promise<void>;
+    createOrderDetailsAsync(detailData: OrderDetailEntity): Promise<void>;
 }

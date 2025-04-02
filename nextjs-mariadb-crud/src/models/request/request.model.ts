@@ -1,10 +1,4 @@
-import {
-    MeasurementType,
-    MeasurementUnit,
-    PaymentStatus,
-    ShippingMethod,
-    SuitStyleEnum,
-} from "../enum";
+import { MeasurementType, MeasurementUnit, SuitStyleEnum } from "../enum";
 
 export type MeasurementRequest = {
     id: number;
@@ -33,6 +27,7 @@ export interface OrderDetailsRequest {
 }
 
 export interface ShippingInfoRequest {
+    note: string;
     country: string;
     city: string;
     state: string;
@@ -51,7 +46,7 @@ export interface OrderRequest {
     shippingInfo: ShippingInfoRequest;
     payment: {
         currencyCode: string;
-        currencyRate: string;
+        currencyRate: number;
     };
     lang: string;
 }
@@ -62,12 +57,6 @@ export interface CustomerRequest {
     email: string;
     companyName: string;
 }
-
-// export interface MeasurementRequest {
-//     id: number;
-//     measurementType: MeasurementType;
-//     unit: MeasurementUnit;
-// }
 
 export interface ShirtMeasurementRequest {
     id: number;
@@ -82,6 +71,7 @@ export interface ShirtMeasurementRequest {
     bellyTummy: number;
     hips: number;
     neck: number;
+    measurementType: MeasurementType;
 }
 
 export interface TrouserMeasurementRequest {
@@ -93,6 +83,7 @@ export interface TrouserMeasurementRequest {
     outswarm: number;
     thigh: number;
     calf: number;
+    measurementType: MeasurementType;
 }
 
 export interface MeasurementImageRequest {
@@ -102,31 +93,31 @@ export interface MeasurementImageRequest {
     measurementId: number;
 }
 
-export interface OrderRequest {
-    orderId: number;
-    customerId: number;
-    measurementId: number;
-    salesOrderNumber: string;
-    sequence: number;
-    createdAt: Date;
-    note: string;
-    totalAmount: number;
+// export interface OrderRequest {
+//     orderId: number;
+//     customerId: number;
+//     measurementId: number;
+//     salesOrderNumber: string;
+//     sequence: number;
+//     createdAt: Date;
+//     note: string;
+//     totalAmount: number;
 
-    // Shipping Information
-    country: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    phone: string;
-    shippingMethod: ShippingMethod;
-    differentAddress: boolean;
+//     // Shipping Information
+//     country: string;
+//     city: string;
+//     state: string;
+//     zipCode: string;
+//     phone: string;
+//     shippingMethod: ShippingMethod;
+//     differentAddress: boolean;
 
-    // Payment Information
-    paymentStatus: PaymentStatus;
-    stripeId: string;
+//     // Payment Information
+//     paymentStatus: PaymentStatus;
+//     stripeId: string;
 
-    // Localization
-    lang: string;
-    currencyCode: string;
-    currencyRate: number;
-}
+//     // Localization
+//     lang: string;
+//     currencyCode: string;
+//     currencyRate: number;
+// }

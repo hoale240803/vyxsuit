@@ -3,27 +3,26 @@ import mariadb from "mariadb";
 const pool = mariadb.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
-    password: process.env.DB_PASS,
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    connectionLimit: 10, // Increase limit
-    acquireTimeout: 30000, // 30 seconds
-    connectTimeout: 10000, // 10 seconds
+    port: Number(process.env.DB_PORT),
+    connectionLimit: 1,
+    connectTimeout: 10000,
 });
 
 async function testConnection() {
     let conn;
     try {
-        debugger;
         conn = await pool.getConnection();
         console.log("Connected to MariaDB!");
     } catch (err) {
         console.error("Database connection failed:", err);
     } finally {
-        if (conn) conn.end();
+        if (conn) conn.release();
     }
 }
 
-async function executeQuery(query: string, params = []) {
+async function executeQuery(query: string, params: any[] = []) {
     let conn;
     try {
         conn = await pool.getConnection();
@@ -33,22 +32,13 @@ async function executeQuery(query: string, params = []) {
         console.error("Query error:", err);
         throw err;
     } finally {
-        if (conn) conn.release();
-    }
-}
-
-async function executeQueryWithAny(query: string, params: any) {
-    let conn;
-    try {
-        debugger;
-        conn = await pool.getConnection();
-        const result = await conn.query(query, params);
-        return result;
-    } catch (err) {
-        console.error("Query error:", err);
-        throw err;
-    } finally {
-        if (conn) conn.release();
+        if (conn) {
+            try {
+                await conn.release();
+            } catch (releaseErr) {
+                console.error("Error releasing connection:", releaseErr);
+            }
+        }
     }
 }
 
@@ -60,22 +50,58 @@ async function getById(table: string, id: never) {
     return await executeQuery(`SELECT * FROM ${table} WHERE id = ?`, [id]);
 }
 
-async function insert(table: string, data: any) {
-    const keys = Object.keys(data).join(", ");
-    const values = Object.values(data) as never[];
-    const placeholders = values.map(() => "?").join(", ");
+async function insert<T extends Record<string, any>>(
+    table: string,
+    entity: T
+): Promise<number> {
+    // Get all properties from the entity object
+    const properties = Object.keys(entity);
 
-    const query = `INSERT INTO ${table} (${keys}) VALUES (${placeholders})`;
-    return await executeQuery(query, values);
+    // Filter out any properties that are undefined or null
+    const validProperties = properties.filter(
+        (prop) =>
+            entity[prop] !== undefined &&
+            entity[prop] !== null &&
+            typeof entity[prop] !== "function"
+    );
+
+    // Create arrays for columns and values
+    const columns = validProperties;
+    const values = validProperties.map((prop) => entity[prop]);
+
+    // Generate the SQL query
+    const placeholders = values.map(() => "?").join(", ");
+    const query = `INSERT INTO ${table} (${columns.join(
+        ", "
+    )}) VALUES (${placeholders})`;
+
+    console.log("Generated SQL:", query);
+    console.log("Columns:", columns);
+    console.log("Values:", values);
+
+    var result = await executeQuery(query, values);
+    var insertId = Number(result.insertId);
+    return insertId;
 }
 
-async function update(table: string, id: never, data: never) {
-    const updates = Object.keys(data)
+async function update(
+    table: string,
+    id: number | string,
+    data: Record<string, any>
+) {
+    // Create SET clause with column names
+    const setClause = Object.keys(data)
         .map((key) => `${key} = ?`)
         .join(", ");
-    const values = [...Object.values(data), id] as never[];
 
-    const query = `UPDATE ${table} SET ${updates} WHERE id = ?`;
+    // Combine values with id for the WHERE clause
+    const values = [...Object.values(data), id];
+
+    const query = `UPDATE ${table} SET ${setClause} WHERE id = ?`;
+
+    console.log("Generated SQL:", query);
+    console.log("Parameters:", values);
+
     return await executeQuery(query, values);
 }
 
@@ -97,7 +123,6 @@ const mariadbHelper = {
     insert,
     update,
     remove,
-    executeQueryWithAny,
 };
 
 export default mariadbHelper;

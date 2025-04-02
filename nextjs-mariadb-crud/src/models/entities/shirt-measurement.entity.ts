@@ -1,3 +1,5 @@
+import { MeasurementType } from "../enum";
+
 export class ShirtMeasurementEntity {
     measurementId: number;
     chest: number;
@@ -10,6 +12,7 @@ export class ShirtMeasurementEntity {
     bellyTummy: number;
     hips: number;
     neck: number;
+    measurementType: MeasurementType;
 
     constructor(
         measurementId: number,
@@ -22,7 +25,8 @@ export class ShirtMeasurementEntity {
         abdomen: number,
         bellyTummy: number,
         hips: number,
-        neck: number
+        neck: number,
+        measurement: MeasurementType
     ) {
         this.measurementId = measurementId;
         this.chest = chest;
@@ -35,5 +39,6 @@ export class ShirtMeasurementEntity {
         this.bellyTummy = bellyTummy;
         this.hips = hips;
         this.neck = neck;
+        this.measurementType = measurement;
     }
 }

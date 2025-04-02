@@ -1,3 +1,4 @@
+import { log } from "console";
 import { CustomerEntity } from "../entities/customer.entity";
 import { MeasurementEntity } from "../entities/measurement.entity";
 import { OrderEntity } from "../entities/order.entity";
@@ -6,7 +7,6 @@ import { TrouserMeasurementEntity } from "../entities/trouser-measurement.entity
 import {
     CustomerRequest,
     MeasurementRequest,
-    OrderDetailsRequest,
     OrderRequest,
     ShirtMeasurementRequest,
     TrouserMeasurementRequest,
@@ -49,7 +49,6 @@ export class MeasurementMapper
         return {
             id: source.id,
             unit: source.unit,
-            measurementType: source.measurementType,
         };
     }
 }
@@ -70,6 +69,7 @@ export class ShirtMeasurementMapper
             hips: source.hips,
             shoulder: source.shoulder,
             measurementId: source.measurementId,
+            measurementType: source.measurementType,
         };
     }
 
@@ -87,6 +87,7 @@ export class ShirtMeasurementMapper
             hips: entity.hips,
             shoulder: entity.shoulder,
             measurementId: entity.measurementId,
+            measurementType: entity.measurementType,
         };
     }
 }
@@ -100,23 +101,25 @@ export class TrouserMeasurementMapper
             calf: source.calf,
             thigh: source.thigh,
             waist: source.waist,
-            hipCrotch: source.hipsCrotch,
+            hipsCrotch: source.hipsCrotch,
             measurementId: source.measurementId,
             outswarm: source.outswarm,
             upperHips: source.upperHips,
+            measurementType: source.measurementType,
         };
     }
 
     toDTO(entity: TrouserMeasurementEntity): TrouserMeasurementRequest {
         return {
+            id: 0,
             calf: entity.calf,
             thigh: entity.thigh,
             waist: entity.waist,
-            hipsCrotch: entity.hipCrotch,
+            hipsCrotch: entity.hipsCrotch,
             measurementId: entity.measurementId,
             outswarm: entity.outswarm,
             upperHips: entity.upperHips,
-            id: 0,
+            measurementType: entity.measurementType,
         };
     }
 }
@@ -126,27 +129,24 @@ export class OrderMapper implements AbstractMapper<OrderRequest, OrderEntity> {
         throw new Error("Method not implemented.");
     }
     toEntity(source: OrderRequest): OrderEntity {
+        log("source", source);
         return {
-            Id: source.orderId,
-            city: source.city,
-            country: source.country,
-            state: source.state,
-            createdAt: source.createdAt,
-            currencyCode: source.currencyCode,
-            currencyRate: source.currencyRate,
-            differentAddress: source.differentAddress,
+            note: source.shippingInfo.note,
+            city: source.shippingInfo.city,
+            phone: source.shippingInfo.phone,
+            state: source.shippingInfo.state,
+            country: source.shippingInfo.country,
+            zipCode: source.shippingInfo.zipCode,
+            differentAddress: source.shippingInfo.differentAddress,
+
+            currencyCode: source.payment.currencyCode,
+            currencyRate: source.payment.currencyRate,
+
             lang: source.lang,
-            measurementId: source.measurementId,
-            note: source.note,
-            paymentStatus: source.paymentStatus,
-            phone: source.phone,
-            stripeId: source.stripeId,
-            zipCode: source.zipCode,
+            paymentStatus: "none",
             salesOrderNumber: source.salesOrderNumber,
-            customerId: source.customerId,
-            sequence: source.sequence,
-            shippingMethod: source.shippingMethod,
-            totalAmout: source.totalAmount,
-        };
+            shippingMethod: source.shippingInfo
+                .shippingMethod as unknown as ShippingMethod,
+        } as OrderEntity;
     }
 }

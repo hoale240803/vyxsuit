@@ -84,7 +84,6 @@ CREATE TABLE ProductTranslation (
 
 CREATE TABLE Measurement (
     Id INT AUTO_INCREMENT PRIMARY KEY,
-    MeasurementType ENUM('Shirt', 'Trouser') NOT NULL,
     Unit ENUM('Cm', 'Inch') NOT NULL
 );
 
@@ -101,6 +100,7 @@ CREATE TABLE ShirtMeasurement (
     BellyTummy DECIMAL(5,2),
     Hips DECIMAL(5,2),
     Neck DECIMAL(5,2),
+    MeasurementType ENUM('Shirt', 'Trouser') NOT NULL,
     FOREIGN KEY (MeasurementId) REFERENCES Measurement(Id) ON DELETE CASCADE
 );
 
@@ -113,6 +113,7 @@ CREATE TABLE TrouserMeasurement (
     Outswarm DECIMAL(5,2),
     Thigh DECIMAL(5,2),
     Calf DECIMAL(5,2),
+    MeasurementType ENUM('Shirt', 'Trouser') NOT NULL,
     FOREIGN KEY (MeasurementId) REFERENCES Measurement(Id) ON DELETE CASCADE
 );
 
@@ -160,7 +161,7 @@ CREATE TABLE Orders (
 CREATE TABLE OrderDetail (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     OrderId INT NOT NULL,
-    ProductId INT NOT NULL COMMENT('suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId'), 
+    ProductId INT NOT NULL COMMENT 'suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId', 
     Price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     Quantity TINYINT NOT NULL DEFAULT 1,
     SuitType ENUM('TwoPieceSuit', 'ThreePieceSuit'),
@@ -169,3 +170,4 @@ CREATE TABLE OrderDetail (
     FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE,
     FOREIGN KEY (ProductId) REFERENCES Product(Id) ON DELETE CASCADE
 );
+

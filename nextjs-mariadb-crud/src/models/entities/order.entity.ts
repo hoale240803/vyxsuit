@@ -1,14 +1,14 @@
 import { PaymentStatus, ShippingMethod } from "../enum";
 
 export class OrderEntity {
-    Id!: number;
+    id!: number;
     customerId: number;
     measurementId: number;
     salesOrderNumber: string;
     sequence: number;
     createdAt: Date;
     note: string;
-    totalAmout: number;
+    totalAmount: number;
 
     // Shipping information
     country: string;
@@ -56,7 +56,7 @@ export class OrderEntity {
         this.sequence = sequence;
         this.createdAt = createdAt;
         this.note = note;
-        this.totalAmout = totalAmount;
+        this.totalAmount = totalAmount;
         this.country = country;
         this.city = city;
         this.state = state;
