@@ -12,7 +12,7 @@ export class ProductRepository implements IProductRepository {
         const placeholders = productIds.map(() => "?").join(", ");
 
         // Define the SQL query
-        const query = `SELECT id, name, price FROM Product WHERE id IN (${placeholders})`;
+        const query = `SELECT id, name, productType, price, s3url FROM Product WHERE id IN (${placeholders})`;
 
         // Call executeQuery with the query and productIds as parameters
         const result = (await mariadbHelper.executeQuery(
@@ -20,6 +20,7 @@ export class ProductRepository implements IProductRepository {
             productIds
         )) as ProductInfo[];
 
+        debugger;
         return result;
     }
 

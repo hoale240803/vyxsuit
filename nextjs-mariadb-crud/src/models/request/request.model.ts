@@ -6,7 +6,7 @@ export type MeasurementRequest = {
     unit: MeasurementUnit;
     shirtMeasurements: ShirtMeasurementRequest;
     trouserMeasurements: TrouserMeasurementRequest;
-    measurementImages: MeasurementImageRequest;
+    measurementImages: MeasurementImageRequest[];
 };
 
 export interface MeasurementImageRequest {
@@ -15,6 +15,7 @@ export interface MeasurementImageRequest {
 }
 
 export interface OrderDetailsRequest {
+    createdAt: Date;
     suitId: number;
     suitTypeId: number;
     trouserId: number;
@@ -79,6 +80,7 @@ export interface TrouserMeasurementRequest {
     measurementId: number;
     waist: number;
     upperHips: number;
+    hips: number;
     hipsCrotch: number;
     outswarm: number;
     thigh: number;

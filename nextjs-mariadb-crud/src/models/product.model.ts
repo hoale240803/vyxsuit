@@ -1,3 +1,5 @@
+import { ProductType } from "./enum";
+
 export type Product = {
     Id: number;
     Name: string;
@@ -60,5 +62,8 @@ export type MeasurementType = {
 export interface ProductInfo {
     id: number;
     name: string;
+    productType: ProductType;
     price: number;
+    code: string;
+    s3url: string;
 }

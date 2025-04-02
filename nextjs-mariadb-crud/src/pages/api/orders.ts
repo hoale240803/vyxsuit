@@ -17,6 +17,7 @@ import {
 import { OrderDetailsEntity } from "@/models/entities/order-details.entity";
 import { SuitTypeEnum } from "@/models/enum";
 import { ProductInfo } from "@/models/product.model";
+import { EmailTemplateHelper } from "@/utils/email-template-helper";
 
 export default async function handler(
     req: NextApiRequest,
@@ -151,9 +152,12 @@ export default async function handler(
             await orderDetailsRepo.createOrderDetailsAsync(orderDetails);
         }
 
-        // // Generate email HTML using the template service.
-        // const orderHtml: string =
-        //     EmailTemplateHelper.generateOrderConfirmationTemplate(payload);
+        // Generate email HTML using the template service.
+        const orderHtml: string =
+            EmailTemplateHelper.generateOrderConfirmationTemplate(
+                payload,
+                totalAmount
+            );
 
         // // Send a notification email to the tailor.
         // const gmail = new GmailProvider();
