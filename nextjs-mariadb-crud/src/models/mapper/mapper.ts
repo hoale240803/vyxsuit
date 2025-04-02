@@ -145,8 +145,7 @@ export class OrderMapper implements AbstractMapper<OrderRequest, OrderEntity> {
             lang: source.lang,
             paymentStatus: "none",
             salesOrderNumber: source.salesOrderNumber,
-            shippingMethod: source.shippingInfo
-                .shippingMethod as unknown as ShippingMethod,
+            shippingMethod: source.shippingInfo.shippingMethod,
         } as OrderEntity;
     }
 }

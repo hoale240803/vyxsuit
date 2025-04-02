@@ -25,8 +25,8 @@ export enum SuitStyleEnum {
 
 export type SuitType = "TwoPieceSuit" | "ThreePieceSuit";
 export enum SuitTypeEnum {
-    TwoPieceSuit,
-    ThreePieceSuit,
+    TwoPieceSuit = "TwoPieceSuit",
+    ThreePieceSuit = "ThreePieceSuit",
 }
 export type ShippingMethod = "Standard" | "Express";
 export type PaymentStatus = "failed" | "success" | "none";

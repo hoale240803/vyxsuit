@@ -55,7 +55,7 @@ export default async function handler(
         // todo: 4. save order and return orderId
 
         // todo: 5. save order details for each product (suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId)
-
+        debugger;
         const productRepo = createProductRepository();
         var productIds = [
             payload.orderDetails.suitId,
@@ -123,6 +123,7 @@ export default async function handler(
         orderEntity.measurementId = measurementId;
         // (You can use the productInfo to calculate pricing, update order.totalAmount, etc.)
         const products = await productRepo.getProductInfoAsync(productIds);
+        debugger;
         const totalAmount = calculateTotal(products);
         const nextSequence = (await orderRepo.getSequenceAsync()) + 1;
         orderEntity.totalAmount = totalAmount;
@@ -139,7 +140,7 @@ export default async function handler(
                     price: product.price,
                     quantity: 1,
                     orderId: orderId, // Attach the orderId for each order detail.
-                    suitType: SuitTypeEnum.ThreePieceSuit,
+                    suitType: mapSuitTypeFromProductName(product.name),
                     tailoredFit: payload.orderDetails.tailoredFit,
                 } as OrderDetailsEntity)
         );
@@ -150,7 +151,6 @@ export default async function handler(
             await orderDetailsRepo.createOrderDetailsAsync(orderDetails);
         }
 
-        debugger;
         // // Generate email HTML using the template service.
         // const orderHtml: string =
         //     EmailTemplateHelper.generateOrderConfirmationTemplate(payload);
@@ -172,7 +172,7 @@ export default async function handler(
     }
 }
 
-export function mapSuitTypeFromProductName(productName?: string): SuitTypeEnum {
+export function mapSuitTypeFromProductName(productName?: string) {
     if (productName) {
         const lower = productName.toLowerCase();
         if (lower.includes("three") || lower.includes("3")) {
@@ -188,8 +188,9 @@ function calculateTotal(products: ProductInfo[]): number {
         return 0;
     }
     const total = products.reduce(
-        (total, product) => total + (product.price || 0),
+        (total, product) => total + (Number(product.price) || 0),
         0
     );
-    return 123;
+    debugger;
+    return total;
 }

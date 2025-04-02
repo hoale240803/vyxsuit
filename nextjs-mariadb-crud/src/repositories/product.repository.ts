@@ -15,7 +15,10 @@ export class ProductRepository implements IProductRepository {
         const query = `SELECT id, name, price FROM Product WHERE id IN (${placeholders})`;
 
         // Call executeQuery with the query and productIds as parameters
-        const result = await mariadbHelper.executeQuery(query, productIds);
+        const result = (await mariadbHelper.executeQuery(
+            query,
+            productIds
+        )) as ProductInfo[];
 
         return result;
     }
@@ -25,7 +28,10 @@ export class ProductRepository implements IProductRepository {
             return 0;
         }
 
-        const total = products.reduce((total, product) => total + (product.price || 0), 0);
+        const total = products.reduce(
+            (total, product) => total + (product.price || 0),
+            0
+        );
         return Number(total.toFixed(2));
     }
 }
