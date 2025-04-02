@@ -9,6 +9,7 @@ import {
   ImageMeasurementType,
   LiningType,
   MeasurementType,
+  Product,
   ShirtMeasurementType,
   SuitStyle,
   SuitType,
@@ -18,6 +19,7 @@ import {
 } from "@/models/product.model";
 
 export const localStorageKey = {
+  Product: "suilt-builder:product",
   SuitType: "suilt-builder:suit-type",
   TrouserType: "suilt-builder:trouser",
   SuitStyle: "suilt-builder:suit-style",
@@ -32,6 +34,15 @@ export interface SuitBuilderContextProviderProps {
 }
 
 export const SuitBuilderDefault = {
+  Product: {
+    Id: 0,
+    Name: '',
+    Description: '',
+    S3Url: '',
+    ProductType: '',
+    Code: '',
+    Price: 0
+  },
   Measurement: {
     Shirt: {
       Chest: 0,
@@ -62,6 +73,7 @@ export const SuitBuilderDefault = {
 export const SuitBuilderContextProvider: React.FC<
   SuitBuilderContextProviderProps
 > = ({ children }): JSX.Element => {
+  const [productChoosen, setProduct] = useState<Product>(SuitBuilderDefault.Product);
   const [suitTypeChoosen, setSuitType] = useState<SuitType>("");
   const [trouserChoosen, setTrouser] = useState<TrouserType>("");
   const [suitStyleChoosen, setSuitStyle] = useState<SuitStyle>("");
@@ -97,6 +109,11 @@ export const SuitBuilderContextProvider: React.FC<
 
   useEffect(() => {
     // Load saved value from localStorage on first render
+    const productOption = localStorage.getItem(
+      localStorageKey.Product
+    ) as unknown as Product;
+    if (productOption) setProduct(productOption);
+
     const sultTypeOption = localStorage.getItem(
       localStorageKey.SuitType
     ) as SuitType;
@@ -143,6 +160,11 @@ export const SuitBuilderContextProvider: React.FC<
       });
     }
   }, []);
+
+  const updateProduct = (option: Product) => {
+    setProduct(option);
+    localStorage.setItem(localStorageKey.Product, JSON.stringify(option)); // Save to localStorage
+  };
 
   const updateSuitType = (option: SuitType) => {
     setSuitType(option);
@@ -260,6 +282,7 @@ export const SuitBuilderContextProvider: React.FC<
 
   const handleClearLocalStorage = () => {
     localStorage.clear();
+    setProduct(SuitBuilderDefault.Product);
     setSuitType("");
     setTrouser("");
     setSuitStyle("");
@@ -271,9 +294,12 @@ export const SuitBuilderContextProvider: React.FC<
     setShirtMeasurement({} as ShirtMeasurementType);
     setTrouserMeasurement({} as TrouserMeasurementType);
     setImageMeasurement([]);
+    localStorage.clear();
   };
 
   const value: SuitBuilderContextType = {
+    product: productChoosen,
+    selectProduct: updateProduct,
     suitType: suitTypeChoosen,
     selectSuitType: updateSuitType,
     trouser: trouserChoosen,

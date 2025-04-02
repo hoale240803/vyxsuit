@@ -1,12 +1,12 @@
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import { GroupedProduct } from "@/models/product.model";
+import { GroupedProduct, Product } from "@/models/product.model";
 import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function ProductList() {
-  const { clear } = useSuitBuilder();
+  const { clear, selectProduct } = useSuitBuilder();
 
   const [products, setProducts] = useState<GroupedProduct[]>([]);
 
@@ -16,8 +16,9 @@ export default function ProductList() {
       .then((data) => setProducts(data));
   }, []);
 
-  const handleClearOldSuit = () => {
+  const handleBeforeNextStep = (product: Product) => {
     clear();
+    selectProduct(product);
   }
 
   return (
@@ -76,7 +77,7 @@ export default function ProductList() {
                   />
                   <p className="fs-4 mb-0">{item.Name}</p>
                   <p className="fs-6">{item.Description}</p>
-                  <Link href={`/product/${item.Main.Id}/builder/step-2`} passHref onClick={handleClearOldSuit}>
+                  <Link href={`/product/${item.Main.Id}/builder/step-2`} passHref onClick={() => handleBeforeNextStep(item.Main)}>
                     <button className="p-3 w-100 border-0">
                       <span>View options</span>
                     </button>

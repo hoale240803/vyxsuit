@@ -73,7 +73,7 @@
   }
 
   // Styling the number input field
-  input[type="number"] {
+  input {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -153,6 +153,64 @@
       font-size: 16px;
       line-height: 1.5;
       // word-wrap: break-word; /* Allow long text to wrap to the next line */
+    }
+  }
+
+  .radio-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--accent-color);
+    cursor: pointer;
+    justify-content: center;
+  
+    input[type="radio"] {
+      display: none; // Hide the default radio button
+  
+      &:checked + label::before {
+        border-color: var(--primary-color); // Outer circle border color
+      }
+  
+      &:checked + label::after {
+        background: var(--primary-color); // Inner filled circle
+        opacity: 1;
+      }
+    }
+  
+    label {
+      position: relative;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding-left: 32px; // Space for the custom radio
+      height: 30px;
+  
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 26px; // Adjusted size
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid var(--primary-bright-color); // Outer circle border color
+        background: #fff;
+        transition: 0.3s ease-in-out;
+      }
+  
+      &::after {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 8px;
+        width: 14px; // Adjusted size for inner dot
+        height: 14px;
+        border-radius: 50%;
+        background: transparent;
+        opacity: 0;
+        transition: 0.3s;
+      }
     }
   }
 }

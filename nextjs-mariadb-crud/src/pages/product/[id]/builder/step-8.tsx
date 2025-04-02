@@ -152,7 +152,7 @@ const Step8 = () => {
           <div className="col-4">
             <div className="w-100 h-100 d-flex flex-row justify-content-center gap-3">
               <h4 className="mb-0">Unit for measurement: </h4>
-              <div className={clsx(styles["radio-container"])}>
+              <div className={clsx("radio-container")}>
                 <input
                   type="radio"
                   id="option1"
@@ -163,12 +163,12 @@ const Step8 = () => {
                 />
                 <label
                   htmlFor="option1"
-                  className={clsx(styles["radio-label"])}
+                  className={clsx("radio-label")}
                 >
                   Cm
                 </label>
               </div>
-              <div className={clsx(styles["radio-container"])}>
+              <div className={clsx("radio-container")}>
                 <input
                   type="radio"
                   id="option2"
@@ -179,7 +179,7 @@ const Step8 = () => {
                 />
                 <label
                   htmlFor="option2"
-                  className={clsx(styles["radio-label"])}
+                  className={clsx("radio-label")}
                 >
                   Inch
                 </label>

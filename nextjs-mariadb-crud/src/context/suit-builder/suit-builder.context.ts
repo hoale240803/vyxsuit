@@ -1,8 +1,10 @@
-import { Buttontype, Fabric, ImageMeasurementType, LiningType, MeasurementType, ShirtMeasurementType, SuitStyle, SuitType, TrouserMeasurementType, TrouserType, UnitMeasurementType } from '@/models/product.model';
+import { Buttontype, Fabric, ImageMeasurementType, LiningType, MeasurementType, Product, ShirtMeasurementType, SuitStyle, SuitType, TrouserMeasurementType, TrouserType, UnitMeasurementType } from '@/models/product.model';
 import { createContext } from 'react';
 
 // Define the type for the context value
 export interface SuitBuilderContextType {
+  product: Product;
+  selectProduct: (option: Product) => void;
   suitType: SuitType;
   selectSuitType: (option: SuitType) => void;
   trouser: TrouserType;
@@ -25,6 +27,8 @@ export interface SuitBuilderContextType {
 }
 
 export const suitBuilderContextDefaultValue: SuitBuilderContextType = {
+  product: {} as Product,
+  selectProduct: () => {},
   suitType: '',
   selectSuitType: () => {},
   trouser: '',
