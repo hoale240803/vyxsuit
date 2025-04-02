@@ -18,6 +18,8 @@ import { OrderDetailsEntity } from "@/models/entities/order-details.entity";
 import { SuitTypeEnum } from "@/models/enum";
 import { ProductInfo } from "@/models/product.model";
 import { EmailTemplateHelper } from "@/utils/email-template-helper";
+import { GmailProvider } from "@/services/notifications/GmailProvider";
+import { verifyCaptcha } from "@/utils/captcha";
 
 export default async function handler(
     req: NextApiRequest,
@@ -33,28 +35,21 @@ export default async function handler(
         const payload = req.body as OrderRequest;
 
         // Verify CAPTCHA.
-        // if (!payload.CaptchaToken) {
-        //     return res.status(400).json({ error: "Captcha token is missing" });
-        // }
-        // const captchaValid = await verifyCaptcha(payload.CaptchaToken);
-        // if (!captchaValid) {
-        //     return res.status(400).json({ error: "Invalid captcha" });
-        // }
+        if (!payload.captchaToken) {
+            return res.status(400).json({ error: "Captcha token is missing" });
+        }
+        const captchaValid = await verifyCaptcha(payload.captchaToken);
+        if (!captchaValid) {
+            return res.status(400).json({ error: "Invalid captcha" });
+        }
 
         // todo: 1. query product table, get list product(id, name, price) by suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId to
-
         // todo: 2. save customer
-
         // todo: 3. save measurement and return measurementId
-
         // todo: 3.1 attach measurementId and save shirtMeasurement
-
         // todo: 3.2 attach measurementId and save trouserMeasurement
-
         // todo: 3.3 attach measurementId and save list measurementImage
-
         // todo: 4. save order and return orderId
-
         // todo: 5. save order details for each product (suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId)
         debugger;
         const productRepo = createProductRepository();
@@ -156,16 +151,17 @@ export default async function handler(
         const orderHtml: string =
             EmailTemplateHelper.generateOrderConfirmationTemplate(
                 payload,
-                totalAmount
+                totalAmount,
+                products
             );
 
-        // // Send a notification email to the tailor.
-        // const gmail = new GmailProvider();
-        // await gmail.sendEmail({
-        //     to: process.env.TAILOR_EMAIL || "tailor@yopmail.com",
-        //     subject: `New Order Received - Order #${payload.salesOrderNumber}`,
-        //     html: orderHtml,
-        // });
+        // Send a notification email to the tailor.
+        const gmail = new GmailProvider();
+        await gmail.sendEmail({
+            to: process.env.TAILOR_EMAIL || "hoa@yopmail.com",
+            subject: `New Order Received - Order #${payload.salesOrderNumber}`,
+            html: orderHtml,
+        });
 
         return res.status(200).json({ success: true, orderId });
     } catch (error: any) {
