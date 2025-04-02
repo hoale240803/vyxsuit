@@ -1,6 +1,4 @@
-// src/pages/api/test-recaptcha.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-// import { prisma } from "@/lib/prisma";
 import { Product } from "@/models/product.model";
 import { buildGroup } from "@/utils/productGroup";
 import { withErrorHandler } from "@/utils/withErrorHandler";
@@ -13,16 +11,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             .json({ success: false, error: "Method not allowed" });
     }
 
-    // const products = (await prisma.product.findMany({
-    //   where: {
-    //     AND: [
-    //       { ProductType: "Lining" },
-    //     ],
-    //   },
-    // })) as unknown as Product[];
-
     const products = (await mariadbHelper.executeQuery(
-        `select * from Product where ProductType = 'Button'`
+        `select * from Product where ProductType = 'TrouserOnly' and PriceType  = 'TrouserOnly'`
     )) as Product[];
 
     const groupedProducts = buildGroup(products);

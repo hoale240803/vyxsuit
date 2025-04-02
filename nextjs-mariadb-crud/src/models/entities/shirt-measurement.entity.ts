@@ -1,15 +1,18 @@
+import { MeasurementType } from "../enum";
+
 export class ShirtMeasurementEntity {
-    MeasurementId: number;
-    Chest: number;
-    Shoulder: number;
-    ArmLength: number;
-    ArmShoulderJoint: number;
-    ArmBicepWidth: number;
-    JacketWidth: number;
-    Abdomen: number;
-    BellyTummy: number;
-    Hips: number;
-    Neck: number;
+    measurementId: number;
+    chest: number;
+    shoulder: number;
+    armLength: number;
+    armShoulderJoint: number;
+    armBicepWidth: number;
+    jacketWidth: number;
+    abdomen: number;
+    bellyTummy: number;
+    hips: number;
+    neck: number;
+    measurementType: MeasurementType;
 
     constructor(
         measurementId: number,
@@ -22,18 +25,20 @@ export class ShirtMeasurementEntity {
         abdomen: number,
         bellyTummy: number,
         hips: number,
-        neck: number
+        neck: number,
+        measurement: MeasurementType
     ) {
-        this.MeasurementId = measurementId;
-        this.Chest = chest;
-        this.Shoulder = shoulder;
-        this.ArmLength = armLength;
-        this.ArmShoulderJoint = armShoulderPoint;
-        this.ArmBicepWidth = armBiceWidth;
-        this.JacketWidth = jacketWidth;
-        this.Abdomen = abdomen;
-        this.BellyTummy = bellyTummy;
-        this.Hips = hips;
-        this.Neck = neck;
+        this.measurementId = measurementId;
+        this.chest = chest;
+        this.shoulder = shoulder;
+        this.armLength = armLength;
+        this.armShoulderJoint = armShoulderPoint;
+        this.armBicepWidth = armBiceWidth;
+        this.jacketWidth = jacketWidth;
+        this.abdomen = abdomen;
+        this.bellyTummy = bellyTummy;
+        this.hips = hips;
+        this.neck = neck;
+        this.measurementType = measurement;
     }
 }

@@ -1,11 +1,14 @@
+import { MeasurementType } from "../enum";
+
 export class TrouserMeasurementEntity {
-    MeasureMentId: number;
-    Waist: number;
-    UpperHips: number;
-    HipCrotch: number;
-    Outswarm: number;
-    Thigh: number;
-    Calf: number;
+    measurementId: number;
+    waist: number;
+    upperHips: number;
+    hipsCrotch: number;
+    outswarm: number;
+    thigh: number;
+    calf: number;
+    measurementType: MeasurementType;
 
     constructor(
         measurementId: number,
@@ -14,14 +17,16 @@ export class TrouserMeasurementEntity {
         hipCrotch: number,
         outswarm: number,
         thigh: number,
-        calf: number
+        calf: number,
+        measurementType: MeasurementType
     ) {
-        this.MeasureMentId = measurementId;
-        this.Waist = waist;
-        this.UpperHips = upperHips;
-        this.HipCrotch = hipCrotch;
-        this.Outswarm = outswarm;
-        this.Thigh = thigh;
-        this.Calf = calf;
+        this.measurementId = measurementId;
+        this.waist = waist;
+        this.upperHips = upperHips;
+        this.hipsCrotch = hipCrotch;
+        this.outswarm = outswarm;
+        this.thigh = thigh;
+        this.calf = calf;
+        this.measurementType = measurementType;
     }
 }

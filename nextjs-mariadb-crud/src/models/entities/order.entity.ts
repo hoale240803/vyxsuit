@@ -1,37 +1,39 @@
 import { PaymentStatus, ShippingMethod } from "../enum";
 
 export class OrderEntity {
-    ProductId: number;
-    MeasurementId: number;
-    SalesOrderNumber: string;
-    SequenceNumber: number;
-    CreatedAt: Date;
-    Note: string;
-    TotalAmout: number;
+    id!: number;
+    customerId: number;
+    measurementId: number;
+    salesOrderNumber: string;
+    sequence: number;
+    createdAt: Date;
+    note: string;
+    totalAmount: number;
 
     // Shipping information
-    Country: string;
-    City: string;
-    State: string;
-    ZipCode: string;
-    Phone: string;
-    ShippingMethod: ShippingMethod;
-    DifferentAddress: boolean;
+    country: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    phone: string;
+    shippingMethod: ShippingMethod;
+    differentAddress: boolean;
 
     // Payment information
-    PaymentStatus: PaymentStatus;
-    StripeId: string;
+    paymentStatus: PaymentStatus;
+    stripeId: string;
 
     // Language and currency information
-    Lang: string;
-    CurrencyCode: string;
-    CurrencyRate: number;
+    lang: string;
+    currencyCode: string;
+    currencyRate: number;
 
     constructor(
+        customerId: number,
         productId: number,
         measurementId: number,
         salesOrderNumber: string,
-        sequenceNumber: number,
+        sequence: number,
         createdAt: Date,
         note: string,
         totalAmount: number,
@@ -48,24 +50,24 @@ export class OrderEntity {
         currencyCode: string,
         currencyRate: number
     ) {
-        this.ProductId = productId;
-        this.MeasurementId = measurementId;
-        this.SalesOrderNumber = salesOrderNumber;
-        this.SequenceNumber = sequenceNumber;
-        this.CreatedAt = createdAt;
-        this.Note = note;
-        this.TotalAmout = totalAmount;
-        this.Country = country;
-        this.City = city;
-        this.State = state;
-        this.ZipCode = zipCode;
-        this.Phone = phone;
-        this.ShippingMethod = shippingMethod;
-        this.DifferentAddress = differentAddress;
-        this.PaymentStatus = paymentStatus;
-        this.StripeId = stripeId;
-        this.Lang = lang;
-        this.CurrencyCode = currencyCode;
-        this.CurrencyRate = currencyRate;
+        this.customerId = customerId;
+        this.measurementId = measurementId;
+        this.salesOrderNumber = salesOrderNumber;
+        this.sequence = sequence;
+        this.createdAt = createdAt;
+        this.note = note;
+        this.totalAmount = totalAmount;
+        this.country = country;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.phone = phone;
+        this.shippingMethod = shippingMethod;
+        this.differentAddress = differentAddress;
+        this.paymentStatus = paymentStatus;
+        this.stripeId = stripeId;
+        this.lang = lang;
+        this.currencyCode = currencyCode;
+        this.currencyRate = currencyRate;
     }
 }
