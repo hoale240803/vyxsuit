@@ -1,3 +1,25 @@
+-- 1. create new user 
+-- Create database if not exists
+CREATE DATABASE IF NOT EXISTS vyxsuit_db;
+
+-- Drop user if exists
+DROP USER IF EXISTS 'vyxsuit_user'@'localhost';
+DROP USER IF EXISTS 'vyxsuit_user'@'%';
+
+-- Create new user with all permissions
+CREATE USER 'vyxsuit_user'@'localhost' IDENTIFIED BY 'vyxsuit_password';
+CREATE USER 'vyxsuit_user'@'%' IDENTIFIED BY 'vyxsuit_password';
+
+-- Grant privileges to the user for specific database
+GRANT ALL PRIVILEGES ON vyxsuit_db.* TO 'vyxsuit_user'@'localhost';
+GRANT ALL PRIVILEGES ON vyxsuit_db.* TO 'vyxsuit_user'@'%';
+
+-- Apply the privileges
+FLUSH PRIVILEGES;
+
+-- Use the database
+USE vyxsuit_db;
+
 -- Drop tables if they exist
 DROP TABLE IF EXISTS OrderDetail;
 DROP TABLE IF EXISTS Orders;

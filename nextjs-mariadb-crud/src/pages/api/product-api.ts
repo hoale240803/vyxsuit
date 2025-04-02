@@ -22,7 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       select * from Product where ProductType = 'DesignOfSuit' and PriceType = 'FullSuit' 
       ${keyword ? " and name like ? " : ""}  
     `)) as Product[];
-        debugger;
+
         const groupedProducts = buildGroup(products);
 
         res.status(200).json(groupedProducts);

@@ -1,6 +1,7 @@
 import mariadbHelper from "@/lib/mariadb.ado";
 import { OrderEntity as OrderEntity } from "@/models/entities/order.entity";
 import { OrderDetailsEntity as OrderDetailEntity } from "@/models/entities/order-details.entity";
+import { PaymentStatus } from "@/models/enum";
 
 export class OrderRepository implements IOrderRepository {
     /**
@@ -39,6 +40,15 @@ export class OrderRepository implements IOrderRepository {
         const result: any = await mariadbHelper.executeQuery(sql, params);
         return result[0]?.total || 0;
     }
+
+    async updateOrderStatusAsync(orderId: number, paymentStatus: PaymentStatus): Promise<void> {
+        const sql = `
+            UPDATE Orders 
+            SET PaymentStatus = ? 
+            WHERE OrderId = ?
+        `;
+        await mariadbHelper.executeQuery(sql, [paymentStatus, orderId]);
+    }
 }
 
 export class OrderDetailRepository implements IOrderDetailRepository {
@@ -58,6 +68,8 @@ export interface IOrderRepository {
      * Retrieves the current maximum sequence number for orders.
      */
     getSequenceAsync(): Promise<number>;
+
+    updateOrderStatusAsync(orderId: number, paymentStatus: PaymentStatus): Promise<void>;
 }
 
 export interface IOrderDetailRepository {

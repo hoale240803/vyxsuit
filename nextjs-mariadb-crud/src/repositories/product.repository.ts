@@ -20,7 +20,6 @@ export class ProductRepository implements IProductRepository {
             productIds
         )) as ProductInfo[];
 
-        debugger;
         return result;
     }
 

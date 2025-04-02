@@ -154,11 +154,11 @@ export default async function handler(
                 totalAmount,
                 products
             );
-
+        debugger;
         // Send a notification email to the tailor.
         const gmail = new GmailProvider();
         await gmail.sendEmail({
-            to: process.env.TAILOR_EMAIL || "hoa@yopmail.com",
+            to: process.env.ORDER_EMAIL || "hoa@yopmail.com",
             subject: `New Order Received - Order #${payload.salesOrderNumber}`,
             html: orderHtml,
         });
