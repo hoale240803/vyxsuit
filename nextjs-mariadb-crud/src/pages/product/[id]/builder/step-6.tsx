@@ -201,7 +201,7 @@ const Step6 = () => {
             ) : null}
           </div>
           <div className="col-12 mt-5 text-center">
-            <h4>Selected Fabrics: {fabricBuiled?.fabric.code} </h4>
+            {/* <h4>Selected Fabrics: {fabricBuiled?.fabric.code} </h4> */}
           </div>
         </div>
         <div className="row">

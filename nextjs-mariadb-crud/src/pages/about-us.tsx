@@ -1,13 +1,8 @@
-import { useRouter } from "next/router";
-
 import styles from "@/styles/about-us.module.scss";
 import clsx from "clsx";
-import Image from "next/image";
 import Carousel from "@/components/Carousel";
 
 export default function AboutUs() {
-  const router = useRouter();
-
   return (
     <>
       <div className="container-fluid relative">

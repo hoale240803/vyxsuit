@@ -45,7 +45,7 @@ const Step2 = () => {
       <div className="container">
         <div className="row">
           <div className={clsx(styles["suit-type"], "col-5 offset-1")} onClick={() => handleChose('2Piece')}>
-            <img src="/images/2-piece.JPG" className={clsx("w-100")} />
+            <img src="/images/twoPiece.png" className={clsx("w-100")} />
             <div className={clsx(styles["overlay"], (suitType === '2Piece' ? styles['active'] : ''))}></div>
             <span className={clsx(styles["checkmark"], (suitType === '2Piece' ? styles['active'] : ''))}>
               <svg
@@ -66,7 +66,7 @@ const Step2 = () => {
             </span>
           </div>
           <div className={clsx(styles["suit-type"], "col-5")} onClick={() => handleChose('3Piece')}>
-            <img src="/images/3-piece.JPG" className={clsx("w-100")} />
+            <img src="/images/ThreePiece.png" className={clsx("w-100")} />
             <div className={clsx(styles["overlay"], (suitType === '3Piece' ? styles['active'] : ''))}></div>
             <span className={clsx(styles["checkmark"], (suitType === '3Piece' ? styles['active'] : ''))}>
               <svg
