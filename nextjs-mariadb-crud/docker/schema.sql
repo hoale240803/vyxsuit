@@ -64,7 +64,8 @@ CREATE TABLE Product (
         'FullSuitMerinoWool',
         
         'Lining',
-        'Button'
+        'Button',
+        'TrouserOnly'
     ) NOT NULL,
 
 
