@@ -1,52 +1,44 @@
 services:
-  # app:
-  #   container_name: nextjs-app
-  #   build: .
-  #   ports:
-  #     - "3000:3000"
-  #   command: >
-  #     sh -c "
-  #     npx prisma generate &&
-  #     npx prisma migrate deploy &&
-  #     npm run dev
-  #     "
-  #   depends_on:
-  #     mariadb:
-  #       condition: service_healthy
-  #   environment:
-  #     DATABASE_URL: mysql://vyxsuit_user:password@mariadb:3306/vyxsuit_db
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - app_network      
+  app:
+    container_name: nextjs-app
+    build: .
+    ports:
+      - "${APP_PORT}:3000"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    env_file:
+      - .env
+    networks:
+      - app_network
 
   mariadb:
     image: mariadb:10.8.3
     container_name: mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: vyxsuit_db
-      MYSQL_USER: vyxsuit_user      # Use a different username
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"
+      - "${DB_PORT}:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./docker/00-user-permissions.sql:/docker-entrypoint-initdb.d/00-user-permissions.sql
       - ./docker/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
       - ./docker/seed-data.sql:/docker-entrypoint-initdb.d/02-seed-data.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "vyxsuit_user", "-ppassword"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}" ]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
     networks:
-      - app_network      
+      - app_network
 
 volumes:
   mariadb_data:
 networks:
   app_network:
-    driver: bridge  
+    driver: bridge
