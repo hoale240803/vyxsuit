@@ -10,6 +10,24 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Debug Secrets
+        run: |
+          if [ -n "${{ secrets.EC2_HOST }}" ]; then
+            echo "EC2_HOST is set"
+          else
+            echo "EC2_HOST is not set"
+          fi
+          if [ -n "${{ secrets.EC2_USER }}" ]; then
+            echo "EC2_USER is set"
+          else
+            echo "EC2_USER is not set"
+          fi
+          if [ -n "${{ secrets.EC2_SSH_PRIVATE_KEY }}" ]; then
+            echo "EC2_SSH_PRIVATE_KEY is set"
+          else
+            echo "EC2_SSH_PRIVATE_KEY is not set"
+          fi
+
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
