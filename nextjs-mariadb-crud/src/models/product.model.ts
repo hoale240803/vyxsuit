@@ -8,6 +8,7 @@ export type Product = {
     ProductType: string;
     Code: string;
     Price: number;
+    IsPrimary: boolean;
 };
 
 export type GroupedProduct = {

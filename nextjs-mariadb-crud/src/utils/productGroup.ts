@@ -11,12 +11,13 @@ export const buildGroup = (products: Product[]): GroupedProduct[] => {
     if (existingGroup) {
       existingGroup.Images.push({ Id: product.Id, S3Url: product.S3Url, Code: product.Code });
     } else {
+      const main = products.find(prod => prod.IsPrimary);
       acc.push({
         Id: product.Id,
         Name: product.Name,
         Description: product.Description,
         Price: 0,
-        Main: product,
+        Main: main || product,
         Images: [{ Id: product.Id, S3Url: product.S3Url, Code: product.Code }]
       });
     }
