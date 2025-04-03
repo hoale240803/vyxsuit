@@ -26,7 +26,7 @@ export class CustomerMapper
             source.lastName,
             source.email,
             source.companyName
-        );
+        ) as CustomerEntity;
     }
 
     toDTO(entity: CustomerEntity) {
@@ -35,7 +35,7 @@ export class CustomerMapper
             lastName: entity.lastName,
             email: entity.email,
             companyName: entity.companyName,
-        };
+        } as CustomerRequest;
     }
 }
 
@@ -49,7 +49,7 @@ export class MeasurementMapper
         return {
             id: source.id,
             unit: source.unit,
-        };
+        } as MeasurementEntity;
     }
 }
 
@@ -70,7 +70,7 @@ export class ShirtMeasurementMapper
             shoulder: source.shoulder,
             measurementId: source.measurementId,
             measurementType: source.measurementType,
-        };
+        } as ShirtMeasurementEntity;
     }
 
     toDTO(entity: ShirtMeasurementEntity): ShirtMeasurementRequest {
@@ -88,7 +88,7 @@ export class ShirtMeasurementMapper
             shoulder: entity.shoulder,
             measurementId: entity.measurementId,
             measurementType: entity.measurementType,
-        };
+        } as ShirtMeasurementRequest;
     }
 }
 
@@ -106,7 +106,7 @@ export class TrouserMeasurementMapper
             outswarm: source.outswarm,
             upperHips: source.upperHips,
             measurementType: source.measurementType,
-        };
+        } as TrouserMeasurementEntity;
     }
 
     toDTO(entity: TrouserMeasurementEntity): TrouserMeasurementRequest {
@@ -120,7 +120,7 @@ export class TrouserMeasurementMapper
             outswarm: entity.outswarm,
             upperHips: entity.upperHips,
             measurementType: entity.measurementType,
-        };
+        } as TrouserMeasurementRequest;
     }
 }
 

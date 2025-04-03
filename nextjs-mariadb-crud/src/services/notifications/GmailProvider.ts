@@ -1,6 +1,7 @@
 // src/services/notifications/providers/GmailProvider.ts
 import nodemailer from "nodemailer";
 import { EmailOptions, EmailProviderInterface } from "./EmailProviderInterface";
+import logger from "@/utils/logger";
 
 export class GmailProvider implements EmailProviderInterface {
     private transporter: nodemailer.Transporter;

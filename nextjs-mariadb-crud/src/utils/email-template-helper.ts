@@ -25,7 +25,6 @@ export class EmailTemplateHelper {
         const suit = products.find((x) => x.productType === "DesignOfSuit");
         const suitType = products.find((x) => x.productType === "SuitType");
         const trouser = products.find((x) => x.productType === "TrouserOnly");
-        const suitStyle = products.find((x) => x.productType === "TailoredFit");
         const fabric = products.find((x) => x.productType === "FabricOptions");
         const lining = products.find((x) => x.productType === "Lining");
         const button = products.find((x) => x.productType === "Button");
