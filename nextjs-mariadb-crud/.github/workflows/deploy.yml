@@ -12,35 +12,38 @@ jobs:
 
       - name: Debug Secrets
         run: |
+          echo "Checking EC2_HOST length: ${#EC2_HOST}"
+          echo "Checking EC2_USER length: ${#EC2_USER}"
+          echo "Checking EC2_SSH_PRIVATE_KEY length: ${#EC2_SSH_PRIVATE_KEY}"
           if [ -n "${{ secrets.EC2_HOST }}" ]; then
-            echo "EC2_HOST is set"
+            echo "EC2_HOST is set and not empty"
           else
-            echo "EC2_HOST is not set"
+            echo "EC2_HOST is not set or empty"
           fi
           if [ -n "${{ secrets.EC2_USER }}" ]; then
-            echo "EC2_USER is set"
+            echo "EC2_USER is set and not empty"
           else
-            echo "EC2_USER is not set"
+            echo "EC2_USER is not set or empty"
           fi
           if [ -n "${{ secrets.EC2_SSH_PRIVATE_KEY }}" ]; then
-            echo "EC2_SSH_PRIVATE_KEY is set"
+            echo "EC2_SSH_PRIVATE_KEY is set and not empty"
           else
-            echo "EC2_SSH_PRIVATE_KEY is not set"
+            echo "EC2_SSH_PRIVATE_KEY is not set or empty"
           fi
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         env:
           SSH_HOST: ${{ secrets.EC2_HOST }}
-          SSH_USER: ${{ secrets.EC2_USER }}
           SSH_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         with:
           host: ${{ env.SSH_HOST }}
-          username: ${{ env.SSH_USER }}
+          username: ubuntu
           key: ${{ env.SSH_KEY }}
           port: 22
+          debug: true
           script: |
-            cd /home/ec2-user/nextjs-mariadb-crud
+            cd /home/ubuntu/nextjs-mariadb-crud
             git pull origin master
             npm install
             npm run build
