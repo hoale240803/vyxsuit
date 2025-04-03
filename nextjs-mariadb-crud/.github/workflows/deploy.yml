@@ -33,13 +33,10 @@ jobs:
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
-        env:
-          SSH_HOST: ${{ secrets.EC2_HOST }}
-          SSH_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         with:
-          host: ${{ env.SSH_HOST }}
+          host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ env.SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           port: 22
           debug: true
           script: |
