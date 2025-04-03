@@ -13,7 +13,7 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Ensure we are in the correct project directory
-cd /home/ubuntu/nextjs-mariadb-crud
+cd /home/ubuntu/vyxsuit
 
 # Pull latest changes
 git pull origin master
