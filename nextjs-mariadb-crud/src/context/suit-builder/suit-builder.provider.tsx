@@ -41,7 +41,8 @@ export const SuitBuilderDefault = {
     S3Url: '',
     ProductType: '',
     Code: '',
-    Price: 0
+    Price: 0,
+    IsPrimary: false
   },
   Measurement: {
     Shirt: {
@@ -199,8 +200,8 @@ export const SuitBuilderContextProvider: React.FC<
   const updateUnitOfMeasurement = (option: UnitMeasurementType) => {
     setUnitOfMMeasurement(option);
     const measurement: MeasurementType = {
-      Shirt: {...measurementChoosen.Shirt},
-      Trouser: {...measurementChoosen.Trouser},
+      Shirt: { ...measurementChoosen.Shirt },
+      Trouser: { ...measurementChoosen.Trouser },
       Images: [...imageMeasurementChoosen],
       Unit: option,
     };
@@ -250,7 +251,7 @@ export const SuitBuilderContextProvider: React.FC<
     imageMeasurement: ImageMeasurementType | ImageMeasurementType[]
   ) => {
     let images: string | string[]; // = [...imageMeasurementChoosen, imageMeasurement];
-    if(Array.isArray(imageMeasurement)) {
+    if (Array.isArray(imageMeasurement)) {
       images = [...imageMeasurementChoosen, ...imageMeasurement];
     } else {
       images = [...imageMeasurementChoosen, imageMeasurement]
