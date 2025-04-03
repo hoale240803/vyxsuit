@@ -7,6 +7,7 @@ import {
     useElements,
 } from "@stripe/react-stripe-js";
 import { useRouter } from "next/router";
+import logger from "@/utils/logger";
 
 // Initialize Stripe
 const stripePromise = loadStripe(
@@ -32,7 +33,7 @@ function PaymentForm({ clientSecret }: { clientSecret: string }) {
         });
 
         if (error) {
-            console.error("Payment failed:", error);
+            logger.error("Payment failed:", error);
         }
     };
 
@@ -71,7 +72,7 @@ export default function Checkout() {
                 setIsLoading(false);
             })
             .catch((error) => {
-                console.error("Error:", error);
+                logger.error("Error:", error);
                 setIsLoading(false);
             });
     }, []);

@@ -1,3 +1,4 @@
+import logger from "@/utils/logger";
 import mariadb from "mariadb";
 
 const pool = mariadb.createPool({
@@ -10,17 +11,17 @@ const pool = mariadb.createPool({
     connectTimeout: 10000,
 });
 
-console.log(
-    `pool: ${process.env.DB_HOST} ${process.env.DB_USER} ${process.env.DB_PASS} ${process.env.DB_NAME} ${process.env.DB_PORT}`
+logger.info(
+    `pool: ${process.env.DB_HOST} ${process.env.DB_USER} ${process.env.DB_PASSWORD} ${process.env.DB_NAME} ${process.env.DB_PORT}`
 );
 
 async function testConnection() {
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("Connected to MariaDB!");
+        logger.info("Connected to MariaDB!");
     } catch (err) {
-        console.error("Database connection failed:", err);
+        logger.error("Database connection failed:", err);
     } finally {
         if (conn) conn.release();
     }
@@ -33,14 +34,14 @@ async function executeQuery(query: string, params: any[] = []) {
         const result = await conn.query(query, params);
         return result;
     } catch (err) {
-        console.error("Query error:", err);
+        logger.error("Query error:", err);
         throw err;
     } finally {
         if (conn) {
             try {
                 await conn.release();
             } catch (releaseErr) {
-                console.error("Error releasing connection:", releaseErr);
+                logger.error("Error releasing connection:", releaseErr);
             }
         }
     }
@@ -79,9 +80,9 @@ async function insert<T extends Record<string, any>>(
         ", "
     )}) VALUES (${placeholders})`;
 
-    console.log("Generated SQL:", query);
-    console.log("Columns:", columns);
-    console.log("Values:", values);
+    logger.info("Generated SQL:", query);
+    logger.info("Columns:", columns);
+    logger.info("Values:", values);
 
     var result = await executeQuery(query, values);
     var insertId = Number(result.insertId);
@@ -103,8 +104,8 @@ async function update(
 
     const query = `UPDATE ${table} SET ${setClause} WHERE id = ?`;
 
-    console.log("Generated SQL:", query);
-    console.log("Parameters:", values);
+    logger.info("Generated SQL:", query);
+    logger.info("Parameters:", values);
 
     return await executeQuery(query, values);
 }
@@ -115,7 +116,7 @@ async function remove(table: string, id: never) {
 
 process.on("SIGINT", async () => {
     await pool.end();
-    console.log("Database pool closed.");
+    logger.info("Database pool closed.");
     process.exit(0);
 });
 

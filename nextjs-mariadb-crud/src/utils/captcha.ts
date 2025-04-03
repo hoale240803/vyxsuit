@@ -2,6 +2,7 @@
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withErrorHandler } from "@/utils/withErrorHandler";
+import logger from "./logger";
 /**
  * Verifies a Google reCAPTCHA token with Google's verification API
  *
@@ -25,7 +26,7 @@ export async function verifyCaptcha(
         const secretKey = process.env.RECAPTCHA_SECRET_KEY;
 
         if (!secretKey) {
-            console.error("RECAPTCHA_SECRET_KEY is not configured");
+            logger.error("RECAPTCHA_SECRET_KEY is not configured");
             return {
                 success: false,
                 error: "reCAPTCHA is not properly configured",
@@ -69,9 +70,10 @@ export async function verifyCaptcha(
 
         return { success: true, score };
     } catch (error) {
-        console.error("reCAPTCHA verification error:", error);
+        logger.error("reCAPTCHA verification error:", error);
         return {
             success: false,
+
             error: "Internal server error during reCAPTCHA verification",
         };
     }

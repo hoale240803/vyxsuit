@@ -6,6 +6,7 @@ import "../i18n";
 
 import "@/styles/global.scss";
 import { SuitBuilderContextProvider } from "@/context/suit-builder/suit-builder.provider";
+import logger from "@/utils/logger";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -15,7 +16,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           console.log("Service Worker registered with scope:", registration.scope);
         })
         .catch((error) => {
-          console.error("Service Worker registration failed:", error);
+          logger.error("Service Worker registration failed:", error);
         });
     }
   }, []);

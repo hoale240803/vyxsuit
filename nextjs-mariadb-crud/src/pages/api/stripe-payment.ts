@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { stripe } from "@/config/stripe";
 import { verifyCaptcha } from "@/utils/captcha";
 import { createProductRepository } from "@/shared/di/container";
+import logger from "@/utils/logger";
 
 export default async function handler(
     req: NextApiRequest,
@@ -16,7 +17,6 @@ export default async function handler(
     try {
         const { productId, suitType, fabricId, captchaToken } = req.body;
 
-        debugger;
         // Verify CAPTCHA
         if (!captchaToken) {
             return res.status(400).json({ error: "Captcha token is missing" });
@@ -56,7 +56,7 @@ export default async function handler(
             clientSecret: paymentIntent.client_secret,
         });
     } catch (error: any) {
-        console.error("Payment initialization failed:", error);
+        logger.error("Payment initialization failed:", error);
         return res
             .status(500)
             .json({ error: error.message || "Internal Server Error" });

@@ -20,6 +20,7 @@ import { ProductInfo } from "@/models/product.model";
 import { EmailTemplateHelper } from "@/utils/email-template-helper";
 import { GmailProvider } from "@/services/notifications/GmailProvider";
 import { verifyCaptcha } from "@/utils/captcha";
+import logger from "@/utils/logger";
 
 export default async function handler(
     req: NextApiRequest,
@@ -35,13 +36,13 @@ export default async function handler(
         const payload = req.body as OrderRequest;
 
         // Verify CAPTCHA.
-        if (!payload.captchaToken) {
-            return res.status(400).json({ error: "Captcha token is missing" });
-        }
-        const captchaValid = await verifyCaptcha(payload.captchaToken);
-        if (!captchaValid) {
-            return res.status(400).json({ error: "Invalid captcha" });
-        }
+        // if (!payload.captchaToken) {
+        //     return res.status(400).json({ error: "Captcha token is missing" });
+        // }
+        // const captchaValid = await verifyCaptcha(payload.captchaToken);
+        // if (!captchaValid) {
+        //     return res.status(400).json({ error: "Invalid captcha" });
+        // }
 
         // todo: 1. query product table, get list product(id, name, price) by suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId to
         // todo: 2. save customer
@@ -51,7 +52,6 @@ export default async function handler(
         // todo: 3.3 attach measurementId and save list measurementImage
         // todo: 4. save order and return orderId
         // todo: 5. save order details for each product (suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId)
-        debugger;
         const productRepo = createProductRepository();
         var productIds = [
             payload.orderDetails.suitId,
@@ -119,12 +119,10 @@ export default async function handler(
         orderEntity.measurementId = measurementId;
         // (You can use the productInfo to calculate pricing, update order.totalAmount, etc.)
         const products = await productRepo.getProductInfoAsync(productIds);
-        debugger;
         const totalAmount = calculateTotal(products);
         const nextSequence = (await orderRepo.getSequenceAsync()) + 1;
         orderEntity.totalAmount = totalAmount;
         orderEntity.sequence = nextSequence;
-        debugger;
         const orderId = await orderRepo.createOrder(orderEntity);
 
         // 5. Save Order Details for each product.
@@ -141,7 +139,6 @@ export default async function handler(
                 } as OrderDetailsEntity)
         );
 
-        debugger;
         // TODO: n+1 problem
         for (const orderDetails of orderDetailsList) {
             await orderDetailsRepo.createOrderDetailsAsync(orderDetails);
@@ -154,18 +151,18 @@ export default async function handler(
                 totalAmount,
                 products
             );
-        debugger;
+
         // Send a notification email to the tailor.
         const gmail = new GmailProvider();
         await gmail.sendEmail({
-            to: process.env.ORDER_EMAIL || "hoa@yopmail.com",
+            to: process.env.ORDER_EMAIL || "trunglvleo@gmail.com",
             subject: `New Order Received - Order #${payload.salesOrderNumber}`,
             html: orderHtml,
         });
 
         return res.status(200).json({ success: true, orderId });
     } catch (error: any) {
-        console.error("Order creation failed:", error);
+        logger.error("Order creation failed:", error);
         return res
             .status(500)
             .json({ error: error.message || "Internal Server Error" });
@@ -179,7 +176,7 @@ export function mapSuitTypeFromProductName(productName?: string) {
             return SuitTypeEnum.ThreePieceSuit;
         }
     }
-    debugger;
+
     return SuitTypeEnum.TwoPieceSuit;
 }
 
@@ -191,6 +188,6 @@ function calculateTotal(products: ProductInfo[]): number {
         (total, product) => total + (Number(product.price) || 0),
         0
     );
-    debugger;
+
     return total;
 }

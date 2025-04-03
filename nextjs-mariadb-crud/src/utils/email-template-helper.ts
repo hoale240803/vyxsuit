@@ -30,7 +30,8 @@ export class EmailTemplateHelper {
         const lining = products.find((x) => x.productType === "Lining");
         const button = products.find((x) => x.productType === "Button");
         const measurementImages = orderPayload.measurements.measurementImages;
-        const createdAt = formatDateTime(orderDetails.createdAt);
+
+        const createdAt = formatDateTime(new Date());
 
         return `<!DOCTYPE html>
                 <html>

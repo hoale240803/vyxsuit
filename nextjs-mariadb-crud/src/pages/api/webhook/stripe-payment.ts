@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { stripe } from "@/config/stripe";
 import { createOrderRepository } from "@/shared/di/container";
 import { buffer } from "micro";
+import logger from "@/utils/logger";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -38,11 +39,10 @@ export default async function handler(
         buf = await buffer(req);
         event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
     } catch (err: any) {
-        console.error("Webhook signature verification failed:", err.message);
+        logger.error("Webhook signature verification failed:", err.message);
         return res.status(400).json({ error: `Webhook Error: ${err.message}` });
     }
 
-    debugger;
     // Handle the event
     switch (event.type) {
         case "payment_intent.succeeded":
@@ -50,7 +50,6 @@ export default async function handler(
             const paymentIntent = event.data.object;
             const orderRepo = createOrderRepository();
 
-            debugger;
             try {
                 // Update order status in your database
                 await orderRepo.updateOrderStatusAsync(
@@ -60,7 +59,7 @@ export default async function handler(
 
                 return res.status(200).json({ received: true });
             } catch (error) {
-                console.error("Error updating order status:", error);
+                logger.error("Error updating order status:", error);
                 return res
                     .status(500)
                     .json({ error: "Failed to update order status" });
@@ -78,7 +77,7 @@ export default async function handler(
 
                 return res.status(200).json({ received: true });
             } catch (error) {
-                console.error("Error updating failed order status:", error);
+                logger.error("Error updating failed order status:", error);
                 return res
                     .status(500)
                     .json({ error: "Failed to update order status" });

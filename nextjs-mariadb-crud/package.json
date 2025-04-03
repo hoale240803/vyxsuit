@@ -17,6 +17,7 @@
     "bootstrap": "^5.3.3",
     "clsx": "^2.1.1",
     "compressorjs": "^1.2.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^12.6.2",

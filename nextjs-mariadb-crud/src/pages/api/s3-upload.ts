@@ -42,9 +42,7 @@ export default async function handler(
     }));
 
     console.log("Mapped files:", mappedFiles);
-    // Remove debugger; once you're done with debugging
 
-    debugger;
     // Create pre-signed URLs for each file (update the S3 logic as needed)
     const urls = mappedFiles.map((file: any) => ({
         fileName: file.originalName,
