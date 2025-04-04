@@ -16,7 +16,6 @@ export default async function handler(
     try {
         const recipient = req.body.email || "orders@vyxlyfstyles.shop";
 
-        debugger;
         const emailSent = await NotificationService.sendTestEmail(recipient);
 
         if (!emailSent) {

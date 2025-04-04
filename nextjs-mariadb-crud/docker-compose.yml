@@ -1,18 +1,4 @@
 services:
-  nginx:
-    container_name: nginx-server
-    image: nginx:latest # Uses the official Nginx Docker image
-    ports:
-      - "80:80" # Nginx handles HTTP traffic
-      - "443:443" # Nginx handles HTTPS traffic
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d # Maps local nginx config files to container
-      - ./nginx/ssl:/etc/nginx/ssl # Maps SSL certificate files to container
-    depends_on:
-      - app # Ensures Next.js app starts before Nginx
-    networks:
-      - app_network
-
   app:
     container_name: nextjs-app
     build: .

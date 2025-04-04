@@ -9,7 +9,7 @@ export class OrderRepository implements IOrderRepository {
      * Expects the OrderPayload extended with customerId and measurementId.
      */
     async createOrder(entity: OrderEntity): Promise<number> {
-        return await mariadbHelper.insert("orders", entity);
+        return await mariadbHelper.insert("Orders", entity);
     }
 
     async getSequenceAsync(): Promise<number> {
@@ -41,7 +41,10 @@ export class OrderRepository implements IOrderRepository {
         return result[0]?.total || 0;
     }
 
-    async updateOrderStatusAsync(orderId: number, paymentStatus: PaymentStatus): Promise<void> {
+    async updateOrderStatusAsync(
+        orderId: number,
+        paymentStatus: PaymentStatus
+    ): Promise<void> {
         const sql = `
             UPDATE Orders 
             SET PaymentStatus = ? 
@@ -53,7 +56,7 @@ export class OrderRepository implements IOrderRepository {
 
 export class OrderDetailRepository implements IOrderDetailRepository {
     async createOrderDetailsAsync(entity: OrderDetailEntity): Promise<void> {
-        await mariadbHelper.insert("orderdetail", entity);
+        await mariadbHelper.insert("OrderDetail", entity);
     }
 }
 
@@ -69,7 +72,10 @@ export interface IOrderRepository {
      */
     getSequenceAsync(): Promise<number>;
 
-    updateOrderStatusAsync(orderId: number, paymentStatus: PaymentStatus): Promise<void>;
+    updateOrderStatusAsync(
+        orderId: number,
+        paymentStatus: PaymentStatus
+    ): Promise<void>;
 }
 
 export interface IOrderDetailRepository {

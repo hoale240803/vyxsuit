@@ -21,18 +21,18 @@ export class MeasurementRepository implements IMeasurementRepository {
     async createShirtMeasurementAsync(
         entity: ShirtMeasurementEntity
     ): Promise<number> {
-        return await mariadbHelper.insert("shirtmeasurement", entity);
+        return await mariadbHelper.insert("ShirtMeasurement", entity);
     }
 
     async createTrouserMeasurementAsync(
         entity: TrouserMeasurementEntity
     ): Promise<number> {
-        return await mariadbHelper.insert("trousermeasurement", entity);
+        return await mariadbHelper.insert("TrouserMeasurement", entity);
     }
 
     async createMeasurementImageAsync(entities: MeasurementImageEntity[]) {
         entities.forEach((img) => {
-            mariadbHelper.insert("measurementimage", {
+            mariadbHelper.insert("MeasurementImage", {
                 name: img.name,
                 s3Url: img.s3Url,
                 measurementId: img.measurementId,
@@ -41,6 +41,6 @@ export class MeasurementRepository implements IMeasurementRepository {
     }
 
     async createMeasurementAsync(entity: MeasurementEntity): Promise<number> {
-        return await mariadbHelper.insert("measurement", entity);
+        return await mariadbHelper.insert("Measurement", entity);
     }
 }

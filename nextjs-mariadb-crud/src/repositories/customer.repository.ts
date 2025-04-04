@@ -7,6 +7,6 @@ export interface ICustomerRepository {
 
 export class CustomerRepository implements ICustomerRepository {
     async createCustomerAsync(entity: CustomerEntity): Promise<number> {
-        return await mariadbHelper.insert("customer", entity);
+        return await mariadbHelper.insert("Customer", entity);
     }
 }
