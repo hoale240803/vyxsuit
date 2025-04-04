@@ -1,9 +1,23 @@
 services:
+  nginx:
+    container_name: nginx-server
+    image: nginx:latest # Uses the official Nginx Docker image
+    ports:
+      - "80:80" # Nginx handles HTTP traffic
+      - "443:443" # Nginx handles HTTPS traffic
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d # Maps local nginx config files to container
+      - ./nginx/ssl:/etc/nginx/ssl # Maps SSL certificate files to container
+    depends_on:
+      - app # Ensures Next.js app starts before Nginx
+    networks:
+      - app_network
+
   app:
     container_name: nextjs-app
     build: .
     ports:
-      - "${APP_PORT}:3000"
+      - "3000:3000"
     depends_on:
       mariadb:
         condition: service_healthy
@@ -17,19 +31,19 @@ services:
     container_name: mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: vyxsuit_db
+      MYSQL_USER: vyxsuit_user
+      MYSQL_PASSWORD: vyxsuit_password
     ports:
-      - "${DB_PORT}:3306"
+      - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./docker/00-user-permissions.sql:/docker-entrypoint-initdb.d/00-user-permissions.sql
       - ./docker/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
       - ./docker/seed-data.sql:/docker-entrypoint-initdb.d/02-seed-data.sql
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "vyxsuit_user", "-pvyxsuit_password" ]
       interval: 10s
       timeout: 5s
       retries: 5
