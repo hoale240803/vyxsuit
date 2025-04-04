@@ -1,0 +1,60 @@
+services:
+  nginx:
+    container_name: nginx-server
+    image: nginx:latest # Uses the official Nginx Docker image
+    ports:
+      - "80:80" # Nginx handles HTTP traffic
+      - "443:443" # Nginx handles HTTPS traffic
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d # Maps local nginx config files to container
+      - ./nginx/ssl:/etc/nginx/ssl # Maps SSL certificate files to container
+    depends_on:
+      - app # Ensures Next.js app starts before Nginx
+    networks:
+      - app_network
+
+  app:
+    image: trunglvleo/nextjs-mariadb-crud-app:latest
+    container_name: nextjs-app
+    # Remove the ports mapping since Nginx will proxy to the app internally
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    env_file:
+      - .env
+    networks:
+      - app_network
+
+  mariadb:
+    image: trunglvleo/mariadb:10.8.3
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: vyxsuit_db
+      MYSQL_USER: vyxsuit_user
+      MYSQL_PASSWORD: vyxsuit_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./docker/00-user-permissions.sql:/docker-entrypoint-initdb.d/00-user-permissions.sql
+      - ./docker/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./docker/seed-data.sql:/docker-entrypoint-initdb.d/02-seed-data.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "vyxsuit_user", "-pvyxsuit_password" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app_network
+
+volumes:
+  mariadb_data:
+networks:
+  app_network:
+    driver: bridge
