@@ -537,12 +537,12 @@ INSERT INTO Product (Name, Description, ProductType, PriceType, Code, Price, IsP
 
 
 -- 'Seeding Suit Type Data' AS log_message;
-('ThreePieceSuit', NULL, 'SuitType', 'ThreePieceSuit', NULL, 0, 100, 'https://d167viv9yasg8.cloudfront.net/SuitType/ThreePieceSuit/Image_001.JPG'),
-('ThreePieceSuit', NULL, 'SuitType', 'ThreePieceSuit', NULL, 0, 100, 'https://d167viv9yasg8.cloudfront.net/SuitType/ThreePieceSuit/Image_002.JPG'),
-('ThreePieceSuit', NULL, 'SuitType', 'ThreePieceSuit', NULL, 0, 100, 'https://d167viv9yasg8.cloudfront.net/SuitType/ThreePieceSuit/Image_003.JPG'),
 ('TwoPieceSuit', NULL, 'SuitType', 'TwoPieceSuit', NULL, 0, 0, 'https://d167viv9yasg8.cloudfront.net/SuitType/TwoPieceSuit/Image_001.JPG'),
 ('TwoPieceSuit', NULL, 'SuitType', 'TwoPieceSuit', NULL, 0, 0, 'https://d167viv9yasg8.cloudfront.net/SuitType/TwoPieceSuit/Image_002.JPG'),
 ('TwoPieceSuit', NULL, 'SuitType', 'TwoPieceSuit', NULL, 0, 0, 'https://d167viv9yasg8.cloudfront.net/SuitType/TwoPieceSuit/Image_003.JPG'),
+('ThreePieceSuit', NULL, 'SuitType', 'ThreePieceSuit', NULL, 0, 100, 'https://d167viv9yasg8.cloudfront.net/SuitType/ThreePieceSuit/Image_001.JPG'),
+('ThreePieceSuit', NULL, 'SuitType', 'ThreePieceSuit', NULL, 0, 100, 'https://d167viv9yasg8.cloudfront.net/SuitType/ThreePieceSuit/Image_002.JPG'),
+('ThreePieceSuit', NULL, 'SuitType', 'ThreePieceSuit', NULL, 0, 100, 'https://d167viv9yasg8.cloudfront.net/SuitType/ThreePieceSuit/Image_003.JPG'),
 
 
 -- 'Seeding Lining Data' AS log_message;
