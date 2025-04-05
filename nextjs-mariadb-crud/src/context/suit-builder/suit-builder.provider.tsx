@@ -1,24 +1,25 @@
 import { useContext, useState, useEffect, ReactNode, JSX } from "react";
 import {
+  ProductSeletection,
+  StepBuilderVerify,
   SuitBuilderContext,
   SuitBuilderContextType,
+  SuitBuilderDefault,
 } from "./suit-builder.context";
 import {
-  Buttontype,
-  Fabric,
   ImageMeasurementType,
-  LiningType,
   MeasurementType,
   Product,
   ShirtMeasurementType,
   SuitStyle,
   SuitType,
   TrouserMeasurementType,
-  TrouserType,
   UnitMeasurementType,
 } from "@/models/product.model";
+import { CustomerRequest, ShippingInfoRequest } from "@/models/request/request.model";
 
 export const localStorageKey = {
+  Term: "suilt-builder:term",
   Product: "suilt-builder:product",
   SuitType: "suilt-builder:suit-type",
   TrouserType: "suilt-builder:trouser",
@@ -27,93 +28,50 @@ export const localStorageKey = {
   Lining: "suilt-builder:lining",
   Button: "suilt-builder:button",
   Measurement: "suilt-builder:measurement",
+  Customer: "suilt-builder:customer",
+  Shipping: "suilt-builder:shipping"
 };
 
 export interface SuitBuilderContextProviderProps {
   children: ReactNode;
 }
 
-export const SuitBuilderDefault = {
-  Product: {
-    Id: 0,
-    Name: '',
-    Description: '',
-    S3Url: '',
-    ProductType: '',
-    Code: '',
-    Price: 0,
-    IsPrimary: false
-  },
-  Measurement: {
-    Shirt: {
-      Chest: 0,
-      Shoulder: 0,
-      ArmLength: 0,
-      ArmShoulderJoint: 0,
-      ArmBicepWidth: 0,
-      JacketLength: 0,
-      Abdomen: 0,
-      Belly: 0,
-      Hips: 0,
-      Neck: 0,
-    },
-    Trouser: {
-      Waist: 0,
-      UpperHips: 0,
-      Hips: 0,
-      Crotch: 0,
-      Outswam: 0,
-      Thigh: 0,
-      Calf: 0,
-    },
-    Images: [],
-    Unit: 'cm'
-  }
-}
-
 export const SuitBuilderContextProvider: React.FC<
   SuitBuilderContextProviderProps
 > = ({ children }): JSX.Element => {
+  const [termAccepted, setTermAccepted] = useState<StepBuilderVerify>({
+    orderPolicyAgreement: false,
+    privacyPolicy: false
+  });
   const [productChoosen, setProduct] = useState<Product>(SuitBuilderDefault.Product);
   const [suitTypeChoosen, setSuitType] = useState<SuitType>("");
-  const [trouserChoosen, setTrouser] = useState<TrouserType>("");
+  const [trouserChoosen, setTrouser] = useState<Product>(SuitBuilderDefault.Product);
   const [suitStyleChoosen, setSuitStyle] = useState<SuitStyle>("");
-  const [fabricChoosen, setFabric] = useState<Fabric>("");
-  const [liningChoosen, setLining] = useState<LiningType>("");
-  const [buttonChoosen, setButton] = useState<Buttontype>("");
-  const [unitOfMeasurementChoosen, setUnitOfMMeasurement] = useState<UnitMeasurementType>("cm");
-  const [measurementChoosen, setMeasurement] = useState<MeasurementType>(SuitBuilderDefault as unknown as MeasurementType);
+  const [fabricChoosen, setFabric] = useState<ProductSeletection>(SuitBuilderDefault.ProductSelection);
+  const [liningChoosen, setLining] = useState<ProductSeletection>(SuitBuilderDefault.ProductSelection);
+  const [buttonChoosen, setButton] = useState<ProductSeletection>(SuitBuilderDefault.ProductSelection);
+  const [unitOfMeasurementChoosen, setUnitOfMMeasurement] = useState<UnitMeasurementType>("Cm");
+  const [measurementChoosen, setMeasurement] = useState<MeasurementType>(SuitBuilderDefault.Measurement as unknown as MeasurementType);
   const [shirtMeasurementChoosen, setShirtMeasurement] =
-    useState<ShirtMeasurementType>({
-      Chest: 0,
-      Shoulder: 0,
-      ArmLength: 0,
-      ArmShoulderJoint: 0,
-      ArmBicepWidth: 0,
-      JacketLength: 0,
-      Abdomen: 0,
-      Belly: 0,
-      Hips: 0,
-      Neck: 0,
-    });
+    useState<ShirtMeasurementType>(SuitBuilderDefault.Measurement.Shirt);
   const [trouserMeasurementChoosen, setTrouserMeasurement] =
-    useState<TrouserMeasurementType>({
-      Waist: 0,
-      UpperHips: 0,
-      Hips: 0,
-      Crotch: 0,
-      Outswam: 0,
-      Thigh: 0,
-      Calf: 0,
-    });
+    useState<TrouserMeasurementType>(SuitBuilderDefault.Measurement.Trouser);
   const [imageMeasurementChoosen, setImageMeasurement] = useState<ImageMeasurementType[]>([]);
+
+  const [customerOrder, setCustomer] = useState<CustomerRequest>(SuitBuilderDefault.Customer);
+  const [shippingOrder, setShipping] = useState<ShippingInfoRequest>(SuitBuilderDefault.Shipping);
 
   useEffect(() => {
     // Load saved value from localStorage on first render
+    const termOption = localStorage.getItem(
+      localStorageKey.Term
+    );
+    if (termOption) setTermAccepted(JSON.parse(termOption));
+
     const productOption = localStorage.getItem(
       localStorageKey.Product
-    ) as unknown as Product;
-    if (productOption) setProduct(productOption);
+    );
+    if (productOption) setProduct(JSON.parse(productOption));
 
     const sultTypeOption = localStorage.getItem(
       localStorageKey.SuitType
@@ -122,31 +80,26 @@ export const SuitBuilderContextProvider: React.FC<
 
     const trouserOption = localStorage.getItem(
       localStorageKey.TrouserType
-    ) as TrouserType;
-    if (trouserOption) setTrouser(trouserOption);
+    );
+    if (trouserOption) setTrouser(JSON.parse(trouserOption));
 
     const suitStyleOption = localStorage.getItem(
       localStorageKey.SuitStyle
     ) as SuitStyle;
     if (suitStyleOption) setSuitStyle(suitStyleOption);
 
-    const fabricOption = localStorage.getItem(localStorageKey.Fabric) as Fabric;
-    if (fabricOption) setFabric(fabricOption);
+    const fabricOption = localStorage.getItem(localStorageKey.Fabric);
+    if (fabricOption) setFabric(JSON.parse(fabricOption));
 
-    const liningOption = localStorage.getItem(
-      localStorageKey.Lining
-    ) as LiningType;
-    if (liningOption) setLining(liningOption);
+    const liningOption = localStorage.getItem(localStorageKey.Lining);
+    if (liningOption) setLining(JSON.parse(liningOption));
 
-    const buttonOption = localStorage.getItem(
-      localStorageKey.Button
-    ) as Buttontype;
-    if (buttonOption) setButton(buttonOption);
+    const buttonOption = localStorage.getItem(localStorageKey.Button);
+    if (buttonOption) setButton(JSON.parse(buttonOption));
 
     const measurementOption = localStorage.getItem(localStorageKey.Measurement);
     if (measurementOption) {
       const measurement = JSON.parse(measurementOption) as MeasurementType;
-      console.log("load from local:", measurement);
       setMeasurement(measurement);
       setShirtMeasurement(measurement.Shirt);
       setTrouserMeasurement(measurement.Trouser);
@@ -160,7 +113,18 @@ export const SuitBuilderContextProvider: React.FC<
         Unit: unitOfMeasurementChoosen,
       });
     }
+
+    const customerOption = localStorage.getItem(localStorageKey.Customer);
+    if (customerOption) setCustomer(JSON.parse(customerOption));
+
+    const shippingOption = localStorage.getItem(localStorageKey.Shipping);
+    if (shippingOption) setShipping(JSON.parse(shippingOption));
   }, []);
+
+  const updateTerm = (term: StepBuilderVerify) => {
+    setTermAccepted(term);
+    localStorage.setItem(localStorageKey.Term, JSON.stringify(term)); // Save to localStorage
+  }
 
   const updateProduct = (option: Product) => {
     setProduct(option);
@@ -172,9 +136,9 @@ export const SuitBuilderContextProvider: React.FC<
     localStorage.setItem(localStorageKey.SuitType, option); // Save to localStorage
   };
 
-  const updateTrouser = (option: TrouserType) => {
+  const updateTrouser = (option: Product) => {
     setTrouser(option);
-    localStorage.setItem(localStorageKey.TrouserType, option); // Save to localStorage
+    localStorage.setItem(localStorageKey.TrouserType, JSON.stringify(option)); // Save to localStorage
   };
 
   const updateSuitStyle = (option: SuitStyle) => {
@@ -182,19 +146,19 @@ export const SuitBuilderContextProvider: React.FC<
     localStorage.setItem(localStorageKey.SuitStyle, option); // Save to localStorage
   };
 
-  const updateFabric = (option: Fabric) => {
+  const updateFabric = (option: ProductSeletection) => {
     setFabric(option);
-    localStorage.setItem(localStorageKey.Fabric, option); // Save to localStorage
+    localStorage.setItem(localStorageKey.Fabric, JSON.stringify(option)); // Save to localStorage
   };
 
-  const updateLining = (option: LiningType) => {
+  const updateLining = (option: ProductSeletection) => {
     setLining(option);
-    localStorage.setItem(localStorageKey.Lining, option); // Save to localStorage
+    localStorage.setItem(localStorageKey.Lining, JSON.stringify(option)); // Save to localStorage
   };
 
-  const updateButton = (option: Buttontype) => {
+  const updateButton = (option: ProductSeletection) => {
     setButton(option);
-    localStorage.setItem(localStorageKey.Button, option); // Save to localStorage
+    localStorage.setItem(localStorageKey.Button, JSON.stringify(option)); // Save to localStorage
   };
 
   const updateUnitOfMeasurement = (option: UnitMeasurementType) => {
@@ -245,6 +209,7 @@ export const SuitBuilderContextProvider: React.FC<
       localStorageKey.Measurement,
       JSON.stringify(measurement)
     ); // Save to localStorage
+    setMeasurement(measurement);
   };
 
   const handlePushImageMeasuremented = (
@@ -281,24 +246,38 @@ export const SuitBuilderContextProvider: React.FC<
     setMeasurement(measurement);
   };
 
+  const customerOrderUpdated = (guest: CustomerRequest) => {
+    setCustomer(guest);
+    localStorage.setItem(localStorageKey.Customer, JSON.stringify(guest)); // Save to localStorage
+  }
+
+  const shippingUpdated = (info: ShippingInfoRequest) => {
+    setShipping(info);
+    localStorage.setItem(localStorageKey.Shipping, JSON.stringify(info)); // Save to localStorage
+  }
+
   const handleClearLocalStorage = () => {
     localStorage.clear();
+    setTermAccepted(SuitBuilderDefault.Term);
     setProduct(SuitBuilderDefault.Product);
     setSuitType("");
-    setTrouser("");
+    setTrouser(SuitBuilderDefault.Product);
     setSuitStyle("");
-    setFabric("");
-    setLining("");
-    setButton("");
-    setUnitOfMMeasurement("cm");
-    setMeasurement({} as MeasurementType);
-    setShirtMeasurement({} as ShirtMeasurementType);
-    setTrouserMeasurement({} as TrouserMeasurementType);
+    setFabric(SuitBuilderDefault.ProductSelection);
+    setLining(SuitBuilderDefault.ProductSelection);
+    setButton(SuitBuilderDefault.Product);
+    setUnitOfMMeasurement("Cm");
+    setMeasurement(SuitBuilderDefault.Measurement as unknown as MeasurementType);
+    setShirtMeasurement(SuitBuilderDefault.Measurement.Shirt);
+    setTrouserMeasurement(SuitBuilderDefault.Measurement.Trouser);
     setImageMeasurement([]);
-    localStorage.clear();
+    setCustomer(SuitBuilderDefault.Customer)
+    setShipping(SuitBuilderDefault.Shipping);
   };
 
   const value: SuitBuilderContextType = {
+    termAccepted: termAccepted,
+    acceptTern: updateTerm,
     product: productChoosen,
     selectProduct: updateProduct,
     suitType: suitTypeChoosen,
@@ -320,6 +299,10 @@ export const SuitBuilderContextProvider: React.FC<
     updateTrouserMeasurement: handleUpdateTrouserMeasurement,
     pushImageMeasurement: handlePushImageMeasuremented,
     deleteImageMeasurement: handleDeleteImageMeasuremented,
+    customer: customerOrder,
+    selectCustomer: customerOrderUpdated,
+    shipping: shippingOrder,
+    selectShippingInfo: shippingUpdated,
   };
 
   return (

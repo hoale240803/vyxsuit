@@ -12,7 +12,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const products = (await mariadbHelper.executeQuery(
-        `select * from Product where ProductType = 'TrouserOnly' and PriceType  = 'TrouserOnly'`
+        `select * from Product where ProductType = 'TrouserOnly' and PriceType  = 'TrouserOnly' AND IsPrimary = 1`
     )) as Product[];
 
     const groupedProducts = buildGroup(products);

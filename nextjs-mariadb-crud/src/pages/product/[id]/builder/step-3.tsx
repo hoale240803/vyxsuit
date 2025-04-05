@@ -3,7 +3,7 @@ import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import { GroupedProduct, TrouserType } from "@/models/product.model";
+import { GroupedProduct, Product, TrouserType } from "@/models/product.model";
 import { useEffect, useState } from "react";
 
 const Step3 = () => {
@@ -23,7 +23,9 @@ const Step3 = () => {
   const nextStep = () => {
     router.push(`/product/${id}/builder/step-4`);
   };
-  const handleChose = (type: TrouserType) => selectTrouser(type);
+  const handleChose = (type: GroupedProduct) => {
+    selectTrouser(type.Main);
+  }
 
   return (
     <>
@@ -37,22 +39,22 @@ const Step3 = () => {
                 id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
-                enable-background="new 0 0 32 32"
+                enableBackground="new 0 0 32 32"
                 fill="#000000"
               >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g
                   id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 ></g>
                 <g id="SVGRepo_iconCarrier">
                   {" "}
                   <line
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     x1="6"
                     y1="16"
                     x2="28"
@@ -61,8 +63,8 @@ const Step3 = () => {
                   <polyline
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     points="14,24.5 5.5,16 14,7.5 "
                   ></polyline>{" "}
                 </g>
@@ -93,7 +95,7 @@ const Step3 = () => {
                 key={`row-${index}-${item.Main.Id}`}
                 className={clsx(styles["suit-type"], "col-4 justify-content-center")}
                 id={item.Description}
-                onClick={() => handleChose(item.Description as TrouserType)}
+                onClick={() => handleChose(item)}
               >
                 <img
                   src={item.Main.S3Url}
@@ -103,13 +105,13 @@ const Step3 = () => {
                 <div
                   className={clsx(
                     styles["overlay"],
-                    trouser === item.Main.Description ? styles["active"] : ""
+                    trouser?.Id === item.Main.Id ? styles["active"] : ""
                   )}
                 ></div>
                 <span
                   className={clsx(
                     styles["checkmark"],
-                    trouser === item.Main.Description ? styles["active"] : ""
+                    trouser?.Id === item.Main.Id ? styles["active"] : ""
                   )}
                 >
                   <svg
@@ -133,179 +135,11 @@ const Step3 = () => {
           </div>
         ))}
 
-        {/* <div className="row">
-          <div
-            className={clsx(styles["suit-type"], "offset-2 col-4")}
-            id="SideLoopStyleWith2Plates"
-            onClick={() => handleChose("SideLoopStyleWith2Plates")}
-          >
-            <img
-              src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/SideLoopStyleWith2Plates/TrouserType_SideLoopStyleWith2Plates_005.JPG"
-              className={clsx("w-100")}
-            />
-            <div
-              className={clsx(
-                styles["overlay"],
-                trouser === "SideLoopStyleWith2Plates" ? styles["active"] : ""
-              )}
-            ></div>
-            <span
-              className={clsx(
-                styles["checkmark"],
-                trouser === "SideLoopStyleWith2Plates" ? styles["active"] : ""
-              )}
-            >
-              <svg
-                width="7rem"
-                height="7rem"
-                viewBox="0 0 36 36"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="iconify iconify--twemoji"
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <path
-                  fill="#fff"
-                  d="M34.459 1.375a2.999 2.999 0 0 0-4.149.884L13.5 28.17l-8.198-7.58a2.999 2.999 0 1 0-4.073 4.405l10.764 9.952s.309.266.452.359a2.999 2.999 0 0 0 4.15-.884L35.343 5.524a2.999 2.999 0 0 0-.884-4.149z"
-                ></path>
-              </svg>
-            </span>
-          </div>
-
-          <div
-            className={clsx(styles["suit-type"], "col-4")}
-            id="DoubleButtonDoublePlated"
-            onClick={() => handleChose("DoubleButtonDoublePlated")}
-          >
-            <img
-              src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/DoubleButtonDoublePlated/TrouserType_DoubleButtonDoublePlated_002.JPG"
-              className={clsx("w-100")}
-            />
-            <div
-              className={clsx(
-                styles["overlay"],
-                trouser === "DoubleButtonDoublePlated" ? styles["active"] : ""
-              )}
-            ></div>
-            <span
-              className={clsx(
-                styles["checkmark"],
-                trouser === "DoubleButtonDoublePlated" ? styles["active"] : ""
-              )}
-            >
-              <svg
-                width="7rem"
-                height="7rem"
-                viewBox="0 0 36 36"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="iconify iconify--twemoji"
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <path
-                  fill="#fff"
-                  d="M34.459 1.375a2.999 2.999 0 0 0-4.149.884L13.5 28.17l-8.198-7.58a2.999 2.999 0 1 0-4.073 4.405l10.764 9.952s.309.266.452.359a2.999 2.999 0 0 0 4.15-.884L35.343 5.524a2.999 2.999 0 0 0-.884-4.149z"
-                ></path>
-              </svg>
-            </span>
-          </div>
-        </div>
-
-        <div className="row mt-3">
-          <div
-            className={clsx(styles["suit-type"], "offset-2 col-4")}
-            id="DoubleButtonPlateLessDisconnectedSideLoop"
-            onClick={() =>
-              handleChose("DoubleButtonPlateLessDisconnectedSideLoop")
-            }
-          >
-            <img
-              src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/DoubleButtonPlateLessDisconnectedSideLoop/TrouserType_DoubleButtonPlateLessDisconnectedSideLoop_004.JPG"
-              className={clsx("w-100")}
-            />
-            <div
-              className={clsx(
-                styles["overlay"],
-                trouser === "DoubleButtonPlateLessDisconnectedSideLoop"
-                  ? styles["active"]
-                  : ""
-              )}
-            ></div>
-            <span
-              className={clsx(
-                styles["checkmark"],
-                trouser === "DoubleButtonPlateLessDisconnectedSideLoop"
-                  ? styles["active"]
-                  : ""
-              )}
-            >
-              <svg
-                width="7rem"
-                height="7rem"
-                viewBox="0 0 36 36"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="iconify iconify--twemoji"
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <path
-                  fill="#fff"
-                  d="M34.459 1.375a2.999 2.999 0 0 0-4.149.884L13.5 28.17l-8.198-7.58a2.999 2.999 0 1 0-4.073 4.405l10.764 9.952s.309.266.452.359a2.999 2.999 0 0 0 4.15-.884L35.343 5.524a2.999 2.999 0 0 0-.884-4.149z"
-                ></path>
-              </svg>
-            </span>
-          </div>
-
-          <div
-            className={clsx(styles["suit-type"], "col-4")}
-            id="PlateLessStandardSingleButton"
-            onClick={() => handleChose("PlateLessStandardSingleButton")}
-          >
-            <img
-              src="https://d1wuhi05elo03b.cloudfront.net/TrouserType/PlateLessStandardSingleButton/TrouserType_PlateLessStandardSingleButton_006.JPG"
-              className={clsx("w-100")}
-            />
-            <div
-              className={clsx(
-                styles["overlay"],
-                trouser === "PlateLessStandardSingleButton"
-                  ? styles["active"]
-                  : ""
-              )}
-            ></div>
-            <span
-              className={clsx(
-                styles["checkmark"],
-                trouser === "PlateLessStandardSingleButton"
-                  ? styles["active"]
-                  : ""
-              )}
-            >
-              <svg
-                width="7rem"
-                height="7rem"
-                viewBox="0 0 36 36"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                className="iconify iconify--twemoji"
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <path
-                  fill="#fff"
-                  d="M34.459 1.375a2.999 2.999 0 0 0-4.149.884L13.5 28.17l-8.198-7.58a2.999 2.999 0 1 0-4.073 4.405l10.764 9.952s.309.266.452.359a2.999 2.999 0 0 0 4.15-.884L35.343 5.524a2.999 2.999 0 0 0-.884-4.149z"
-                ></path>
-              </svg>
-            </span>
-          </div>
-        </div> */}
         <div className="row">
           <div className="col-4 m-auto mt-5 ">
             <button
-              className="p-3 w-100 bg-primary-color border-0 accent-color fs-5"
+              className="p-3 w-100 bg-primary-color border-0 accent-color fs-5 btn-primary"
+              disabled={!trouser}
               onClick={nextStep}
             >
               Continue

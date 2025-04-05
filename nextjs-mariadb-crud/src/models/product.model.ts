@@ -26,11 +26,12 @@ export type TrouserType =
     | "SideLoopStyleWith2Plates"
     | "DoubleButtonDoublePlated"
     | "DoubleButtonPlateLessDisconnectedSideLoop"
-    | "PlateLessStandardSingleButton";
+    | "PlateLessStandardSingleButton"
+    | string | Product;
 export type SuitStyle = "" | "ConfortFit" | "SlimFit";
-export type Fabric = "" | string;
-export type LiningType = "" | string;
-export type Buttontype = "" | string;
+export type Fabric = "" | string | Product;
+export type LiningType = "" | string | Product;
+export type Buttontype = "" | string | Product;
 export type ShirtMeasurementType = {
     Chest: number;
     Shoulder: number;
@@ -53,7 +54,7 @@ export type TrouserMeasurementType = {
     Calf: number;
 };
 export type ImageMeasurementType = "" | string;
-export type UnitMeasurementType = "cm" | "inch";
+export type UnitMeasurementType = "Cm" | "Inch";
 export type MeasurementType = {
     Shirt: ShirtMeasurementType;
     Trouser: TrouserMeasurementType;

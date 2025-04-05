@@ -3,12 +3,12 @@ import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import { GroupedProduct } from "@/models/product.model";
+import { GroupedProduct, Product } from "@/models/product.model";
 import React, { useEffect, useState } from "react";
 
 import EmblaCarousel from "@/components/EmblaCarousel";
 import Popup from "@/components/Popup";
-import { buildFabric } from "@/utils/productGroup";
+import { ProductSeletection } from "@/context/suit-builder/suit-builder.context";
 
 const Step5 = () => {
   const router = useRouter();
@@ -17,9 +17,8 @@ const Step5 = () => {
 
   const [products, setProducts] = useState<GroupedProduct[]>([]);
   const [productSelected, setProductSelected] = useState<GroupedProduct>();
+  const [fabricSelected, setFabricSelected] = useState<Product>();
   const [productIndexSelected, setProductIndexSelected] = useState<number>(0);
-  const [mainCode, setMainCode] = useState<string>("");
-  const [fabricCode, setFabricCode] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
@@ -29,49 +28,30 @@ const Step5 = () => {
   }, []);
 
   useEffect(() => {
-    if (fabric) {
-      const data = buildFabric(fabric);
-      setFabricCode(data.fabric.code);
-      setMainCode(data.group);
-      setProductIndexSelected(data.fabric.index);
-    }
+    setTimeout(() => {
+      setProductIndexSelected(fabric.selected.index);
+    }, 500);
+    setFabricSelected(fabric.selected.data);
   }, [fabric]);
 
-  // const buildFabric = (
-  //   source: string
-  // ): { group: string; fabric: { code: string; index: number } } => {
-  //   if (!source)
-  //     return {
-  //       group: "",
-  //       fabric: { code: "", index: 0 },
-  //     };
-  //   const arr = source.split(":;");
-  //   return {
-  //     group: arr[2],
-  //     fabric: {
-  //       code: arr[0],
-  //       index: Number(arr[1]),
-  //     },
-  //   };
-  // };
-
   const nextStep = () => {
-    if(!fabric) return;
+    if (!fabric) return;
     router.push(`/product/${id}/builder/step-6`);
   };
-  const handleChose = (img: {Id: number, Code: string, S3Url: string }, index: number) => {
-    selectFabric(`${img.Id}:;${index}:;${productSelected?.Main.Code}:;${img.S3Url}`);
+  const handleChose = (img: Product, index: number) => {
+    selectFabric({
+      group: productSelected?.Main,
+      selected: {
+        data: img,
+        index: index,
+      },
+    } as ProductSeletection);
     setProductIndexSelected(index);
   };
 
   const handleOpenTypePopup = (group: GroupedProduct) => {
-    if (mainCode !== group.Main.Code) {
+    if (productSelected?.Main.Id !== group.Main.Id) {
       setProductIndexSelected(0);
-    } else {
-      const data = buildFabric(fabric);
-      setFabricCode(data.fabric.code);
-      setMainCode(data.group);
-      setProductIndexSelected(data.fabric.index);
     }
     setProductSelected(group);
     setShowModal(true);
@@ -94,22 +74,22 @@ const Step5 = () => {
                 id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
-                enable-background="new 0 0 32 32"
+                enableBackground="new 0 0 32 32"
                 fill="#000000"
               >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g
                   id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 ></g>
                 <g id="SVGRepo_iconCarrier">
                   {" "}
                   <line
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     x1="6"
                     y1="16"
                     x2="28"
@@ -118,8 +98,8 @@ const Step5 = () => {
                   <polyline
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     points="14,24.5 5.5,16 14,7.5 "
                   ></polyline>{" "}
                 </g>
@@ -168,10 +148,10 @@ const Step5 = () => {
 
               <EmblaCarousel indexSelected={productIndexSelected}>
                 {productSelected?.Images.map((img, index) => (
-                  <div className="embla__slide" key={img.Code}>
+                  <div className="embla__slide" key={img.Id}>
                     <div
                       className={clsx(styles["suit-type"])}
-                      onClick={() => handleChose(img, index)}
+                      onClick={() => handleChose(img as Product, index)}
                     >
                       <img
                         src={img.S3Url}
@@ -186,13 +166,13 @@ const Step5 = () => {
                       <div
                         className={clsx(
                           styles["overlay"],
-                          fabricCode === img.Code ? styles["active"] : ""
+                          fabricSelected?.Id === img.Id ? styles["active"] : ""
                         )}
                       ></div>
                       <span
                         className={clsx(
                           styles["checkmark"],
-                          fabricCode === img.Code ? styles["active"] : ""
+                          fabricSelected?.Id === img.Id ? styles["active"] : ""
                         )}
                       >
                         <svg
@@ -230,7 +210,8 @@ const Step5 = () => {
         <div className="row">
           <div className="col-4 m-auto mt-5 ">
             <button
-              className="p-3 w-100 bg-primary-color border-0 accent-color fs-5"
+              className="p-3 w-100 bg-primary-color border-0 accent-color fs-5 btn-primary"
+              disabled={!fabric}
               onClick={nextStep}
             >
               Continue

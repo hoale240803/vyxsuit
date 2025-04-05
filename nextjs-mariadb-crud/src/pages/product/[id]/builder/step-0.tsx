@@ -27,22 +27,22 @@ const Step0 = () => {
                 id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
-                enable-background="new 0 0 32 32"
+                enableBackground="new 0 0 32 32"
                 fill="#000000"
               >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g
                   id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 ></g>
                 <g id="SVGRepo_iconCarrier">
                   {" "}
                   <line
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     x1="6"
                     y1="16"
                     x2="28"
@@ -51,8 +51,8 @@ const Step0 = () => {
                   <polyline
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     points="14,24.5 5.5,16 14,7.5 "
                   ></polyline>{" "}
                 </g>

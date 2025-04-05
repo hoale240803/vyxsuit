@@ -3,21 +3,16 @@ import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import { SuitStyle } from "@/models/product.model";
 import ReCAPTCHA from "react-google-recaptcha";
-
-enum Test {
-  Test123,
-  Test456,
-}
+import { useEffect, useState } from "react";
+import { Product } from "@/models/product.model";
+import { parseToSelectedOption } from "@/utils/productGroup";
 
 const Step10 = () => {
   const router = useRouter();
-  const { product, suitType, suitStyle, fabric, trouser, lining, button } =
+  const { product, suitType, suitStyle, fabric, trouser, lining, button, customer, shipping } =
     useSuitBuilder();
   const { id } = router.query;
-
-  console.log(Test.Test456);
 
   const nextStep = () => {
     router.push(`/product/${id}/builder/step-11`);
@@ -39,22 +34,22 @@ const Step10 = () => {
                 id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
-                enable-background="new 0 0 32 32"
+                enableBackground="new 0 0 32 32"
                 fill="#000000"
               >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g
                   id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 ></g>
                 <g id="SVGRepo_iconCarrier">
                   {" "}
                   <line
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     x1="6"
                     y1="16"
                     x2="28"
@@ -63,8 +58,8 @@ const Step10 = () => {
                   <polyline
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     points="14,24.5 5.5,16 14,7.5 "
                   ></polyline>{" "}
                 </g>
@@ -97,7 +92,7 @@ const Step10 = () => {
           </div>
           <div className="col-6">
             <span className="fw-bold fs-4">User: </span>{" "}
-            <span className="fs-4">oooo</span>
+            <span className="fs-4">{customer.firstName} {customer.lastName}</span>
           </div>
           <div className="col-6">
             <span className="fw-bold fs-4">Purchase Order: </span>{" "}
@@ -113,8 +108,8 @@ const Step10 = () => {
               <h4>Suit collections</h4>
               <img src={product.S3Url} alt={product.Name} className="w-100" />
               <h3>The Aristocrat</h3>
-              <p className="mb-0"><span className="fs-4">Suit Type:</span> <span className="fs-5">Two-piece</span></p>
-              <p className="mb-0"><span className="fs-4">Fitting:</span> <span className="fs-5">Comfort fit</span></p>
+              <p className="mb-0"><span className="fs-4">Suit Type:</span> <span className="fs-5">{suitType === '2Piece' ? 'Two-piece' : 'Three-piece'}</span></p>
+              <p className="mb-0"><span className="fs-4">Fitting:</span> <span className="fs-5">{suitStyle === 'ConfortFit' ? "Comfort fit" : "Slim fit"}</span></p>
             </div>
           </div>
           <div className="col-4 mt-3">
@@ -123,8 +118,8 @@ const Step10 = () => {
                 <div className="w-100">
                   <h4>Trouser</h4>
                   <img
-                    src={product.S3Url}
-                    alt={product.Name}
+                    src={trouser?.S3Url}
+                    alt={trouser?.Name}
                     className="w-100"
                   />
                 </div>
@@ -133,8 +128,8 @@ const Step10 = () => {
                 <div className="w-100">
                   <h4>Fabric</h4>
                   <img
-                    src={product.S3Url}
-                    alt={product.Name}
+                    src={fabric?.selected.data.S3Url}
+                    alt={fabric?.selected.data.Code}
                     className="w-100"
                   />
                 </div>
@@ -143,8 +138,8 @@ const Step10 = () => {
                 <div className="w-100">
                   <h4>Lining</h4>
                   <img
-                    src={product.S3Url}
-                    alt={product.Name}
+                    src={lining?.selected.data.S3Url}
+                    alt={lining?.selected.data.Code}
                     className="w-100"
                   />
                 </div>
@@ -153,8 +148,8 @@ const Step10 = () => {
                 <div className="w-100">
                   <h4>Button</h4>
                   <img
-                    src={product.S3Url}
-                    alt={product.Name}
+                    src={button?.selected.data.S3Url}
+                    alt={button?.selected.data.Code}
                     className="w-100"
                   />
                 </div>
@@ -163,7 +158,7 @@ const Step10 = () => {
           </div>
         </div>
         <div className="row">
-          <div className="col-12">
+          <div className="col-12 ">
           <ReCAPTCHA
             sitekey={'6Lc-AwQrAAAAAFdgi3JpIE643tTCZ9q4hUfPSkH8'}
             onChange={handleCaptchaChange}

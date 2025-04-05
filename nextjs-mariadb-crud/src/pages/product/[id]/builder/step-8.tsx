@@ -9,11 +9,14 @@ import {
 import {
   compressAndConvertToBase64,
 } from "@/utils/productGroup";
+import { useEffect } from "react";
 
 const Step8 = () => {
   const router = useRouter();
   const {
     measurement,
+    termAccepted,
+    acceptTern,
     selectUnitOfMeasurement,
     updateShirtMeasurement,
     updateTrouserMeasurement,
@@ -35,6 +38,33 @@ const Step8 = () => {
   //     updateTrouserMeasurement(measurementConverted.Trouser);
   //   }
   // }, [unit]);
+
+  const isDisabled = () => {
+    if(!measurement || !measurement.Shirt || !measurement.Trouser || !measurement.Images?.length || !termAccepted.orderPolicyAgreement) return true;
+
+    if(measurement.Images.length < 4) return true;
+
+    let isShirtFillFully = true;
+    for(const item in measurement.Shirt) {
+      if (measurement.Shirt.hasOwnProperty(item)) {
+        isShirtFillFully = Number(measurement.Shirt[item as keyof typeof measurement.Shirt]) > 0;
+        if(!isShirtFillFully) break;
+      }
+    }
+
+    if(!isShirtFillFully) return !isShirtFillFully;
+
+    let isTrouserFillFully = true;
+    for(const item in measurement.Trouser) {
+      if (measurement.Trouser.hasOwnProperty(item)) {
+        isTrouserFillFully = Number(measurement.Trouser[item as keyof typeof measurement.Trouser]) > 0;
+        if(!isTrouserFillFully) break;
+      }
+    }
+    if(!isTrouserFillFully) return !isTrouserFillFully;
+
+    return false;
+  }
 
   const nextStep = () => {
     router.push(`/product/${id}/builder/step-9`);
@@ -80,9 +110,16 @@ const Step8 = () => {
   };
 
   const handleDeleteImage = (index: number) => {
-    console.log("del img: ", index);
     deleteImageMeasurement(index);
   };
+
+  const handleAcceptTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked;
+    acceptTern({
+      ...termAccepted,
+      orderPolicyAgreement: isChecked,
+    });
+  }
 
   return (
     <>
@@ -96,22 +133,22 @@ const Step8 = () => {
                 id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
-                enable-background="new 0 0 32 32"
+                enableBackground="new 0 0 32 32"
                 fill="#000000"
               >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g
                   id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 ></g>
                 <g id="SVGRepo_iconCarrier">
                   {" "}
                   <line
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     x1="6"
                     y1="16"
                     x2="28"
@@ -120,8 +157,8 @@ const Step8 = () => {
                   <polyline
                     fill="none"
                     stroke="#D4AF37"
-                    stroke-width="2"
-                    stroke-miterlimit="10"
+                    strokeWidth="2"
+                    strokeMiterlimit="10"
                     points="14,24.5 5.5,16 14,7.5 "
                   ></polyline>{" "}
                 </g>
@@ -158,7 +195,7 @@ const Step8 = () => {
                   id="option1"
                   name="option"
                   value="cm"
-                  checked={measurement.Unit === "cm"}
+                  checked={measurement.Unit === "Cm"}
                   onChange={handleChangeUnit}
                 />
                 <label
@@ -174,7 +211,7 @@ const Step8 = () => {
                   id="option2"
                   name="option"
                   value="inch"
-                  checked={measurement.Unit === "inch"}
+                  checked={measurement.Unit === "Inch"}
                   onChange={handleChangeUnit}
                 />
                 <label
@@ -190,7 +227,7 @@ const Step8 = () => {
         <div className="row mt-5">
           <div className="col-6">
             <video width="100%" controls>
-              <source src="https://drive.google.com/file/d/1vFLSA-xTN2su92t0GOQSuNsw3q70G6nP/view?t=4" />
+              <source src="https://d167viv9yasg8.cloudfront.net/Videos/SuitJacket_ShirtMeasurement.mp4" />
             </video>
           </div>
           <div className="col-6">
@@ -360,7 +397,7 @@ const Step8 = () => {
 
           <div className="col-6">
             <video width="100%" controls>
-              <source src="https://drive.google.com/file/d/1SawRL1uMdH_SPAVKBk1aCzrFQu8tvhNk/view?t=3" />
+              <source src="https://d167viv9yasg8.cloudfront.net/Videos/Trouser_PantsMeasurement.mp4" />
             </video>
           </div>
           <div className="col-6">
@@ -519,7 +556,7 @@ const Step8 = () => {
           </div>
           <div className="col-8 mt-4">
             <label className="checkbox-container">
-              <input type="checkbox" />
+              <input type="checkbox" defaultChecked={termAccepted.orderPolicyAgreement} onChange={handleAcceptTerm} checked={termAccepted.orderPolicyAgreement}/>
               <span className="checkmark"></span>
               <span className="label fw-light ms-3">
                 Please note that all made-to-measure shirts are non-returnable
@@ -533,7 +570,8 @@ const Step8 = () => {
         <div className="row">
           <div className="col-4 m-auto mt-5 ">
             <button
-              className="p-3 w-100 bg-primary-color border-0 accent-color fs-5"
+              className="p-3 w-100 bg-primary-color border-0 accent-color fs-5 btn-primary"
+              disabled={isDisabled()}
               onClick={nextStep}
             >
               Continue
