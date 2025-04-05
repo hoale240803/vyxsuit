@@ -258,12 +258,12 @@ export const SuitBuilderContextProvider: React.FC<
     localStorage.clear();
     setTermAccepted(SuitBuilderDefault.Term);
     setProduct(SuitBuilderDefault.Product);
-    setSuitType("");
+    setSuitType(SuitBuilderDefault.Product);
     setTrouser(SuitBuilderDefault.Product);
     setSuitStyle("");
     setFabric(SuitBuilderDefault.ProductSelection);
     setLining(SuitBuilderDefault.ProductSelection);
-    setButton(SuitBuilderDefault.Product);
+    setButton(SuitBuilderDefault.ProductSelection);
     setUnitOfMMeasurement("Cm");
     setMeasurement(SuitBuilderDefault.Measurement as unknown as MeasurementType);
     setShirtMeasurement(SuitBuilderDefault.Measurement.Shirt);
