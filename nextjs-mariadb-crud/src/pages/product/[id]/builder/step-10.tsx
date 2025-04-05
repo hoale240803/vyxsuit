@@ -36,48 +36,34 @@ const Step10 = () => {
 
   useEffect(() => {
     setCapcha("");
+    const payload = {
+      productId: product.Id,
+      suitTypeId: suitType.Id,
+      fabricId: fabric.selected.data.Id,
+    };
+    if(!payload.productId || !payload.suitTypeId || !payload.fabricId) return;
     fetch("/api/generate-sales-order-number", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        productId: product.Id,
-        suitTypeId: suitType.Id,
-        fabricId: fabric.selected.data.Id,
-      }),
+      body: JSON.stringify(payload),
     })
       .then((res) => res.json())
       .then((data) => {
         setSalesOrderNumber(data?.orderNumber);
         setSalesOrderAmount(data?.totalAmount || 0);
       });
-  }, []);
+  }, [product, suitType, fabric]);
 
   const nextStep = async () => {
     // router.push(`/product/${id}/builder/step-11`);
 
-    //upload image to s3
-    const filesConverted = measurement.Images.map((img) => {
-      return base64ToFile(img);
-    });
-    console.log("files:", filesConverted);
-
-    const formData = new FormData();
-    filesConverted.forEach((file, index) => {
-      formData.append("files", file); // key là 'files', backend sẽ nhận là mảng
-    });
-
-    const res = await fetch("/api/s3-upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const response: { urls: any[] } = await res.json();
+    
 
     /// TODO: set images to localstorage
-    const s3Urls: string[] = [];
-    uploadImageMeasurement(s3Urls);
+    // const s3Urls: string[] = [];
+    // uploadImageMeasurement(s3Urls);
 
     /// TODO: Call stripe payment
     await getStripePaymentToken();
@@ -102,24 +88,11 @@ const Step10 = () => {
     console.log("stripe token", token);
     router.push(
       {
-        pathname: "/payment",
-        query: { token }, // gửi token vào query params
+        pathname: `/product/${id}/builder/step-11`,
+        query: { token, totalAmount: salesOrderAmount }, // gửi token vào query params
       },
-      `/payment`
+      `/product/${id}/builder/step-11`
     );
-  };
-
-  const getOrderDetails = () => {
-    return {
-      suitId: product.Id,
-      suitTypeId: suitType.Id,
-      trouserId: trouser.Id,
-      tailoredFit: suitStyle === "ConfortFit" ? "ConfortFit" : "SlimFit",
-      jacketId: 0,
-      fabricId: fabric.selected.data.Id,
-      liningId: lining.selected.data.Id,
-      buttonId: button.selected.data.Id,
-    } as unknown as OrderDetailsRequest;
   };
 
   const handleCaptchaChange = (token: string | null) => {
