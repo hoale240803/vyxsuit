@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { ReactNode } from "react";
 import clsx from "clsx"
@@ -13,7 +13,15 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const { t } = useTranslation();
+  const [searchOpen, setSearchOpen] = useState(false);
 
+  const handleOpenSearch = () => {
+    setSearchOpen(true);
+  };
+
+  const handleCloseSearch = () => {
+    setSearchOpen(false);
+  };
   return (
     <div className={clsx("main-layout")}>
       {/* Header */}
@@ -89,7 +97,7 @@ export default function Layout({ children }: LayoutProps) {
             </ul>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link" href="#">
+                <Link className="nav-link" href="#" onClick={handleOpenSearch}>
                   <img src="/images/icons/Search.png" alt="search icon" /> Search
                 </Link>
               </li>
@@ -110,6 +118,15 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Main Content */}
       <main className={clsx("main-content", "container-fluid p-0")}>{children}</main>
+
+      {/* Search controll */}
+      {searchOpen && (
+        <div className="search-overlay" onClick={handleCloseSearch}>
+          <div className="search-box" onClick={(e) => e.stopPropagation()}>
+            <input type="text" placeholder="Search..." />
+          </div>
+        </div>
+      )}
 
       <footer className={clsx("main-footer","py-4")}>
         <div className="container d-flex justify-content-between align-items-center">

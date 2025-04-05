@@ -371,12 +371,12 @@ const Step9 = () => {
             </label>
           </div>
         </div>
-        <div className="row mt-3">
+        {/* <div className="row mt-3">
           <ReCAPTCHA
             sitekey={"6Lc-AwQrAAAAAFdgi3JpIE643tTCZ9q4hUfPSkH8"}
             onChange={handleCaptchaChange}
           />
-        </div>
+        </div> */}
 
         <div className="row mt-3">
           <div className="col-4 m-auto mt-5 ">

@@ -194,7 +194,7 @@ const Step8 = () => {
                   type="radio"
                   id="option1"
                   name="option"
-                  value="cm"
+                  value="Cm"
                   checked={measurement.Unit === "Cm"}
                   onChange={handleChangeUnit}
                 />
@@ -210,7 +210,7 @@ const Step8 = () => {
                   type="radio"
                   id="option2"
                   name="option"
-                  value="inch"
+                  value="Inch"
                   checked={measurement.Unit === "Inch"}
                   onChange={handleChangeUnit}
                 />

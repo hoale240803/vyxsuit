@@ -44,7 +44,7 @@ export const SuitBuilderContextProvider: React.FC<
     privacyPolicy: false
   });
   const [productChoosen, setProduct] = useState<Product>(SuitBuilderDefault.Product);
-  const [suitTypeChoosen, setSuitType] = useState<SuitType>("");
+  const [suitTypeChoosen, setSuitType] = useState<Product>(SuitBuilderDefault.Product);
   const [trouserChoosen, setTrouser] = useState<Product>(SuitBuilderDefault.Product);
   const [suitStyleChoosen, setSuitStyle] = useState<SuitStyle>("");
   const [fabricChoosen, setFabric] = useState<ProductSeletection>(SuitBuilderDefault.ProductSelection);
@@ -73,10 +73,8 @@ export const SuitBuilderContextProvider: React.FC<
     );
     if (productOption) setProduct(JSON.parse(productOption));
 
-    const sultTypeOption = localStorage.getItem(
-      localStorageKey.SuitType
-    ) as SuitType;
-    if (sultTypeOption) setSuitType(sultTypeOption);
+    const sultTypeOption = localStorage.getItem(localStorageKey.SuitType);
+    if (sultTypeOption) setSuitType(JSON.parse(sultTypeOption));
 
     const trouserOption = localStorage.getItem(
       localStorageKey.TrouserType
@@ -131,9 +129,9 @@ export const SuitBuilderContextProvider: React.FC<
     localStorage.setItem(localStorageKey.Product, JSON.stringify(option)); // Save to localStorage
   };
 
-  const updateSuitType = (option: SuitType) => {
+  const updateSuitType = (option: Product) => {
     setSuitType(option);
-    localStorage.setItem(localStorageKey.SuitType, option); // Save to localStorage
+    localStorage.setItem(localStorageKey.SuitType, JSON.stringify(option)); // Save to localStorage
   };
 
   const updateTrouser = (option: Product) => {
