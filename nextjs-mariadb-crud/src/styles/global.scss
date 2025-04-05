@@ -165,20 +165,20 @@
     color: var(--accent-color);
     cursor: pointer;
     justify-content: center;
-  
+
     input[type="radio"] {
       display: none; // Hide the default radio button
-  
+
       &:checked + label::before {
         border-color: var(--primary-color); // Outer circle border color
       }
-  
+
       &:checked + label::after {
         background: var(--primary-color); // Inner filled circle
         opacity: 1;
       }
     }
-  
+
     label {
       position: relative;
       display: flex;
@@ -186,7 +186,7 @@
       cursor: pointer;
       padding-left: 32px; // Space for the custom radio
       height: 30px;
-  
+
       &::before {
         content: "";
         position: absolute;
@@ -198,7 +198,7 @@
         background: #fff;
         transition: 0.3s ease-in-out;
       }
-  
+
       &::after {
         content: "";
         position: absolute;
@@ -302,6 +302,46 @@ body {
 
     ul > li > a {
       color: var(--primary-color);
+    }
+  }
+
+  // Overlay and Search Box Styling
+  .search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Gray blur */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Make sure it is on top */
+  }
+
+  .search-box {
+    background-color: var(--primary-light-color);
+    // padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 400px;
+    border-radius: 2rem;
+
+    input {
+      width: 100%;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: 1px solid var(--secondary-bright-color);
+      border-radius: 4px;
+      background-color: var(--primary-light-color);
+      color: var(--secondary-color);
+      border-radius: 2rem;
+
+      &:focus {
+        border-color: var(--primary-color);
+        outline: none;
+      }
     }
   }
 }

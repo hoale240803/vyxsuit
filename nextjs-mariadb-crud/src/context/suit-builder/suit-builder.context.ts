@@ -95,8 +95,8 @@ export interface SuitBuilderContextType {
   acceptTern: (term: StepBuilderVerify) => void;
   product: Product;
   selectProduct: (option: Product) => void;
-  suitType: SuitType;
-  selectSuitType: (option: SuitType) => void;
+  suitType: Product;
+  selectSuitType: (option: Product) => void;
   trouser: Product;
   selectTrouser: (option: Product) => void;
   suitStyle: SuitStyle;
@@ -131,7 +131,7 @@ export const suitBuilderContextDefaultValue: SuitBuilderContextType = {
   // Initialize the product and selectProduct to an empty object
   product: SuitBuilderDefault.Product,
   selectProduct: () => {},
-  suitType: '',
+  suitType: SuitBuilderDefault.Product,
   selectSuitType: () => {},
   trouser: SuitBuilderDefault.Product,
   selectTrouser: () => {},

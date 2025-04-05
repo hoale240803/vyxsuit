@@ -4,22 +4,155 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
 import ReCAPTCHA from "react-google-recaptcha";
+import { base64ToFile } from "@/utils/productGroup";
+import { MeasurementRequest, OrderDetailsRequest, OrderRequest } from "@/models/request/request.model";
 import { useEffect, useState } from "react";
-import { Product } from "@/models/product.model";
-import { parseToSelectedOption } from "@/utils/productGroup";
 
 const Step10 = () => {
   const router = useRouter();
-  const { product, suitType, suitStyle, fabric, trouser, lining, button, customer, shipping } =
+  const { product, suitType, suitStyle, fabric, trouser, lining, button, customer, shipping, measurement } =
     useSuitBuilder();
   const { id } = router.query;
 
-  const nextStep = () => {
-    router.push(`/product/${id}/builder/step-11`);
+  const [capcha, setCapcha] = useState<string>('');
+  const [salesOrderNumber, setSalesOrderNumber] = useState<string>('');
+  const [salesOrderAmount, setSalesOrderAmount] = useState<number>(0);
+
+  useEffect(() => {
+    setCapcha('');
+    fetch('/api/generate-sales-order-number', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        productId: product.Id,
+        suitTypeId: suitType.Id,
+        fabricId: fabric.selected.data.Id
+      }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setSalesOrderNumber(data?.salesOrderNumber);
+      setSalesOrderAmount(data?.totalAmount || 0)
+    });
+  }, [])
+
+  const nextStep = async () => {
+    // router.push(`/product/${id}/builder/step-11`);
+
+    //upload image to s3
+    const filesConverted = measurement.Images.map(img => {
+      return base64ToFile(img);
+    });
+    console.log('files:', filesConverted);
+
+    const formData = new FormData();
+    filesConverted.forEach((file, index) => {
+      formData.append('files', file); // key là 'files', backend sẽ nhận là mảng
+    });
+    
+    const res = await fetch('/api/s3-upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const response: { urls: any[] } = await res.json();
+
+    console.log('payload:', response)
+
+    const orderPayload: OrderRequest = {
+      lang: getLang(),
+      captchaToken: capcha,
+      salesOrderNumber: salesOrderNumber,
+      customer: getCustomer(),
+      shippingInfo: getShippingInfo(),
+      payment: getPayment(),
+      measurements: getMeasurements(response.urls),
+      orderDetails: getOrderDetails()
+    };
+    console.log('orderPayload:', orderPayload);
+
+    const orderResponse = await fetch('/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderPayload),
+    });
+    console.log(await orderResponse.text())
   };
+
+  const getCustomer = () => {
+    return { ... customer };
+  }
+
+  const getShippingInfo = () => {
+    return { ... shipping };
+  }
+
+  const getPayment = () => {
+    ///TODO: get from states
+    return {
+      currencyCode: "USD",
+      currencyRate: 1,
+    }
+  };
+
+  const getLang = () => {
+    /// TODO: get from i18n
+    return 'en';
+  }
+
+  const getMeasurements = (images: any[]) => {
+    return {
+      measurementType: 'Shirt',
+      unit: measurement?.Unit || 'Cm',
+      shirtMeasurements: {
+        measurementType: 'Shirt',
+        chest: measurement.Shirt.Chest,
+        shoulder: measurement.Shirt.Shoulder,
+        armLength: measurement.Shirt.ArmLength,
+        armShoulderJoint: measurement.Shirt.ArmShoulderJoint,
+        armBicepWidth: measurement.Shirt.ArmBicepWidth,
+        jacketWidth: measurement.Shirt.JacketLength,
+        abdomen: measurement.Shirt.Abdomen,
+        bellyTummy: measurement.Shirt.Belly,
+        hips: measurement.Shirt.Hips,
+        neck: measurement.Shirt.Neck,
+      },
+      trouserMeasurements: {
+        waist: measurement.Trouser.Waist,
+        upperHips: measurement.Trouser.UpperHips,
+        hips: measurement.Trouser.Hips,
+        hipsCrotch: measurement.Trouser.Crotch,
+        outswarm: measurement.Trouser.Outswam, // chú ý: JSON là 'Outswam' nhưng interface là 'outswarm'
+        thigh: measurement.Trouser.Thigh,
+        calf: measurement.Trouser.Calf,
+      },
+      measurementImages: images.map((img) => ({
+        name: img.fileName,
+        s3Url: img.signedUrl,
+      })),
+    } as MeasurementRequest;
+  }
+
+  const getOrderDetails = () => {
+    return {
+      suitId: product.Id,
+      suitTypeId: suitType.Id,
+      trouserId: trouser.Id,
+      tailoredFit: suitStyle === 'ConfortFit' ? 'ConfortFit' : 'SlimFit',
+      jacketId: 0,
+      fabricId: fabric.selected.data.Id,
+      liningId: lining.selected.data.Id,
+      buttonId: button.selected.data.Id
+    } as unknown as OrderDetailsRequest;
+  }
 
   const handleCaptchaChange = (token: string | null) => {
     console.log('capcha token:', token);
+    setCapcha(token || '');
   };
 
   return (
@@ -96,7 +229,7 @@ const Step10 = () => {
           </div>
           <div className="col-6">
             <span className="fw-bold fs-4">Purchase Order: </span>{" "}
-            <span className="fs-4">xxxxxxx</span>
+            <span className="fs-4">{salesOrderNumber}</span>
           </div>
         </div>
         <div className="row mt-4">
@@ -107,9 +240,10 @@ const Step10 = () => {
             <div className="w-100">
               <h4>Suit collections</h4>
               <img src={product.S3Url} alt={product.Name} className="w-100" />
-              <h3>The Aristocrat</h3>
-              <p className="mb-0"><span className="fs-4">Suit Type:</span> <span className="fs-5">{suitType === '2Piece' ? 'Two-piece' : 'Three-piece'}</span></p>
+              <h3>{product.Name}</h3>
+              <p className="mb-0"><span className="fs-4">Suit Type:</span> <span className="fs-5">{suitType.Name === 'TwoPieceSuit' ? 'Two-piece' : 'Three-piece'}</span></p>
               <p className="mb-0"><span className="fs-4">Fitting:</span> <span className="fs-5">{suitStyle === 'ConfortFit' ? "Comfort fit" : "Slim fit"}</span></p>
+              <h2 className="text-center">Total: <span>{salesOrderAmount} USD</span></h2>
             </div>
           </div>
           <div className="col-4 mt-3">
@@ -167,8 +301,8 @@ const Step10 = () => {
           </div>
           <div className="col-4 m-auto mt-5 ">
             <button
-              className="p-3 w-100 bg-primary-color border-0 accent-color fs-5"
-              onClick={nextStep}
+              className="p-3 w-100 bg-primary-color border-0 accent-color fs-5 btn-primary"
+              disabled={!!capcha}
             >
               Confirm
             </button>
