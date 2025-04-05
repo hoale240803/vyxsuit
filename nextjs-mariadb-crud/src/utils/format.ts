@@ -23,3 +23,10 @@ export function formatDateTime(date: Date): string {
 export function calculateTotalWithCurrency(amount: number, currencyRate: number): number {
     return Number((amount * currencyRate).toFixed(2));
 } 
+
+export function formatNumber(value: number): string {
+	return new Intl.NumberFormat('en-US', {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	}).format(value);
+}

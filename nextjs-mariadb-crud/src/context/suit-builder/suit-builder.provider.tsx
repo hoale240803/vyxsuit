@@ -244,6 +244,10 @@ export const SuitBuilderContextProvider: React.FC<
     setMeasurement(measurement);
   };
 
+  const updateImageMeasurement = (s3Url: string[]) => {
+    saveImageMeasurementToLocalStorage(s3Url);
+  }
+
   const customerOrderUpdated = (guest: CustomerRequest) => {
     setCustomer(guest);
     localStorage.setItem(localStorageKey.Customer, JSON.stringify(guest)); // Save to localStorage
@@ -297,6 +301,7 @@ export const SuitBuilderContextProvider: React.FC<
     updateTrouserMeasurement: handleUpdateTrouserMeasurement,
     pushImageMeasurement: handlePushImageMeasuremented,
     deleteImageMeasurement: handleDeleteImageMeasuremented,
+    uploadImageMeasurement: updateImageMeasurement,
     customer: customerOrder,
     selectCustomer: customerOrderUpdated,
     shipping: shippingOrder,

@@ -3,17 +3,20 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Image from "next/image";
 import { ReactNode } from "react";
-import clsx from "clsx"
+import clsx from "clsx";
 
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const router = useRouter();
   const { t } = useTranslation();
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleOpenSearch = () => {
     setSearchOpen(true);
@@ -22,6 +25,17 @@ export default function Layout({ children }: LayoutProps) {
   const handleCloseSearch = () => {
     setSearchOpen(false);
   };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchKeyPress = async (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && searchQuery.trim() !== "") {
+      router.push(`/product-list/search?q=${searchQuery.trim()}`);
+    }
+  };
+
   return (
     <div className={clsx("main-layout")}>
       {/* Header */}
@@ -33,7 +47,7 @@ export default function Layout({ children }: LayoutProps) {
               alt="WX logo"
               width={50}
               height={50}
-              priority 
+              priority
             />
           </Link>
           <button
@@ -98,17 +112,23 @@ export default function Layout({ children }: LayoutProps) {
             <ul className="navbar-nav">
               <li className="nav-item">
                 <Link className="nav-link" href="#" onClick={handleOpenSearch}>
-                  <img src="/images/icons/Search.png" alt="search icon" /> Search
+                  <img src="/images/icons/Search.png" alt="search icon" />{" "}
+                  Search
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" href="#">
-                <img src="/images/icons/ShoppingCart.png" alt="shopping cart icon" /> Cart
+                  <img
+                    src="/images/icons/ShoppingCart.png"
+                    alt="shopping cart icon"
+                  />{" "}
+                  Cart
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" href="#">
-                <img src="/images/icons/Person.png" alt="person icon" /> Profile
+                  <img src="/images/icons/Person.png" alt="person icon" />{" "}
+                  Profile
                 </Link>
               </li>
             </ul>
@@ -117,18 +137,26 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main className={clsx("main-content", "container-fluid p-0")}>{children}</main>
+      <main className={clsx("main-content", "container-fluid p-0")}>
+        {children}
+      </main>
 
       {/* Search controll */}
       {searchOpen && (
         <div className="search-overlay" onClick={handleCloseSearch}>
           <div className="search-box" onClick={(e) => e.stopPropagation()}>
-            <input type="text" placeholder="Search..." />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onKeyDown={handleSearchKeyPress} // Lắng nghe sự kiện keydown
+            />
           </div>
         </div>
       )}
 
-      <footer className={clsx("main-footer","py-4")}>
+      <footer className={clsx("main-footer", "py-4")}>
         <div className="container d-flex justify-content-between align-items-center">
           {/* Logo */}
           <div>

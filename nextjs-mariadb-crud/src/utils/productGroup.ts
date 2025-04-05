@@ -5,6 +5,7 @@ import {
   UnitMeasurementType,
 } from "@/models/product.model";
 import Compressor from "compressorjs";
+import { v4 as uuidv4 } from 'uuid';
 
 export const buildGroup = (products: Product[]): GroupedProduct[] => {
   return products.reduce((acc: GroupedProduct[], product: Product) => {
@@ -136,47 +137,6 @@ export function compressAndConvertToBase64(file: File): Promise<string> {
     });
   });
 }
-
-export function combineSelectedOption(
-  productSelected: GroupedProduct | undefined,
-  img: { Id: number; Code: string; S3Url: string },
-  itemSelectedIndex: number
-): {
-  group: GroupedProduct | undefined;
-  selected: {
-    data: { Id: number; Code: string; S3Url: string };
-    index: number;
-  };
-} {
-  return {
-    group: productSelected,
-    selected: {
-      data: img,
-      index: itemSelectedIndex,
-    },
-  };
-}
-
-export function parseToSelectedOption(json: string): {
-  group: GroupedProduct | undefined;
-  selected: {
-    data: { Id: number; Code: string; S3Url: string };
-    index: number;
-  };
-} {
-  if (!json)
-    return {
-      group: undefined,
-      selected: {
-        data: { Id: 0, Code: "", S3Url: "" },
-        index: -1,
-      },
-    };
-  return JSON.parse(json);
-}
-
-
-import { v4 as uuidv4 } from 'uuid';
 
 export function base64ToFile(base64: string, extension = 'png'): File {
   const arr = base64.split(',');

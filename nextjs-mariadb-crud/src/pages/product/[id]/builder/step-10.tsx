@@ -7,10 +7,11 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { base64ToFile } from "@/utils/productGroup";
 import { MeasurementRequest, OrderDetailsRequest, OrderRequest } from "@/models/request/request.model";
 import { useEffect, useState } from "react";
+import { calculateTotalWithCurrency, formatNumber } from "@/utils/format";
 
 const Step10 = () => {
   const router = useRouter();
-  const { product, suitType, suitStyle, fabric, trouser, lining, button, customer, shipping, measurement } =
+  const { product, suitType, suitStyle, fabric, trouser, lining, button, customer, shipping, measurement, uploadImageMeasurement } =
     useSuitBuilder();
   const { id } = router.query;
 
@@ -33,7 +34,7 @@ const Step10 = () => {
     })
     .then((res) => res.json())
     .then((data) => {
-      setSalesOrderNumber(data?.salesOrderNumber);
+      setSalesOrderNumber(data?.orderNumber);
       setSalesOrderAmount(data?.totalAmount || 0)
     });
   }, [])
@@ -59,82 +60,16 @@ const Step10 = () => {
 
     const response: { urls: any[] } = await res.json();
 
-    console.log('payload:', response)
+    /// TODO: set images to localstorage
+    const s3Urls: string[] = [];
+    uploadImageMeasurement(s3Urls);
 
-    const orderPayload: OrderRequest = {
-      lang: getLang(),
-      captchaToken: capcha,
-      salesOrderNumber: salesOrderNumber,
-      customer: getCustomer(),
-      shippingInfo: getShippingInfo(),
-      payment: getPayment(),
-      measurements: getMeasurements(response.urls),
-      orderDetails: getOrderDetails()
-    };
-    console.log('orderPayload:', orderPayload);
-
-    const orderResponse = await fetch('/api/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orderPayload),
-    });
-    console.log(await orderResponse.text())
+    /// TODO: Call stripe payment 
+    await getStripePaymentToken();
   };
 
-  const getCustomer = () => {
-    return { ... customer };
-  }
-
-  const getShippingInfo = () => {
-    return { ... shipping };
-  }
-
-  const getPayment = () => {
-    ///TODO: get from states
-    return {
-      currencyCode: "USD",
-      currencyRate: 1,
-    }
-  };
-
-  const getLang = () => {
-    /// TODO: get from i18n
-    return 'en';
-  }
-
-  const getMeasurements = (images: any[]) => {
-    return {
-      measurementType: 'Shirt',
-      unit: measurement?.Unit || 'Cm',
-      shirtMeasurements: {
-        measurementType: 'Shirt',
-        chest: measurement.Shirt.Chest,
-        shoulder: measurement.Shirt.Shoulder,
-        armLength: measurement.Shirt.ArmLength,
-        armShoulderJoint: measurement.Shirt.ArmShoulderJoint,
-        armBicepWidth: measurement.Shirt.ArmBicepWidth,
-        jacketWidth: measurement.Shirt.JacketLength,
-        abdomen: measurement.Shirt.Abdomen,
-        bellyTummy: measurement.Shirt.Belly,
-        hips: measurement.Shirt.Hips,
-        neck: measurement.Shirt.Neck,
-      },
-      trouserMeasurements: {
-        waist: measurement.Trouser.Waist,
-        upperHips: measurement.Trouser.UpperHips,
-        hips: measurement.Trouser.Hips,
-        hipsCrotch: measurement.Trouser.Crotch,
-        outswarm: measurement.Trouser.Outswam, // chú ý: JSON là 'Outswam' nhưng interface là 'outswarm'
-        thigh: measurement.Trouser.Thigh,
-        calf: measurement.Trouser.Calf,
-      },
-      measurementImages: images.map((img) => ({
-        name: img.fileName,
-        s3Url: img.signedUrl,
-      })),
-    } as MeasurementRequest;
+  const getStripePaymentToken = async () => {
+    
   }
 
   const getOrderDetails = () => {
@@ -243,7 +178,7 @@ const Step10 = () => {
               <h3>{product.Name}</h3>
               <p className="mb-0"><span className="fs-4">Suit Type:</span> <span className="fs-5">{suitType.Name === 'TwoPieceSuit' ? 'Two-piece' : 'Three-piece'}</span></p>
               <p className="mb-0"><span className="fs-4">Fitting:</span> <span className="fs-5">{suitStyle === 'ConfortFit' ? "Comfort fit" : "Slim fit"}</span></p>
-              <h2 className="text-center">Total: <span>{salesOrderAmount} USD</span></h2>
+              <h2 className="text-center">Total: <span>{formatNumber(salesOrderAmount)} USD</span></h2>
             </div>
           </div>
           <div className="col-4 mt-3">
@@ -303,6 +238,7 @@ const Step10 = () => {
             <button
               className="p-3 w-100 bg-primary-color border-0 accent-color fs-5 btn-primary"
               disabled={!!capcha}
+              onClick={nextStep}
             >
               Confirm
             </button>

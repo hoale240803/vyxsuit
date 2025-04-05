@@ -113,6 +113,7 @@ export interface SuitBuilderContextType {
   updateTrouserMeasurement: (option: TrouserMeasurementType) => void;
   pushImageMeasurement: (option: ImageMeasurementType | ImageMeasurementType[]) => void;
   deleteImageMeasurement: (index: number) => void;
+  uploadImageMeasurement: (s3Urls: string[]) => void;
 
   customer: CustomerRequest;
   selectCustomer: (guest: CustomerRequest) => void;
@@ -149,6 +150,7 @@ export const suitBuilderContextDefaultValue: SuitBuilderContextType = {
   updateTrouserMeasurement: () => {},
   pushImageMeasurement: () => {},
   deleteImageMeasurement: () => {},
+  uploadImageMeasurement: () => {},
 
   customer: {} as CustomerRequest,
   selectCustomer: () => {},
