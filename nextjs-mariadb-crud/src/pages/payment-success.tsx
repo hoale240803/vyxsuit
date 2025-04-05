@@ -50,6 +50,13 @@ export default function PaymentSuccess() {
       });
   
       const response: { urls: any[] } = await res.json();
+
+      const images =  response.urls.map((img) => ({
+        name: img.fileName,
+        imageFile: img.signedUrl,
+      }));
+
+      console.log(images);
   
       const orderPayload = {
         lang: "en",
@@ -86,10 +93,7 @@ export default function PaymentSuccess() {
             thigh: measurement.Trouser.Thigh,
             calf: measurement.Trouser.Calf,
           },
-          measurementImages: response.urls.map((img) => ({
-            name: img.fileName,
-            s3Url: img.signedUrl,
-          })),
+          measurementImages: [...images],
         } as MeasurementRequest,
         orderDetails: {
           suitId: product.Id,
