@@ -5,56 +5,71 @@ import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
 import ReCAPTCHA from "react-google-recaptcha";
 import { base64ToFile } from "@/utils/productGroup";
-import { MeasurementRequest, OrderDetailsRequest, OrderRequest } from "@/models/request/request.model";
+import {
+  MeasurementRequest,
+  OrderDetailsRequest,
+  OrderRequest,
+} from "@/models/request/request.model";
 import { useEffect, useState } from "react";
 import { calculateTotalWithCurrency, formatNumber } from "@/utils/format";
 
 const Step10 = () => {
   const router = useRouter();
-  const { product, suitType, suitStyle, fabric, trouser, lining, button, customer, shipping, measurement, uploadImageMeasurement } =
-    useSuitBuilder();
+  const {
+    product,
+    suitType,
+    suitStyle,
+    fabric,
+    trouser,
+    lining,
+    button,
+    customer,
+    shipping,
+    measurement,
+    uploadImageMeasurement,
+  } = useSuitBuilder();
   const { id } = router.query;
 
-  const [capcha, setCapcha] = useState<string>('');
-  const [salesOrderNumber, setSalesOrderNumber] = useState<string>('');
+  const [capcha, setCapcha] = useState<string>("");
+  const [salesOrderNumber, setSalesOrderNumber] = useState<string>("");
   const [salesOrderAmount, setSalesOrderAmount] = useState<number>(0);
 
   useEffect(() => {
-    setCapcha('');
-    fetch('/api/generate-sales-order-number', {
-      method: 'POST',
+    setCapcha("");
+    fetch("/api/generate-sales-order-number", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         productId: product.Id,
         suitTypeId: suitType.Id,
-        fabricId: fabric.selected.data.Id
+        fabricId: fabric.selected.data.Id,
       }),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      setSalesOrderNumber(data?.orderNumber);
-      setSalesOrderAmount(data?.totalAmount || 0)
-    });
-  }, [])
+      .then((res) => res.json())
+      .then((data) => {
+        setSalesOrderNumber(data?.orderNumber);
+        setSalesOrderAmount(data?.totalAmount || 0);
+      });
+  }, []);
 
   const nextStep = async () => {
     // router.push(`/product/${id}/builder/step-11`);
 
     //upload image to s3
-    const filesConverted = measurement.Images.map(img => {
+    const filesConverted = measurement.Images.map((img) => {
       return base64ToFile(img);
     });
-    console.log('files:', filesConverted);
+    console.log("files:", filesConverted);
 
     const formData = new FormData();
     filesConverted.forEach((file, index) => {
-      formData.append('files', file); // key là 'files', backend sẽ nhận là mảng
+      formData.append("files", file); // key là 'files', backend sẽ nhận là mảng
     });
-    
-    const res = await fetch('/api/s3-upload', {
-      method: 'POST',
+
+    const res = await fetch("/api/s3-upload", {
+      method: "POST",
       body: formData,
     });
 
@@ -64,30 +79,52 @@ const Step10 = () => {
     const s3Urls: string[] = [];
     uploadImageMeasurement(s3Urls);
 
-    /// TODO: Call stripe payment 
+    /// TODO: Call stripe payment
     await getStripePaymentToken();
   };
 
   const getStripePaymentToken = async () => {
-    
-  }
+    const paymentPayload = {
+      productId: product.Id,
+      suitType: suitType.Id,
+      fabricId: fabric.selected.data.Id,
+      captchaToken: capcha,
+    };
+    const resp = await fetch("/api/stripe-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(paymentPayload),
+    });
+
+    const token = await resp.text();
+    console.log("stripe token", token);
+    router.push(
+      {
+        pathname: "/payment",
+        query: { token }, // gửi token vào query params
+      },
+      `/payment`
+    );
+  };
 
   const getOrderDetails = () => {
     return {
       suitId: product.Id,
       suitTypeId: suitType.Id,
       trouserId: trouser.Id,
-      tailoredFit: suitStyle === 'ConfortFit' ? 'ConfortFit' : 'SlimFit',
+      tailoredFit: suitStyle === "ConfortFit" ? "ConfortFit" : "SlimFit",
       jacketId: 0,
       fabricId: fabric.selected.data.Id,
       liningId: lining.selected.data.Id,
-      buttonId: button.selected.data.Id
+      buttonId: button.selected.data.Id,
     } as unknown as OrderDetailsRequest;
-  }
+  };
 
   const handleCaptchaChange = (token: string | null) => {
-    console.log('capcha token:', token);
-    setCapcha(token || '');
+    console.log("capcha token:", token);
+    setCapcha(token || "");
   };
 
   return (
@@ -160,7 +197,9 @@ const Step10 = () => {
           </div>
           <div className="col-6">
             <span className="fw-bold fs-4">User: </span>{" "}
-            <span className="fs-4">{customer.firstName} {customer.lastName}</span>
+            <span className="fs-4">
+              {customer.firstName} {customer.lastName}
+            </span>
           </div>
           <div className="col-6">
             <span className="fw-bold fs-4">Purchase Order: </span>{" "}
@@ -176,9 +215,23 @@ const Step10 = () => {
               <h4>Suit collections</h4>
               <img src={product.S3Url} alt={product.Name} className="w-100" />
               <h3>{product.Name}</h3>
-              <p className="mb-0"><span className="fs-4">Suit Type:</span> <span className="fs-5">{suitType.Name === 'TwoPieceSuit' ? 'Two-piece' : 'Three-piece'}</span></p>
-              <p className="mb-0"><span className="fs-4">Fitting:</span> <span className="fs-5">{suitStyle === 'ConfortFit' ? "Comfort fit" : "Slim fit"}</span></p>
-              <h2 className="text-center">Total: <span>{formatNumber(salesOrderAmount)} USD</span></h2>
+              <p className="mb-0">
+                <span className="fs-4">Suit Type:</span>{" "}
+                <span className="fs-5">
+                  {suitType.Name === "TwoPieceSuit"
+                    ? "Two-piece"
+                    : "Three-piece"}
+                </span>
+              </p>
+              <p className="mb-0">
+                <span className="fs-4">Fitting:</span>{" "}
+                <span className="fs-5">
+                  {suitStyle === "ConfortFit" ? "Comfort fit" : "Slim fit"}
+                </span>
+              </p>
+              <h2 className="text-center">
+                Total: <span>{formatNumber(salesOrderAmount)} USD</span>
+              </h2>
             </div>
           </div>
           <div className="col-4 mt-3">
@@ -228,16 +281,16 @@ const Step10 = () => {
         </div>
         <div className="row">
           <div className="col-12 ">
-          <ReCAPTCHA
-            sitekey={'6Lc-AwQrAAAAAFdgi3JpIE643tTCZ9q4hUfPSkH8'}
-            onChange={handleCaptchaChange}
-            // ref={recaptchaRef}
-          />
+            <ReCAPTCHA
+              sitekey={"6Lc-AwQrAAAAAFdgi3JpIE643tTCZ9q4hUfPSkH8"}
+              onChange={handleCaptchaChange}
+              // ref={recaptchaRef}
+            />
           </div>
           <div className="col-4 m-auto mt-5 ">
             <button
               className="p-3 w-100 bg-primary-color border-0 accent-color fs-5 btn-primary"
-              disabled={!!capcha}
+              disabled={!capcha}
               onClick={nextStep}
             >
               Confirm
